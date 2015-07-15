@@ -1,3 +1,8 @@
+This is a fork of the Tabbed Box Maker for Inkscape 0.91, from http://www.keppel.demon.co.uk/111000/111000.html
+
+
+Below, is the original README.txt from as it was on 7/14/2015. All my changes will be logged above this line.
+---------------------------------------------------------------------------------------------------------------
 BoxMaker: A free tool for creating boxes using tabbed construction
 
 Version 0.91 - January 31 2015        FOR   Inkscape 0.91
