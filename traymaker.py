@@ -161,7 +161,8 @@ class BoxMaker(inkex.Effect):
         "width": X,
         "length": Z,
         "edges": [TOP, MALE, MALE, MALE],
-        "offset": ( X+spacing*2, spacing )
+        "offset": ( X+spacing*2, spacing ),
+        "indentradius": indentradius
       },
       {
         "width": Z,
@@ -173,7 +174,8 @@ class BoxMaker(inkex.Effect):
         "width": X,
         "length": Z,
         "edges": [MALE, MALE, TOP, MALE],
-        "offset": ( Z+spacing*2, Z+Y+spacing*3 )
+        "offset": ( Z+spacing*2, Z+Y+spacing*3 ),
+        "indentradius": indentradius
       }]
 
 
@@ -195,7 +197,11 @@ class BoxMaker(inkex.Effect):
         if edge in [2, 3]:
           translation_y = piece["length"]
 
-        directives = g_side(tabInfo, length, nomTab)
+        indentradius = 0
+        if "indentradius" in piece:
+          indentradius = piece["indentradius"]
+
+        directives = g_side(tabInfo, length, nomTab, indentradius)
         directives = transform(directives, edge, (translation_x, translation_y))
         pieceDirectives.append(directives)
 
@@ -203,23 +209,44 @@ class BoxMaker(inkex.Effect):
       for directive in pieceDirectives:
         (x, y) = directive["origin"]
         cmds = "M {} {} ".format(x+piece_x, y+piece_y)
-        for (x,y) in directive["lines"]:
-          cmds += "l {} {} ".format(x, y)
+        for elem in directive["elements"]:
+          cmds += elem["draw"](elem)
         drawS(cmds)
 
     if error:
       inkex.errormsg(_('Warning: Box may be impractical'))
 
 
-def convertDeltasToAbsolute(directive):
-  lines = []
-  accumulated = directive["origin"]
-  for (linex, liney) in directive["lines"]:
-    (x,y) = accumulated
-    accumulated = (x+linex, y+liney)
-    lines.append(accumulated)
-  directive["lines"] = lines
-  return directive
+def line(x, y):
+  def draw(line_element):
+    (x,y) = line_element["coords"]
+    (x,y) = rotateClockwise((x,y), line_element["rotations"])
+    return "l {} {} ".format(x, y)
+
+  return {
+    "type": "line",
+    "coords": (x,y),
+    "rotations": 0,
+    "draw": draw
+  }
+
+
+def halfcircle(radius):
+  # relative arc
+  def draw(arc_element):
+    radius = arc_element["radius"]
+    rotations = arc_element["rotations"]
+    x_angle = (rotations % 4) * 90
+    end_point = ( 2 * radius, 0 )
+    (end_x, end_y) = rotateClockwise(end_point, rotations)
+    return "a{},{} {} 0,0 {},{}".format(radius, radius, x_angle, end_x, end_y)
+
+  return {
+    "type": "arc",
+    "radius": radius,
+    "rotations": 0,
+    "draw": draw
+  }
 
 
 def rotateClockwise((x,y), rotations):
@@ -234,11 +261,12 @@ def transform(directives, rotations, (translation_x, translation_y)):
   (origin_x, origin_y) = directives["origin"]
   (x, y) = rotateClockwise((origin_x, origin_y), rotations)
   origin = (x + translation_x, y + translation_y)
-  lines = list(map(lambda line: rotateClockwise(line, rotations), directives["lines"]))
+  for elem in directives["elements"]:
+    elem["rotations"] += rotations
 
   return {
     "origin": origin,
-    "lines": lines
+    "elements": directives["elements"]
   }
 
 
@@ -257,7 +285,7 @@ def drawS(XYstring):         # Draw lines from a list
 # MALE means this edge should have tabs at corners, (unless neighboring edge of the face is FEMALE)
 # FEMALE means this edge should have holes at corners.
 
-def g_side(tabInfo, length, nomTab):
+def g_side(tabInfo, length, nomTab, indentradius):
   divs=int(length/nomTab)  # divisions
   if not divs%2: divs-=1   # make divs odd
   divs=float(divs)
@@ -282,15 +310,24 @@ def g_side(tabInfo, length, nomTab):
 
   draw_directives = {
       "origin": (start_x,start_y),
-      "lines": []
+      "elements": []
     }
 
   if tabInfo["self"] is TOP:
     if not currentlyTab:
-      draw_directives["relative_lines"].append((0, thickness))
+      draw_directives["elements"].append(line(0, thickness))
 
-    endOffset = 0 if tabInfo["right"] is MALE else thickness
-    draw_directives["lines"].append((length - start_x - endOffset,0))
+    if indentradius > 0:
+      len_to_indent = length / 2 - start_x - indentradius
+      draw_directives["elements"].append(line(len_to_indent,0))
+      draw_directives["elements"].append(halfcircle(indentradius))
+      endOffset = 0 if tabInfo["right"] is MALE else thickness
+      len_to_end = length / 2 - endOffset - indentradius
+      draw_directives["elements"].append(line(len_to_end,0))
+
+    else:
+      endOffset = 0 if tabInfo["right"] is MALE else thickness
+      draw_directives["elements"].append(line(length - start_x - endOffset,0))
 
   else:
     for n in range(1,int(divs)):
@@ -307,10 +344,10 @@ def g_side(tabInfo, length, nomTab):
         (sx, sy) = draw_directives["origin"]
         dx = dx - sx + first
 
-      draw_directives["lines"].extend([(dx, 0),(0, dy)])
+      draw_directives["elements"].extend([line(dx, 0),line(0, dy)])
 
     endOffset = thickness if tabInfo["right"] is FEMALE else 0
-    draw_directives["lines"].append(( (gapWidth if not currentlyTab else tabWidth) - endOffset, 0))
+    draw_directives["elements"].append( line( (gapWidth if not currentlyTab else tabWidth) - endOffset, 0))
 
   return draw_directives
 
