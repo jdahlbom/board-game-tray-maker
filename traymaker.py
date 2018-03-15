@@ -202,9 +202,9 @@ class BoxMaker(inkex.Effect):
       piece_x, piece_y = piece["offset"]
       for directive in pieceDirectives:
         (x, y) = directive["origin"]
-        cmds = 'M ' + str(x+piece_x) + ',' + str(y+piece_y) + ' '
+        cmds = "M {} {} ".format(x+piece_x, y+piece_y)
         for (x,y) in directive["lines"]:
-          cmds += 'L ' + str(x+piece_x) + ',' + str(y+piece_y) + ' '
+          cmds += "l {} {} ".format(x, y)
         drawS(cmds)
 
     if error:
@@ -231,12 +231,10 @@ def rotateClockwise((x,y), rotations):
 
 
 def transform(directives, rotations, (translation_x, translation_y)):
-  directives = convertDeltasToAbsolute(directives)
   (origin_x, origin_y) = directives["origin"]
   (x, y) = rotateClockwise((origin_x, origin_y), rotations)
   origin = (x + translation_x, y + translation_y)
-  lines = list(map(lambda (x,y): (x+translation_x, y+translation_y),
-                   map(lambda line: rotateClockwise(line, rotations), directives["lines"])))
+  lines = list(map(lambda line: rotateClockwise(line, rotations), directives["lines"]))
 
   return {
     "origin": origin,
