@@ -6,6 +6,7 @@
   <dependency type="executable" location="extensions">traymaker.py</dependency>
   <dependency type="executable" location="extensions">simpletransform.py</dependency>
   <dependency type="executable" location="extensions">inkex.py</dependency>
+  <dependency type="executable" location="extensions">testable_traymaker.py</dependency>
 
   <param name="unit" _gui-text="Unit" type="optiongroup" appearance="minimal">
     <option value="mm">mm</option>
@@ -37,6 +38,10 @@
     <option value="1">Diagramatic</option>
     <option value="3">Inline(compact)</option>
   </param>
+
+  <param name="cut_length" type="float" precision="2"  _gui-text="Hinge cut length (y)" min="1" max="1000">19.0</param>
+  <param name="gap_length" type="float" precision="2" _gui-text="Hinge gap length (y)" min="1" max="1000">3.0</param>
+  <param name="sep_distance" type="float" precision="2" _gui-text="Hinge cut separation distance (x)" min="1" max="1000">1.5</param>
 
   <param name="spacing" type="float" precision="2" min="0.0" max="10000.0" _gui-text="Space Between Parts">1.0</param>
 
