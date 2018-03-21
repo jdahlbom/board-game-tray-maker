@@ -6,7 +6,7 @@
   <dependency type="executable" location="extensions">traymaker.py</dependency>
   <dependency type="executable" location="extensions">simpletransform.py</dependency>
   <dependency type="executable" location="extensions">inkex.py</dependency>
-  <dependency type="executable" location="extensions">testable_traymaker.py</dependency>
+  <dependency type="executable" location="extensions">traymaker_logic.py</dependency>
 
   <param name="unit" _gui-text="Unit" type="optiongroup" appearance="minimal">
     <option value="mm">mm</option>
