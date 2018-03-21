@@ -3,134 +3,70 @@ from llist import dllist
 from math import pi as PI
 
 class TrayLaserCut():
-    global FEMALE, MALE, HINGE_FEMALE, TOP
+    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE
 
     FEMALE = "FEMALE"
     MALE = "MALE"
     HINGE_FEMALE = "HINGE_FEMALE"
     TOP = "TOP"
+    NO_EDGE = "NO_EDGE"
 
-
-    def __init__(self, options, unittouu):
+    def __init__(self, options, unittouu, errorFn):
         self.options = options
         self.unittouu = unittouu # Function reference to inkex-dependent conversion function.
+        self.errorFn = errorFn
 
-        self.X = self.options["X"]
-        self.Y = self.options["Y"]
-        self.Z = self.options["Z"]
         self.thickness = self.options["thickness"]
-        self.nom_tab = self.options["nom_tab"]
+        self.nom_tab = self.options["nomTab"]
         self.spacing = self.options["spacing"]
         self.kerf = self.options["kerf"]
-        self.empty_space = self.options["empty_space"]
         self.indentradius = self.options["indentradius"]
         self.clearance = self.options["clearance"]
         self.cut_length = self.options["cut_length"]
         self.gap_length = self.options["gap_length"]
         self.sep_distance = self.options["sep_distance"]
+        self.correction = self.kerf - self.clearance
 
-
-    def draw(self):
+    def draw(self, pieces):
         # layout format:(rootx),(rooty),Xlength,Ylength,tabInfo
         # root= (spacing,X,Y,Z) * values in tuple
         # tabInfo= <abcd> 0=holes 1=tabs
         hinge_radius=self.unittouu("6mm")
         empty_space=self.unittouu("10mm")
-        pieces = [
-            {
-                "width": self.X,
-                "length": self.Y,
-                "edges": dllist([
-                    {
-                        "parts": dllist([
-                            {"tabs": FEMALE, "length": self.X-hinge_radius*PI/2-empty_space},
-                            {"tabs": HINGE_FEMALE, "length": hinge_radius*PI/2},
-                            {"tabs": FEMALE, "length": empty_space}]),
-                        "translation": (0, 0),
-                        "rotation": 0,
-                        "depth": self.Y
-                    },
-                    {
-                        "parts": dllist([{"tabs": TOP, "length": self.Y}]),
-                        "translation": (self.X, 0),
-                        "rotation": 1,
-                        "depth": self.X
-                    },
-                    {
-                        "parts": dllist([
-                            {"tabs": FEMALE, "length": empty_space},
-                            {"tabs": TOP, "length": hinge_radius*PI/2},
-                            {"tabs": FEMALE, "length": self.X-empty_space-hinge_radius*PI/2}]),
-                        "translation": (self.X, self.Y),
-                        "rotation": 2,
-                        "depth": self.Y
-                    },
-                    {
-                        "parts": dllist([{"tabs": FEMALE, "length": self.Y}]),
-                        "translation": (0, self.Y),
-                        "rotation": 3,
-                        "depth": self.X
-                    }
-                ]),
-                "offset": ( self.Z+self.spacing*2, self.Z+self.spacing*2 )
-            }]
+        error = ""
 
-        other_pieces = [
-            {
-                "width": self.Z,
-                "length": self.Y,
-                "edges": [FEMALE, MALE, FEMALE, TOP],
-                "offset": ( self.spacing, self.Z+self.spacing*2 )
-            },
-            {
-                "width": self.X,
-                "length": self.Z,
-                "edges": [TOP, MALE, MALE, MALE],
-                "offset": ( self.X+self.spacing*2, self.spacing ),
-                "indentradius": self.indentradius
-            },
-            {
-                "width": self.Z,
-                "length": self.Y,
-                "edges": [FEMALE, TOP, FEMALE, MALE],
-                "offset": ( self.Z+self.X+self.spacing * 3, self.Z + self.spacing*2 )
-            },
-            {
-                "width": self.X,
-                "length": self.Z,
-                "edges": [MALE, MALE, TOP, MALE],
-                "offset": ( self.Z+self.spacing*2, self.Z+self.Y+self.spacing*3 ),
-                "indentradius": self.indentradius
-            }]
+        all_directives = []
+        pieceDirectives = []
+
+        for piece in pieces:
+            piece["edges"] = dllist(piece["edges"])
+            for edge in piece["edges"]:
+                edge["parts"] = dllist(edge["parts"])
 
 
-        for piece in pieces: # generate and draw each piece of the box
-            pieceDirectives = []
+            edge_node = piece["edges"].first
 
-            for edge_node in piece["edges"]:
+            while edge_node is not None:
                 edge = edge_node.value
 
-                for part_node in edge.value["parts"]:
+                translation_x, translation_y = edge["translation"]
+                rotation = edge["rotation"]
 
-                    translation_x, translation_y = edge["translation"]
-                    rotation = edge["rotation"]
-
-                    depth = edge["depth"]
-
-                    indentradius = 0
-                    if "indentradius" in piece:
-                        indentradius = piece["indentradius"]
-
+                part_node = edge["parts"].first
+                while part_node is not None:
                     x_part_offset = 0
                     prev_part = part_node.prev
                     while prev_part is not None:
                         x_part_offset += prev_part.value["length"]
                         prev_part = prev_part.prev
 
-                    directives = g_side(edge_node, part_node, nomTab, indentradius, (depth, cut_length, gap_length, sep_distance))
-                    directives = transform(directives, 0, (x_part_offset, 0))
-                    directives = transform(directives, rotation, (translation_x, translation_y))
+                    directives = self.g_side(edge_node, part_node)
+                    directives = self.transform(directives, 0, (x_part_offset, 0))
+                    directives = self.transform(directives, rotation, (translation_x, translation_y))
                     pieceDirectives.extend(directives)
+                    part_node = part_node.next
+
+                edge_node = edge_node.next
 
             piece_x, piece_y = piece["offset"]
             for directive in pieceDirectives:
@@ -138,16 +74,20 @@ class TrayLaserCut():
                 cmds = "M {} {} ".format(x+piece_x, y+piece_y)
                 for elem in directive["elements"]:
                     cmds += elem["draw"](elem)
-                drawS(cmds)
+                all_directives.append(cmds)
 
         if error:
-            inkex.errormsg(_('Warning: Box may be impractical'))
+            self.errorFn('Warning: Box may be impractical')
+            return ""
+        else:
+            return all_directives
+
 
 
     def line(self, x, y):
         def draw(line_element):
             (x,y) = line_element["coords"]
-            (x,y) = rotateClockwise((x,y), line_element["rotations"])
+            (x,y) = self.rotateClockwise((x,y), line_element["rotations"])
             return "l {} {} ".format(x, y)
 
         return {
@@ -165,7 +105,7 @@ class TrayLaserCut():
             rotations = arc_element["rotations"]
             x_angle = (rotations % 4) * 90
             end_point = ( 2 * radius, 0 )
-            (end_x, end_y) = rotateClockwise(end_point, rotations)
+            (end_x, end_y) = self.rotateClockwise(end_point, rotations)
             return "a{},{} {} 0,0 {},{}".format(radius, radius, x_angle, end_x, end_y)
 
         return {
@@ -187,7 +127,7 @@ class TrayLaserCut():
     def transform(self, directives, rotations, (translation_x, translation_y)):
         def single_directive(directive):
             (origin_x, origin_y) = directive["origin"]
-            (x, y) = rotateClockwise((origin_x, origin_y), rotations)
+            (x, y) = self.rotateClockwise((origin_x, origin_y), rotations)
             origin = (x + translation_x, y + translation_y)
             for elem in directive["elements"]:
                 elem["rotations"] += rotations
@@ -209,7 +149,10 @@ class TrayLaserCut():
     # MALE means this edge should have tabs at corners, (unless neighboring edge of the face is FEMALE)
     # FEMALE means this edge should have holes at corners.
 
-    def g_side(self, edge_node, part_node, nomTab, indentradius, (depth, cut_length, gap_length, sep_distance)):
+    def g_side(self, edge_node, part_node):
+        nomTab = self.nom_tab
+        depth = edge_node.value["depth"]
+
         part = part_node.value
         length = part["length"]
 
@@ -219,47 +162,47 @@ class TrayLaserCut():
         gapWidth=tabWidth=length/divs
 
         # kerf correction
-        gapWidth-=correction
-        tabWidth+=correction
-        first=correction/2
+        gapWidth -= self.correction
+        tabWidth += self.correction
+        first = self.correction/2
 
         leftTab = NO_EDGE
         rightTab = NO_EDGE
-        if part.prev is None:
+        if part_node.prev is None:
             left_edge = edge_node.prev
             if left_edge is None:
                 left_edge = edge_node.next
                 while left_edge.next is not None:
                     left_edge = left_edge.next
-            leftTab = edge_node.last.value["tabs"]
-        if part.next is None:
+            leftTab = left_edge.value["parts"].last.value["tabs"]
+        if part_node.next is None:
             right_edge = edge_node.next
             if right_edge is None:
                 right_edge = edge_node.prev
                 while right_edge.prev is not None:
                     right_edge = right_edge.prev
-            rightTab = right_edge.first.value["tabs"]
+            rightTab = right_edge.value["parts"].first.value["tabs"]
 
-        thisTab = part_node.value["tabs"]
+        thisTab = part["tabs"]
 
         if thisTab is HINGE_FEMALE:
-            start_y = thickness
-            dirs = [{"origin": (0,start_y), "elements": [line(length, 0)]}]
-            dirs.extend(living_hinge_cuts(length, start_y, depth-thickness, cut_length, gap_length, sep_distance))
+            start_y = self.thickness
+            dirs = [{"origin": (0,start_y), "elements": [self.line(length, 0)]}]
+            dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
             return dirs
 
 
         if thisTab is MALE:
-            start_y = 0
+            start_y = -self.thickness
             if leftTab in [FEMALE, HINGE_FEMALE]:
-                start_x = thickness
+                start_x = 0
             else:
-                start_x = 0
+                start_x = -self.thickness
         else:
-            start_y = thickness
-            start_x = thickness
+            start_y = 0
+            start_x = 0
             if leftTab is MALE:
-                start_x = 0
+                start_x = -self.thickness
 
 
         draw_directives = {
@@ -268,28 +211,29 @@ class TrayLaserCut():
         }
 
         if thisTab is TOP:
-            if indentradius > 0:
-                len_to_indent = length / 2 - start_x - indentradius
-                draw_directives["elements"].append(line(len_to_indent,0))
-                draw_directives["elements"].append(halfcircle(indentradius))
-                endOffset = 0 if rightTab is MALE else thickness
-                len_to_end = length / 2 - endOffset - indentradius
-                draw_directives["elements"].append(line(len_to_end,0))
+            if self.indentradius > 0:
+                i_rad = self.indentradius
+                len_to_indent = length / 2 - start_x - i_rad
+                draw_directives["elements"].append(self.line(len_to_indent,0))
+                draw_directives["elements"].append(self.halfcircle(i_rad))
+                endOffset = 0 if rightTab is MALE else self.thickness
+                len_to_end = length / 2 - endOffset - i_rad
+                draw_directives["elements"].append(self.line(len_to_end,0))
 
             else:
-                endOffset = 0 if rightTab is MALE else thickness
-                draw_directives["elements"].append(line(length - start_x - endOffset,0))
+                endTab = self.thickness if rightTab is MALE else 0
+                draw_directives["elements"].append(self.line(length - start_x + endTab,0))
             return [draw_directives]
 
         currently_male_tab = True if thisTab is MALE else False
         for n in range(1,int(divs)):
             if not currently_male_tab:
                 dx = gapWidth
-                dy = -thickness
+                dy = -self.thickness
                 currently_male_tab = True
             else:
                 dx = tabWidth
-                dy = thickness
+                dy = self.thickness
                 currently_male_tab = False
 
             if n is 1:
@@ -298,10 +242,10 @@ class TrayLaserCut():
 
             if n is int(divs):
                 dy = 0
-            draw_directives["elements"].extend([line(dx, 0), line(0, dy)])
+            draw_directives["elements"].extend([self.line(dx, 0), self.line(0, dy)])
 
-        endOffset = thickness if tabInfo["right"] in [NO_EDGE, FEMALE, HINGE_FEMALE] else 0
-        draw_directives["elements"].append( line( (gapWidth if not currentlyTab else tabWidth) - endOffset, 0))
+        endOffset = self.thickness if rightTab in [NO_EDGE, FEMALE, HINGE_FEMALE] else 0
+        draw_directives["elements"].append( self.line( (gapWidth if not currently_male_tab else tabWidth) - endOffset, 0))
 
         return [draw_directives]
 
@@ -353,7 +297,7 @@ class TrayLaserCut():
                 if endy >= hinge_width:
                     cut_len -= (endy - hinge_width)
                 # Add the end points of the line
-                draw_directives.append({'origin' : (currx, starty), 'elements': [line(0, cut_len)] })
+                draw_directives.append({'origin' : (currx, starty), 'elements': [self.line(0, cut_len)] })
                 starty = endy + cut_line_vert_spacing
                 endy = starty + cut_line_len
                 if starty >= hinge_width:
@@ -375,7 +319,7 @@ class TrayLaserCut():
                 if endy >= hinge_width:
                     cut_len -= (endy-hinge_width)
                 # create a line
-                draw_directives.append({'origin' : (currx, starty), 'elements': [line(0, cut_len)] })
+                draw_directives.append({'origin' : (currx, starty), 'elements': [ self.line(0, cut_len)] })
                 starty = endy + cut_line_vert_spacing
                 endy = starty + cut_line_len
                 if starty >= hinge_width:

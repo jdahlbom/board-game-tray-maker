@@ -170,11 +170,13 @@ class BoxMaker(inkex.Effect):
             "sep_distance": sep_distance
         }
 
-        tray_cut = TrayLaserCut(options, self.unittouu)
-        self.draw()
+        tray_cut = TrayLaserCut(options, self.unittouu, inkex.errormsg)
+        command_str = tray_cut.draw()
+        for cmd in command_str:
+            self.drawS(cmd)
 
 
-    def drawS(XYstring):         # Draw lines from a list
+    def drawS(self, XYstring):         # Draw lines from a list
         name='part'
         style = { 'stroke': '#000000', 'fill': 'none' }
         drw = {'style':simplestyle.formatStyle(style),inkex.addNS('label','inkscape'):name,'d':XYstring}
