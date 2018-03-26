@@ -16,7 +16,6 @@ class TrayLaserCut():
         self.unittouu = unittouu # Function reference to inkex-dependent conversion function.
         self.errorFn = errorFn
 
-        self.thickness = self.options["thickness"]
         self.nom_tab = self.options["nomTab"]
         self.spacing = self.options["spacing"]
         self.kerf = self.options["kerf"]
@@ -148,6 +147,20 @@ class TrayLaserCut():
     # FEMALE means this edge should have holes at corners.
 
     def g_side(self, edge_node, part_node):
+        def prevnode(node):
+            if node.prev is not None:
+                return node.prev
+            while node.next is not None:
+                node = node.next
+            return node
+
+        def nextnode(node):
+            if node.next is not None:
+                return node.next
+            while node.prev is not None:
+                node = node.prev
+            return node
+
         nomTab = self.nom_tab
         depth = edge_node.value["depth"]
 
@@ -166,19 +179,11 @@ class TrayLaserCut():
 
         leftTab = NO_EDGE
         rightTab = NO_EDGE
+        left_edge = prevnode(edge_node)
+        right_edge = nextnode(edge_node)
         if part_node.prev is None:
-            left_edge = edge_node.prev
-            if left_edge is None:
-                left_edge = edge_node.next
-                while left_edge.next is not None:
-                    left_edge = left_edge.next
             leftTab = left_edge.value["parts"].last.value["tabs"]
         if part_node.next is None:
-            right_edge = edge_node.next
-            if right_edge is None:
-                right_edge = edge_node.prev
-                while right_edge.prev is not None:
-                    right_edge = right_edge.prev
             rightTab = right_edge.value["parts"].first.value["tabs"]
 
         thisTab = part["tabs"]
@@ -186,22 +191,22 @@ class TrayLaserCut():
         start_x = 0
         start_y = 0
         if thisTab is HINGE_FEMALE:
-            start_y = self.thickness
+            start_y = 0
             dirs = [{"origin": (0,start_y), "elements": [self.line(length, 0)]}]
-            dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
+         #   dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
             return dirs
 
         elif thisTab is MALE:
-            start_y = -self.thickness
+            start_y = -edge_node.value["opposite"]["thickness"]
             if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE]:
                 start_x = 0
             else:
-                start_x = -self.thickness
+                start_x = -left_edge.value["opposite"]["thickness"]
         elif thisTab in [FEMALE, TOP]:
             start_y = 0
             start_x = 0
             if leftTab is MALE:
-                start_x = -self.thickness
+                start_x = -left_edge.value["opposite"]["thickness"]
 
 
         draw_directives = {
@@ -213,26 +218,26 @@ class TrayLaserCut():
             if self.indentradius > 0:
                 i_rad = self.indentradius
                 len_to_indent = length / 2 - start_x - i_rad
-                draw_directives["elements"].append(self.line(len_to_indent,0))
+                draw_directives["elements"].append(self.line(len_to_indent, 0))
                 draw_directives["elements"].append(self.halfcircle(i_rad))
-                endOffset = 0 if rightTab is MALE else self.thickness
-                len_to_end = length / 2 - endOffset - i_rad
-                draw_directives["elements"].append(self.line(len_to_end,0))
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is MALE else 0
+                len_to_end = length / 2 + end_tab - i_rad
+                draw_directives["elements"].append(self.line(len_to_end, 0))
 
             else:
-                endTab = self.thickness if rightTab is MALE else 0
-                draw_directives["elements"].append(self.line(length - start_x + endTab,0))
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is MALE else 0
+                draw_directives["elements"].append(self.line(length - start_x + end_tab, 0))
             return [draw_directives]
 
         currently_male_tab = True if thisTab is MALE else False
         for n in range(1,int(divs)):
             if not currently_male_tab:
                 dx = gapWidth
-                dy = -self.thickness
+                dy = -edge_node.value["opposite"]["thickness"]
                 currently_male_tab = True
             else:
                 dx = tabWidth
-                dy = self.thickness
+                dy = edge_node.value["opposite"]["thickness"]
                 currently_male_tab = False
 
             if n is 1:
@@ -243,7 +248,7 @@ class TrayLaserCut():
                 dy = 0
             draw_directives["elements"].extend([self.line(dx, 0), self.line(0, dy)])
 
-        end_tab = self.thickness if rightTab in [MALE] else 0
+        end_tab = right_edge.value["opposite"]["thickness"] if rightTab in [MALE] else 0
         part_width = (gapWidth if not currently_male_tab else tabWidth) + end_tab
 
         draw_directives["elements"].append( self.line(part_width, 0))
