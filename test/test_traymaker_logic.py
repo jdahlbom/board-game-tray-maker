@@ -4,7 +4,6 @@ import re
 def mocked_unitfunc(unitstr):
     exp = re.compile(r'^([0-9]*)[^0-9]*$')
     matches = exp.match(unitstr)
-    print(matches)
     return 1
 
 
@@ -150,6 +149,60 @@ def mock_male_male_edge(x, y):
     return single_edge_piece
 
 
+def mock_top_male_edge(x, y):
+    single_edge_piece = [{
+        "width": x,
+        "length": y,
+        "offset": (0, 0),
+        "edges": [
+            {
+                "parts": [
+                    {"tabs": "TOP", "length": x}
+                ],
+                "translation": (0, 0),
+                "rotation": 0,
+                "depth": y
+            },
+            {
+                "parts": [
+                    {"tabs": "MALE", "length": y}
+                ],
+                "translation": (x, 0),
+                "rotation": 1,
+                "depth": x
+            }
+        ]
+    }]
+    return single_edge_piece
+
+
+def mock_top_female_edge(x, y):
+    single_edge_piece = [{
+        "width": x,
+        "length": y,
+        "offset": (0, 0),
+        "edges": [
+            {
+                "parts": [
+                    {"tabs": "TOP", "length": x}
+                ],
+                "translation": (0, 0),
+                "rotation": 0,
+                "depth": y
+            },
+            {
+                "parts": [
+                    {"tabs": "FEMALE", "length": y}
+                ],
+                "translation": (x, 0),
+                "rotation": 1,
+                "depth": x
+            }
+        ]
+    }]
+    return single_edge_piece
+
+
 def error_print(msg):
     print(msg)
 
@@ -266,4 +319,58 @@ def test_male_male_tabbed_side():
                'l 0 {} '.format(ytab) + \
                'l {} 0 '.format(thickness) + \
                'l 0 {} '.format(ytab+thickness)
+    assert(cmds[1] == expected)
+
+
+def test_top_male_tabbed_side():
+    xlen = 20
+    ylen = 24
+    ytab = 24/5.0
+    f_top_male_edges = mock_top_male_edge(xlen, ylen)
+    tab_size = 4.0
+    opts = options
+    thickness = opts["thickness"]
+    opts["nomTab"] = tab_size
+    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    cmds = traycut.draw(f_top_male_edges)
+    expected = 'M {} {} '.format(-thickness, 0) + \
+               'l {} {} '.format(xlen+thickness*2, 0)
+    assert(cmds[0] == expected)
+    expected = 'M {} {} '.format(xlen + thickness, 0) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(-thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(-thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(thickness) + \
+               'l 0 {} '.format(ytab)
+    assert(cmds[1] == expected)
+
+
+def test_top_female_tabbed_side():
+    xlen = 20
+    ylen = 24
+    ytab = 24/5.0
+    f_top_female_edges = mock_top_female_edge(xlen, ylen)
+    tab_size = 4.0
+    opts = options
+    thickness = opts["thickness"]
+    opts["nomTab"] = tab_size
+    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    cmds = traycut.draw(f_top_female_edges)
+    expected = 'M {} {} '.format(0, 0) + \
+               'l {} {} '.format(xlen, 0)
+    assert(cmds[0] == expected)
+    expected = 'M {} {} '.format(xlen, 0) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(-thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(thickness) + \
+               'l 0 {} '.format(ytab) + \
+               'l {} 0 '.format(-thickness) + \
+               'l 0 {} '.format(ytab)
     assert(cmds[1] == expected)

@@ -34,6 +34,9 @@ class TrayLaserCut():
         pieceDirectives = []
 
         for piece in pieces:
+            if "edges" not in piece:
+                continue
+
             piece["edges"] = dllist(piece["edges"])
             for edge in piece["edges"]:
                 edge["parts"] = dllist(edge["parts"])
@@ -180,8 +183,6 @@ class TrayLaserCut():
 
         thisTab = part["tabs"]
 
-        print("This: {}, Left: {}, Right: {}".format(thisTab, leftTab, rightTab))
-
         start_x = 0
         start_y = 0
         if thisTab is HINGE_FEMALE:
@@ -196,11 +197,12 @@ class TrayLaserCut():
                 start_x = 0
             else:
                 start_x = -self.thickness
-        elif thisTab is FEMALE:
+        elif thisTab in [FEMALE, TOP]:
             start_y = 0
             start_x = 0
             if leftTab is MALE:
                 start_x = -self.thickness
+
 
         draw_directives = {
             "origin": (start_x,start_y),
