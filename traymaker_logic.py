@@ -28,11 +28,6 @@ class TrayLaserCut():
         self.correction = self.kerf - self.clearance
 
     def draw(self, pieces):
-        # layout format:(rootx),(rooty),Xlength,Ylength,tabInfo
-        # root= (spacing,X,Y,Z) * values in tuple
-        # tabInfo= <abcd> 0=holes 1=tabs
-        hinge_radius=self.unittouu("6mm")
-        empty_space=self.unittouu("10mm")
         error = ""
 
         all_directives = []
@@ -185,25 +180,27 @@ class TrayLaserCut():
 
         thisTab = part["tabs"]
 
+        print("This: {}, Left: {}, Right: {}".format(thisTab, leftTab, rightTab))
+
+        start_x = 0
+        start_y = 0
         if thisTab is HINGE_FEMALE:
             start_y = self.thickness
             dirs = [{"origin": (0,start_y), "elements": [self.line(length, 0)]}]
             dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
             return dirs
 
-
-        if thisTab is MALE:
+        elif thisTab is MALE:
             start_y = -self.thickness
-            if leftTab in [FEMALE, HINGE_FEMALE]:
+            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE]:
                 start_x = 0
             else:
                 start_x = -self.thickness
-        else:
+        elif thisTab is FEMALE:
             start_y = 0
             start_x = 0
             if leftTab is MALE:
                 start_x = -self.thickness
-
 
         draw_directives = {
             "origin": (start_x,start_y),
@@ -244,8 +241,10 @@ class TrayLaserCut():
                 dy = 0
             draw_directives["elements"].extend([self.line(dx, 0), self.line(0, dy)])
 
-        endOffset = self.thickness if rightTab in [NO_EDGE, FEMALE, HINGE_FEMALE] else 0
-        draw_directives["elements"].append( self.line( (gapWidth if not currently_male_tab else tabWidth) - endOffset, 0))
+        end_tab = self.thickness if rightTab in [MALE] else 0
+        part_width = (gapWidth if not currently_male_tab else tabWidth) + end_tab
+
+        draw_directives["elements"].append( self.line(part_width, 0))
 
         return [draw_directives]
 
