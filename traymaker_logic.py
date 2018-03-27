@@ -292,7 +292,7 @@ class TrayLaserCut():
         directives = []
         for hole_part in edge["holes"]:
             x_offset += hole_part["offset"]
-            width = hole_part["width"]
+            width = hole_part["opposite"]["thickness"]
             shape = hole_part["shape"]
             if shape is START_HALF_TAB:
                 directive = {"origin": (x_offset, 0), "elements": []}

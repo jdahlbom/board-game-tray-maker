@@ -477,8 +477,8 @@ def test_top_female_tabbed_side():
 def test_square_with_holes():
     pieces = mock_square(10)
     pieces[0]["edges"][0]["holes"] = [{
+        "opposite": {"thickness": 2},
         "offset": 4,
-        "width": 2,
         "shape": "START_HALF_TAB"
     }]
     traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
