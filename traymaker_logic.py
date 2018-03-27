@@ -3,13 +3,15 @@ from llist import dllist
 from math import pi as PI
 
 class TrayLaserCut():
-    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE
+    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB
 
     FEMALE = "FEMALE"
     MALE = "MALE"
     HINGE_FEMALE = "HINGE_FEMALE"
     TOP = "TOP"
     NO_EDGE = "NO_EDGE"
+    END_HALF_TAB = "END_HALF_TAB"
+    START_HALF_TAB = "START_HALF_TAB"
 
     def __init__(self, options, unittouu, errorFn):
         self.options = options
@@ -63,6 +65,7 @@ class TrayLaserCut():
                     pieceDirectives.extend(directives)
                     part_node = part_node.next
 
+                pieceDirectives.extend(self.face_path(edge_node))
                 edge_node = edge_node.next
 
             piece_x, piece_y = piece["offset"]
@@ -196,9 +199,33 @@ class TrayLaserCut():
          #   dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
             return dirs
 
+        elif thisTab in [END_HALF_TAB, START_HALF_TAB]:
+            start_x = 0
+            end_tab = 0
+            if leftTab in [MALE, END_HALF_TAB]:
+                start_x = -left_edge.value["opposite"]["thickness"]
+            if rightTab in [MALE, START_HALF_TAB]:
+                end_tab = right_edge.value["opposite"]["thickness"]
+            thickness = edge_node.value["opposite"]["thickness"]
+            if thisTab in START_HALF_TAB:
+                dirs = {"origin": (start_x, -thickness),
+                        "elements": [
+                            self.line(part_node.value["length"]/2-start_x, 0),
+                            self.line(0, thickness),
+                            self.line(part_node.value["length"]/2+end_tab, 0)
+                        ]}
+                return [dirs]
+            if thisTab in END_HALF_TAB:
+                dirs = {"origin": (start_x, 0),
+                        "elements": [
+                            self.line(part_node.value["length"]/2-start_x, 0),
+                            self.line(0, -thickness),
+                            self.line(part_node.value["length"]/2+end_tab, 0)
+                        ]}
+                return [dirs]
         elif thisTab is MALE:
             start_y = -edge_node.value["opposite"]["thickness"]
-            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE]:
+            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE, START_HALF_TAB]:
                 start_x = 0
             else:
                 start_x = -left_edge.value["opposite"]["thickness"]
@@ -220,12 +247,12 @@ class TrayLaserCut():
                 len_to_indent = length / 2 - start_x - i_rad
                 draw_directives["elements"].append(self.line(len_to_indent, 0))
                 draw_directives["elements"].append(self.halfcircle(i_rad))
-                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is MALE else 0
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is [START_HALF_TAB, MALE] else 0
                 len_to_end = length / 2 + end_tab - i_rad
                 draw_directives["elements"].append(self.line(len_to_end, 0))
 
             else:
-                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is MALE else 0
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 draw_directives["elements"].append(self.line(length - start_x + end_tab, 0))
             return [draw_directives]
 
@@ -248,12 +275,36 @@ class TrayLaserCut():
                 dy = 0
             draw_directives["elements"].extend([self.line(dx, 0), self.line(0, dy)])
 
-        end_tab = right_edge.value["opposite"]["thickness"] if rightTab in [MALE] else 0
+        end_tab = right_edge.value["opposite"]["thickness"] if rightTab in [MALE, START_HALF_TAB] else 0
         part_width = (gapWidth if not currently_male_tab else tabWidth) + end_tab
 
         draw_directives["elements"].append( self.line(part_width, 0))
 
         return [draw_directives]
+
+
+    def face_path(self, edge_node):
+        edge = edge_node.value
+        depth = edge["depth"]
+        if "holes" not in edge:
+            return []
+        x_offset = 0
+        directives = []
+        for hole_part in edge["holes"]:
+            x_offset += hole_part["offset"]
+            width = hole_part["width"]
+            shape = hole_part["shape"]
+            if shape is START_HALF_TAB:
+                directive = {"origin": (x_offset, 0), "elements": []}
+            elif shape is END_HALF_TAB:
+                directive = {"origin": (x_offset, depth/2), "elements": []}
+            directive["elements"].append(self.line(0, depth/2))
+            directive["elements"].append(self.line(width, 0))
+            directive["elements"].append(self.line(0, -depth/2))
+            directive["elements"].append(self.line(-width, 0))
+            directives.append(directive)
+            x_offset += width
+        return directives
 
 
     def living_hinge_cuts(self, hinge_length, start_y, hinge_width, cut_line_len, cut_line_vert_spacing, cut_line_horiz_spacing):
