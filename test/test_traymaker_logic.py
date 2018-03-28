@@ -1,17 +1,12 @@
 from traymaker_logic import TrayLaserCut
-import re
 
 def mocked_unitfunc(unitstr):
-    exp = re.compile(r'^([0-9]*)[^0-9]*$')
-    matches = exp.match(unitstr)
     return 1
 
 
 options = {
-    "X": 10,
-    "Y": 20,
-    "Z": 30,
     "unit": "mm",
+    "uconv": 1,
     "nomTab": 4,
     "spacing": 1,
     "kerf": 0.1,
@@ -32,7 +27,7 @@ def mock_square(side):
 
     return [{
         "width": X,
-        "length": Y,
+        "height": Y,
         "offset": (0,0),
         "thickness": 3,
         "edges": [
@@ -83,7 +78,7 @@ def mock_female_edge(x=20, y=12):
 
     single_edge_piece = [{
         "width": x,
-        "length": y,
+        "height": y,
         "offset": (0,0),
         "thickness": 3,
         "edges": [
@@ -117,7 +112,7 @@ def mock_female_male_edge(x, y):
     }
     single_edge_piece = [{
         "width": x,
-        "length": y,
+        "height": y,
         "offset": (0, 0),
         "thickness": 3,
         "edges": [
@@ -150,7 +145,7 @@ def mock_male_male_edge(x, y):
     }
     single_edge_piece = [{
         "width": x,
-        "length": y,
+        "height": y,
         "offset": (0, 0),
         "thickness": 3,
         "edges": [
@@ -184,7 +179,7 @@ def mock_top_male_edge(x, y):
 
     single_edge_piece = [{
         "width": x,
-        "length": y,
+        "height": y,
         "offset": (0, 0),
         "thickness": 3,
         "edges": [
@@ -218,7 +213,7 @@ def mock_top_female_edge(x, y):
 
     single_edge_piece = [{
         "width": x,
-        "length": y,
+        "height": y,
         "offset": (0, 0),
         "thickness": 3,
         "edges": [
@@ -253,7 +248,7 @@ def mock_half_tabs(side):
 
     return [{
         "width": X,
-        "length": Y,
+        "height": Y,
         "offset": (0,0),
         "thickness": 3,
         "edges": [

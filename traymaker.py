@@ -25,6 +25,7 @@ __version__ = "0.91" ### please report bugs, suggestions etc to bugs@twot.eu ###
 from math import pi as PI
 import sys,inkex,simplestyle,gettext
 from traymaker_logic import TrayLaserCut
+import gloomhaven
 from llist import dllist
 
 _ = gettext.gettext
@@ -37,36 +38,24 @@ HINGE_FEMALE = 4
 CURVE = 5
 
 
-class BoxMaker(inkex.Effect):
+class TrayMaker(inkex.Effect):
 
     def __init__(self):
         # Call the base class constructor.
         inkex.Effect.__init__(self)
         # Define options
+        self.OptionParser.add_option('--tray_name',action='store',type='string',
+                                     dest='tray_name',default='effects',help='Tray name')
         self.OptionParser.add_option('--unit',action='store',type='string',
                                      dest='unit',default='mm',help='Measure Units')
-        self.OptionParser.add_option('--inside',action='store',type='int',
-                                     dest='inside',default=0,help='Int/Ext Dimension')
-        self.OptionParser.add_option('--length',action='store',type='float',
-                                     dest='length',default=100,help='Length of Box')
-        self.OptionParser.add_option('--width',action='store',type='float',
-                                     dest='width',default=100,help='Width of Box')
-        self.OptionParser.add_option('--depth',action='store',type='float',
-                                     dest='height',default=100,help='Height of Box')
-        self.OptionParser.add_option('--indentradius',action='store',type='float',
-                                     dest='indentradius',default=50,help='End of tray indent circle radius')
         self.OptionParser.add_option('--tab',action='store',type='float',
                                      dest='tab',default=25,help='Nominal Tab Width')
         self.OptionParser.add_option('--equal',action='store',type='int',
                                      dest='equal',default=0,help='Equal/Prop Tabs')
-        self.OptionParser.add_option('--thickness',action='store',type='float',
-                                     dest='thickness',default=10,help='Thickness of Material')
         self.OptionParser.add_option('--kerf',action='store',type='float',
                                      dest='kerf',default=0.5,help='Kerf (width) of cut')
         self.OptionParser.add_option('--clearance',action='store',type='float',
                                      dest='clearance',default=0.01,help='Clearance of joints')
-        self.OptionParser.add_option('--style',action='store',type='int',
-                                     dest='style',default=25,help='Layout/Style')
         self.OptionParser.add_option('--spacing',action='store',type='float',
                                      dest='spacing',default=25,help='Part Spacing')
         self.OptionParser.add_option('--cut_length',action='store',type='float',
@@ -96,11 +85,7 @@ class BoxMaker(inkex.Effect):
 
         # Get script's option values.
         unit=self.options.unit
-        X = self.unittouu( str(self.options.length)  + unit )
-        Y = self.unittouu( str(self.options.width) + unit )
-        Z = self.unittouu( str(self.options.height)  + unit )
-        indentradius = self.unittouu( str(self.options.indentradius) + unit)
-        thickness = self.unittouu( str(self.options.thickness)  + unit )
+        uconv = self.unittouu( "1 {}".format(unit))
         nomTab = self.unittouu( str(self.options.tab) + unit )
         equalTabs=self.options.equal
         kerf = self.unittouu( str(self.options.kerf)  + unit )
@@ -117,49 +102,15 @@ class BoxMaker(inkex.Effect):
         # TODO restrict values to *correct* solutions
         error=0
 
-        if min(X,Y,Z)==0:
-            inkex.errormsg(_('Error: Dimensions must be non zero'))
-            error=1
-        if max(X,Y,Z)>max(widthDoc,heightDoc)*10: # crude test
-            inkex.errormsg(_('Error: Dimensions Too Large'))
-            error=1
-        if min(X,Y,Z)<3*nomTab:
-            inkex.errormsg(_('Error: Tab size too large'))
-            error=1
-        if nomTab<thickness:
-            inkex.errormsg(_('Error: Tab size too small'))
-            error=1
-        if thickness==0:
-            inkex.errormsg(_('Error: Thickness is zero'))
-            error=1
-        if thickness>min(X,Y,Z)/3: # crude test
-            inkex.errormsg(_('Error: Material too thick'))
-            error=1
-        if correction>min(X,Y,Z)/3: # crude test
-            inkex.errormsg(_('Error: Kerf/Clearence too large'))
-            error=1
-        if spacing>max(X,Y,Z)*10: # crude test
-            inkex.errormsg(_('Error: Spacing too large'))
-            error=1
         if spacing<kerf:
             inkex.errormsg(_('Error: Spacing too small'))
-            error=1
-        if indentradius<0:
-            inkex.errormsg(_('Error: Indent Radius cannot be negative'))
-            error=1
-        if thickness >= nomTab:
-            inkex.errormsg(_('Error: Material thickness should be less than nominal tab size'))
             error=1
         if error:
             exit()
 
         options = {
             "unit": unit,
-            "X": X,
-            "Y": Y,
-            "Z": Z,
-            "indentradius": indentradius,
-            "thickness": thickness,
+            "uconv": uconv,
             "nomTab": nomTab,
             "equalTabs": equalTabs,
             "kerf": kerf,
@@ -171,7 +122,8 @@ class BoxMaker(inkex.Effect):
         }
 
         tray_cut = TrayLaserCut(options, self.unittouu, inkex.errormsg)
-        command_str = tray_cut.draw()
+        pieces = gloomhaven.tray_setup(self.options.tray_name)
+        command_str = tray_cut.draw(pieces)
         for cmd in command_str:
             self.drawS(cmd)
 
@@ -187,6 +139,6 @@ class BoxMaker(inkex.Effect):
 
 if __name__ == "__main__":
     # Create effect instance and apply it.
-    effect = BoxMaker()
+    effect = TrayMaker()
     effect.affect()
 

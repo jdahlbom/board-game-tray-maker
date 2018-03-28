@@ -7,6 +7,7 @@
   <dependency type="executable" location="extensions">simpletransform.py</dependency>
   <dependency type="executable" location="extensions">inkex.py</dependency>
   <dependency type="executable" location="extensions">traymaker_logic.py</dependency>
+  <dependency type="executable" location="extensions">gloomhaven.py</dependency>
 
   <param name="unit" _gui-text="Unit" type="optiongroup" appearance="minimal">
     <option value="mm">mm</option>
@@ -14,30 +15,21 @@
     <option value="in">in</option>
   </param>
 
-  <param name="inside" type="optiongroup" _gui-text="Tray Dimensions">
-    <_option value="1">Inside</_option>
-    <_option value="0">Outside</_option>
+  <param name="tray_name" _gui-text="Gloomhaven Insert Part" type="optiongroup" appearance="minimal">
+    <option value="monsters">Monsters</option>
+    <option value="bosses">Boss Monsters</option>
+    <option value="effects">Effect markers</option>
+    <option value="small_terrain">Small terrain pieces</option>
+    <option value="large_terrain">Large terrain pieces</option>
+    <option value="monster_cards">Monster Cards</option>
+    <option value="event_cards">Event Cards</option>
+    <option value="player_trays">Player Trays</option>
   </param>
 
-  <param name="length" type="float" precision="3" min="0.0" max="10000.0" _gui-text="length">1.0</param>
-  <param name="width" type="float" precision="3"  min="0.0" max="10000.0" _gui-text="Width">1.0</param>
-  <param name="depth" type="float" precision="3"  min="0.0" max="10000.0" _gui-text="Height">1.0</param>
   <param name="tab" type="float" precision="2" min="0.0" max="10000.0" _gui-text="Minimum/Prefered Tab Width">1.0</param>
-  <param name="indentradius" type="float" precision="1" min="0.0" max="5000.0" _gui-text="End of tray indent circle radius">0.0</param>
 
-  <param name="equal" type="optiongroup" _gui-text="Tab Width">
-    <_option value="0">Fixed</_option>
-    <_option value="1">Proportional</_option>
-  </param>
-
-  <param name="thickness" type="float" precision="2" min="0.0" max="10000.0" _gui-text="Material Thickness">1.0</param>
   <param name="kerf" type="float" precision="3"  min="0.0" max="10000.0" _gui-text="Kerf (cut width)">0.1</param>
   <param name="clearance" type="float" precision="3"  min="0.0" max="10000.0" _gui-text="Clearance">0.01</param>
-
-  <param name="style" _gui-text="Layout/Style" type="optiongroup" appearance="minimal">
-    <option value="1">Diagramatic</option>
-    <option value="3">Inline(compact)</option>
-  </param>
 
   <param name="cut_length" type="float" precision="2"  _gui-text="Hinge cut length (y)" min="1" max="1000">19.0</param>
   <param name="gap_length" type="float" precision="2" _gui-text="Hinge gap length (y)" min="1" max="1000">3.0</param>
@@ -48,7 +40,7 @@
   <effect>
     <object-type>all</object-type>
     <effects-menu>
-      <submenu _name="Laser Tools" />
+      <submenu _name="Gloomhaven" />
     </effects-menu>
   </effect>
   <script>

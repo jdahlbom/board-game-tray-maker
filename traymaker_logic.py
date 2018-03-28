@@ -18,18 +18,49 @@ class TrayLaserCut():
         self.unittouu = unittouu # Function reference to inkex-dependent conversion function.
         self.errorFn = errorFn
 
+        self.uconv = self.options["uconv"] # Conversion rate from 1 <unit> to drawing units.
         self.nom_tab = self.options["nomTab"]
         self.spacing = self.options["spacing"]
         self.kerf = self.options["kerf"]
-        self.indentradius = self.options["indentradius"]
         self.clearance = self.options["clearance"]
         self.cut_length = self.options["cut_length"]
         self.gap_length = self.options["gap_length"]
         self.sep_distance = self.options["sep_distance"]
         self.correction = self.kerf - self.clearance
 
+        self.indentradius = 0
+
+
+    def convert_piece(self, piece):
+        def convert_tuple(tuple):
+            (x, y) = tuple
+            return x * self.uconv, y * self.uconv
+
+        for key in ["width","height","thickness"]:
+            piece[key] = self.uconv * piece[key]
+        piece["offset"] = convert_tuple(piece["offset"])
+        if "edges" not in piece:
+            return
+
+
+        for edge in piece["edges"]:
+            edge["translation"] = convert_tuple(edge["translation"])
+            for part in edge["parts"]:
+                part["length"] = self.uconv * part["length"]
+            if "depth" in edge:
+                edge["depth"] = self.uconv * edge["depth"]
+
+            if "holes" in edge:
+                for hole in edge["holes"]:
+                    hole["offset"] = self.uconv * hole["offset"]
+                    hole["opposite"]["thickness"] = self.uconv * hole["opposite"]["thickness"]
+
+
     def draw(self, pieces):
         error = ""
+
+        for piece in pieces:
+            self.convert_piece(piece)
 
         all_directives = []
         pieceDirectives = []
@@ -164,8 +195,9 @@ class TrayLaserCut():
                 node = node.prev
             return node
 
+        self.errorFn("{}".format(edge_node.value["rotation"]))
+
         nomTab = self.nom_tab
-        depth = edge_node.value["depth"]
 
         part = part_node.value
         length = part["length"]
@@ -173,6 +205,8 @@ class TrayLaserCut():
         divs=int(length/nomTab)  # divisions
         if not divs%2: divs-=1   # make divs odd
         divs=float(divs)
+        if divs > 9:
+            divs = 9
         gapWidth=tabWidth=length/divs
 
         # kerf correction
@@ -285,6 +319,9 @@ class TrayLaserCut():
 
     def face_path(self, edge_node):
         edge = edge_node.value
+        if "depth" not in edge:
+            self.errorFn("No 'depth' given for edge")
+            return []
         depth = edge["depth"]
         if "holes" not in edge:
             return []
