@@ -284,7 +284,7 @@ def tray_setup(tray_name):
                 "width": 116,
                 "height": 12,
                 "thickness": 3,
-                "offset":  (0, 200),
+                "offset":  (5, 200),
                 "edges": [
                     {
                         "rotation": 0,
@@ -336,7 +336,7 @@ def tray_setup(tray_name):
                 "width": 279,
                 "height": 12,
                 "thickness": 2,
-                "offset":  (0, 240),
+                "offset":  (5, 240),
                 "edges": [
                     {
                         "rotation": 0,

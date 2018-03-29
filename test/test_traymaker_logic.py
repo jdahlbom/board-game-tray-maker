@@ -18,7 +18,8 @@ options = {
     "indentradius": 0
 }
 
-def mock_square(side):
+
+def mock_square(side, offset=(0, 0)):
     X = side
     Y = side
     opposite_piece = {
@@ -28,7 +29,7 @@ def mock_square(side):
     return [{
         "width": X,
         "height": Y,
-        "offset": (0,0),
+        "offset": offset,
         "thickness": 3,
         "edges": [
             {
@@ -497,3 +498,18 @@ def test_half_tabs():
     assert(cmds[3] == 'M 0 12 l 0 -6 l -3 0 l 0 -9 ')
 
 
+def test_two_squares():
+    pieces = mock_square(10)
+    pieces.extend(mock_square(10, (0, 20)))
+    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    cmds = traycut.draw(pieces)
+
+    assert(len(cmds) == 8)
+    assert(cmds[0] == 'M 0 0 l 10 0 ')
+    assert(cmds[1] == 'M 10 0 l 0 10 ')
+    assert(cmds[2] == 'M 10 10 l -10 0 ')
+    assert(cmds[3] == 'M 0 10 l 0 -10 ')
+    assert(cmds[4] == 'M 0 20 l 10 0 ')
+    assert(cmds[5] == 'M 10 20 l 0 10 ')
+    assert(cmds[6] == 'M 10 30 l -10 0 ')
+    assert(cmds[7] == 'M 0 30 l 0 -10 ')

@@ -26,7 +26,7 @@ def error_print(msg):
     print(msg)
 
 
-def test_effects_tray():
+def xtest_effects_tray_syntax_works():
     pieces = gloomhaven.tray_setup("effects")
     lasercut = TrayLaserCut(options, mocked_unitfunc, error_print)
     cmds = lasercut.draw(pieces)

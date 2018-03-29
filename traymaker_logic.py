@@ -63,9 +63,10 @@ class TrayLaserCut():
             self.convert_piece(piece)
 
         all_directives = []
-        pieceDirectives = []
 
         for piece in pieces:
+            pieceDirectives = []
+
             if "edges" not in piece:
                 continue
 
@@ -194,8 +195,6 @@ class TrayLaserCut():
             while node.prev is not None:
                 node = node.prev
             return node
-
-        self.errorFn("{}".format(edge_node.value["rotation"]))
 
         nomTab = self.nom_tab
 
