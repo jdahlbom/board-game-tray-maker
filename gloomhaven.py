@@ -69,7 +69,8 @@ def tray_setup(tray_name):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279
+                                "length": 279,
+                                "pin_height": 3
                             }
                         ],
                         "holes": [
