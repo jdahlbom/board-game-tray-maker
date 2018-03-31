@@ -1,4 +1,4 @@
-def tray_setup(tray_name):
+def tray_setup(tray_name, errorFn):
     trays = {
         "effects": [
             {
@@ -6,16 +6,47 @@ def tray_setup(tray_name):
                 "width": 279,
                 "height": 116,
                 "thickness": 3,
-                "offset":  (5, 5),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "opposite": "long side wall",
                         "parts": [
                             {
                                 "tabs": "FEMALE",
                                 "length": 279
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 21,
+                                "opposite": "1 full v-divider",
+                                "shape": "FEMALE"
+                            },
+                            {
+                                "offset": 104,
+                                "opposite": "2 half-divider",
+                                "shape": "FEMALE",
+                                "length": 59
+                            },
+                            {
+                                "offset": 30,
+                                "opposite": "2 full v-divider",
+                                "shape": "FEMALE"
+                            },
+                            {
+                                "offset": 28,
+                                "opposite": "3 full v-divider",
+                                "shape": "FEMALE"
+                            },
+                            {
+                                "offset": 28,
+                                "opposite": "4 full v-divider",
+                                "shape": "FEMALE"
+                            },
+                            {
+                                "offset": 28,
+                                "opposite": "5 full v-divider",
+                                "shape": "FEMALE"
                             }
                         ]
                     },
@@ -32,18 +63,24 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (279, 116),
                         "opposite": "long side wall 2",
                         "parts": [
                             {
                                 "tabs": "FEMALE",
                                 "length": 279
                             }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 226,
+                                "opposite": "1 half-divider",
+                                "shape": "FEMALE",
+                                "length": 55
+                            },
                         ]
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 116),
                         "opposite": "short side wall 2",
                         "parts": [
                             {
@@ -59,18 +96,16 @@ def tray_setup(tray_name):
                 "width": 279,
                 "height": 12,
                 "thickness": 3,
-                "offset":  (5, 125),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "depth": 12,
 
                         "parts": [
                             {
                                 "tabs": "TOP",
                                 "length": 279,
-                                "pin_height": 3
+                                "pin_height": 0.5
                             }
                         ],
                         "holes": [
@@ -80,7 +115,7 @@ def tray_setup(tray_name):
                                 "shape": "START_HALF_TAB"
                             },
                             {
-                                "offset": 103,
+                                "offset": 104,
                                 "opposite": "2 half-divider",
                                 "shape": "START_HALF_TAB"
                             },
@@ -108,7 +143,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 1,
-                        "translation": (279, 0),
                         "opposite": "short side wall",
                         "parts": [
                             {
@@ -119,7 +153,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (279, 12),
                         "opposite": "bottom",
                         "parts": [
                             {
@@ -130,7 +163,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 12),
                         "opposite": "short side wall 2",
                         "parts": [
                             {
@@ -146,11 +178,9 @@ def tray_setup(tray_name):
                 "width": 116,
                 "height": 12,
                 "thickness": 3,
-                "offset":  (5, 160),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -160,7 +190,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 1,
-                        "translation": (116, 0),
                         "opposite": "long side wall 2",
                         "parts": [
                             {
@@ -171,7 +200,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (116, 12),
                         "opposite": "bottom",
                         "parts": [
                             {
@@ -182,7 +210,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 12),
                         "opposite": "long side wall",
                         "parts": [
                             {
@@ -199,16 +226,15 @@ def tray_setup(tray_name):
                 "width": 279,
                 "height": 12,
                 "thickness": 3,
-                "offset":  (5, 180),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "depth": 12,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279
+                                "length": 279,
+                                "pin_height": 0.5
                             }
                         ],
                         "holes": [
@@ -234,7 +260,7 @@ def tray_setup(tray_name):
                             },
                             {
                                 "offset": 106,
-                                "opposite": "1 half divider",
+                                "opposite": "1 half-divider",
                                 "shape": "START_HALF_TAB"
                             },
                             {
@@ -246,7 +272,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 1,
-                        "translation": (279, 0),
                         "opposite": "short side wall",
                         "parts": [
                             {
@@ -257,7 +282,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (279, 12),
                         "opposite": "bottom",
                         "parts": [
                             {
@@ -268,7 +292,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 12),
                         "opposite": "short side wall 2",
                         "parts": [
                             {
@@ -285,11 +308,9 @@ def tray_setup(tray_name):
                 "width": 116,
                 "height": 12,
                 "thickness": 3,
-                "offset":  (5, 200),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -299,7 +320,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 1,
-                        "translation": (116, 0),
                         "opposite": "long side wall 2",
                         "parts": [
                             {
@@ -310,7 +330,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (116, 12),
                         "opposite": "bottom",
                         "parts": [
                             {
@@ -321,7 +340,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 12),
                         "opposite": "long side wall",
                         "parts": [
                             {
@@ -337,11 +355,9 @@ def tray_setup(tray_name):
                 "width": 279,
                 "height": 12,
                 "thickness": 2,
-                "offset":  (5, 240),
                 "edges": [
                     {
                         "rotation": 0,
-                        "translation": (0, 0),
                         "depth": 12,
                         "parts": [
                             {
@@ -361,8 +377,8 @@ def tray_setup(tray_name):
                                 "shape": "START_HALF_TAB"
                             },
                             {
-                                "offset": 73,
-                                "opposite": "1 half-divider",
+                                "offset": 74,
+                                "opposite": "2 half-divider",
                                 "shape": "START_HALF_TAB"
                             },
                             {
@@ -389,7 +405,6 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 1,
-                        "translation": (279, 0),
                         "opposite": "short side wall",
                         "parts": [
                             {
@@ -400,19 +415,396 @@ def tray_setup(tray_name):
                     },
                     {
                         "rotation": 2,
-                        "translation": (279, 12),
                         "opposite": "bottom",
                         "parts": [
                             {
-                                "tabs": "MALE",
+                                "tabs": "TOP",
                                 "length": 279
                             }
                         ]
                     },
                     {
                         "rotation": 3,
-                        "translation": (0, 12),
                         "opposite": "short side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "1 full v-divider",
+                "width": 116,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 59,
+                                "opposite": "middle h-divider",
+                                "shape": "END_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+
+            {
+                "name": "2 full v-divider",
+                "width": 116,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 59,
+                                "opposite": "middle h-divider",
+                                "shape": "END_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "3 full v-divider",
+                "width": 116,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 59,
+                                "opposite": "middle h-divider",
+                                "shape": "END_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "4 full v-divider",
+                "width": 116,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 59,
+                                "opposite": "middle h-divider",
+                                "shape": "END_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "5 full v-divider",
+                "width": 116,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 59,
+                                "opposite": "middle h-divider",
+                                "shape": "END_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "1 half-divider",
+                "width": 55,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 55
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 55
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "middle h-divider",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "2 half-divider",
+                "width": 59,
+                "height": 12,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 12,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 59
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 12
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 59
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "middle h-divider",
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
@@ -439,6 +831,7 @@ def tray_setup(tray_name):
                         opposite_name = hole["opposite"]
                         opposite_piece = next((piece for piece in pieces if piece["name"] == opposite_name), None)
                         if opposite_piece is None:
+                            errorFn("Opposite piece [{}] missing for piece [{}]".format(opposite_name, piece["name"]))
                             opposite_piece = {"thickness": 2}
                         hole["opposite"] = {"thickness": opposite_piece["thickness"]}
 

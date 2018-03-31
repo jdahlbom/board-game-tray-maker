@@ -122,7 +122,7 @@ class TrayMaker(inkex.Effect):
         }
 
         tray_cut = TrayLaserCut(options, self.unittouu, inkex.errormsg)
-        pieces = gloomhaven.tray_setup(self.options.tray_name)
+        pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
         command_str = tray_cut.draw(pieces)
         for cmd in command_str:
             self.drawS(cmd)
