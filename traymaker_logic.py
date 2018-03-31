@@ -38,7 +38,6 @@ class TrayLaserCut():
 
         for key in ["width","height","thickness"]:
             piece[key] = self.uconv * piece[key]
-        piece["offset"] = convert_tuple(piece["offset"])
         if "edges" not in piece:
             return
 
@@ -46,6 +45,8 @@ class TrayLaserCut():
         for edge in piece["edges"]:
             for part in edge["parts"]:
                 part["length"] = self.uconv * part["length"]
+                if "pin_height" in part:
+                    part["pin_height"] = self.uconv * part["pin_height"]
             if "depth" in edge:
                 edge["depth"] = self.uconv * edge["depth"]
 
@@ -53,6 +54,8 @@ class TrayLaserCut():
                 for hole in edge["holes"]:
                     hole["offset"] = self.uconv * hole["offset"]
                     hole["opposite"]["thickness"] = self.uconv * hole["opposite"]["thickness"]
+                    if "length" in hole:
+                        hole["length"] = self.uconv * hole["length"]
 
 
     def max_thickness(self, piece):
@@ -91,6 +94,7 @@ class TrayLaserCut():
             edge_translation_y = 0
             while edge_node is not None:
                 edge = edge_node.value
+                edge_directives = []
 
                 rotation = edge["rotation"]
 
@@ -102,13 +106,14 @@ class TrayLaserCut():
                         x_part_offset += prev_part.value["length"]
                         prev_part = prev_part.prev
 
-                    directives = self.g_side(edge_node, part_node)
-                    directives = self.transform(directives, 0, (x_part_offset, 0))
-                    directives = self.transform(directives, rotation, (edge_translation_x, edge_translation_y))
-                    pieceDirectives.extend(directives)
+                    part_directives = self.g_side(edge_node, part_node)
+                    edge_directives.extend(self.transform(part_directives, 0, (x_part_offset, 0)))
                     part_node = part_node.next
 
-                pieceDirectives.extend(self.face_path(edge_node))
+                edge_directives.extend(self.face_path(piece, edge_node))
+                directives = self.transform(edge_directives, rotation, (edge_translation_x, edge_translation_y))
+                pieceDirectives.extend(directives)
+
                 edge_node = edge_node.next
                 if rotation % 2 == 0:
                     edge_translation_x += piece["width"] * (1-rotation)
@@ -164,14 +169,12 @@ class TrayLaserCut():
             "draw": draw
         }
 
-
     def rotateClockwise(self, (x,y), rotations):
         coords = (x,y)
         for n in range(0, rotations):
             oldx, oldy = coords
             coords = (-oldy, oldx)
         return coords
-
 
     def transform(self, directives, rotations, (translation_x, translation_y)):
         def single_directive(directive):
@@ -277,7 +280,7 @@ class TrayLaserCut():
         elif thisTab in [FEMALE, TOP]:
             start_y = 0
             start_x = 0
-            if leftTab is MALE:
+            if leftTab in [MALE, END_HALF_TAB]:
                 start_x = -left_edge.value["opposite"]["thickness"]
 
 
@@ -338,13 +341,52 @@ class TrayLaserCut():
 
         return [draw_directives]
 
+    def compute_male_tabs(self, length, divs, holes=False):
+        if divs % 2 == 0:
+            raise BaseException("Divs must be an odd integer")
+        nominal_width = length * 1.0 / divs
+        # kerf correction
+        gapWidth = nominal_width - self.correction
+        tabWidth = nominal_width + self.correction
+        if holes:
+            temp = gapWidth
+            gapWidth = tabWidth
+            tabWidth = temp
 
-    def face_path(self, edge_node):
+        first = self.correction/2
+        tabs = [{
+            "offset": 0,
+            "length": tabWidth + first
+        }]
+        for index in range(0, (divs-1)/2):
+            tabs.append({
+                "offset": gapWidth,
+                "length": tabWidth
+            })
+        return tabs
+
+    def invert_tabs(self, tabs):
+        tablist = dllist(tabs)
+        offset = tablist.first.value["length"]
+        tab = tablist.first.next
+        female_tabs = []
+        while tab is not None:
+            length = tab.value["offset"]
+            female_tabs.append({
+                "offset": offset,
+                "length": length
+            })
+            offset = tab.value["length"]
+            tab = tab.next
+        return female_tabs
+
+    def face_path(self, piece, edge_node):
         edge = edge_node.value
-        if "depth" not in edge:
-            self.errorFn("No 'depth' given for edge")
-            return []
-        depth = edge["depth"]
+
+        depth = piece["height"]
+        if edge["rotation"] % 2 == 1:
+            depth = piece["width"]
+
         if "holes" not in edge:
             return []
         x_offset = 0
@@ -354,13 +396,42 @@ class TrayLaserCut():
             width = hole_part["opposite"]["thickness"]
             shape = hole_part["shape"]
             if shape is START_HALF_TAB:
-                directive = {"origin": (x_offset, 0), "elements": []}
+                directive = {"origin": (x_offset, 0), "elements": [
+                    self.line(0, depth/2),
+                    self.line(width, 0),
+                    self.line(0, -depth/2),
+                    self.line(-width, 0)
+                ]}
+                directives.append(directive)
             elif shape is END_HALF_TAB:
-                directive = {"origin": (x_offset, depth/2), "elements": []}
-            directive["elements"].append(self.line(0, depth/2))
-            directive["elements"].append(self.line(width, 0))
-            directive["elements"].append(self.line(0, -depth/2))
-            directive["elements"].append(self.line(-width, 0))
-            directives.append(directive)
+                directive = {"origin": (x_offset, depth/2), "elements": [
+                    self.line(0, depth/2),
+                    self.line(width, 0),
+                    self.line(0, -depth/2),
+                    self.line(-width, 0)
+                ]}
+                directives.append(directive)
+            elif shape is FEMALE:
+                hole_shape_length = depth
+                if "length" in hole_part:
+                    hole_shape_length = hole_part["length"]
+                #TODO: Ugly hardcoding of div amount, doesnt always match reality.
+                tabs = self.invert_tabs(self.compute_male_tabs(hole_shape_length, 9, holes=True))
+                total_y_offset = 0
+                for tab in tabs:
+                    total_y_offset += tab["offset"]
+                    directive = {"origin": (x_offset, total_y_offset), "elements": [
+                        self.line(0, tab["length"]),
+                        self.line(width, 0),
+                        self.line(0, -tab["length"]),
+                        self.line(-width, 0)
+                    ]}
+                    directives.append(directive)
+                    total_y_offset += tab["length"]
+
+            elif shape is MALE:
+                self.errorFn("Unsupported MALE shape for holes")
+                continue
+
             x_offset += width
         return directives

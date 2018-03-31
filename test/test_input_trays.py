@@ -17,8 +17,6 @@ options = {
 
 
 def mocked_unitfunc(unitstr):
-    exp = re.compile(r'^([0-9]*)[^0-9]*$')
-    matches = exp.match(unitstr)
     return 1
 
 

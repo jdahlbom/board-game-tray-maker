@@ -274,7 +274,36 @@ def mock_half_tabs(side):
         ]
     }]
 
+def mock_top_half_tabs(side):
+    X = side
+    Y = side
+    opposite_piece = {
+        "thickness": 3
+    }
 
+    return [{
+        "width": X,
+        "height": Y,
+        "thickness": 3,
+        "edges": [
+            {
+                "parts": [
+                    {"tabs": "END_HALF_TAB", "length": X}
+                ],
+                "rotation": 0,
+                "depth": Y,
+                "opposite": opposite_piece
+            },
+            {
+                "parts": [
+                    {"tabs": "TOP", "length": Y}
+                ],
+                "rotation": 1,
+                "depth": X,
+                "opposite": opposite_piece
+            }
+        ]
+    }]
 
 def error_print(msg):
     print(msg)
@@ -507,3 +536,15 @@ def test_two_squares():
     assert(cmds[5] == 'M {} {} l 0 10 '.format(offset+10, offset + 2*(thickness+1) + p_height))
     assert(cmds[6] == 'M {} {} l -10 0 '.format(offset+10, offset + 2*(thickness+1) + 2*p_height))
     assert(cmds[7] == 'M {} {} l 0 -10 '.format(offset, offset + 2*(thickness+1) + 2*p_height))
+
+
+def test_top_and_half():
+    side_len = 10
+    pieces = mock_top_half_tabs(side_len)
+    thickness = 3
+    offset = thickness + 1
+    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    cmds = traycut.draw(pieces)
+    assert(len(cmds) == 2)
+    assert(cmds[0] == 'M {} {} l 5 0 l 0 {} l 5 0 '.format(offset, offset, -thickness))
+    assert(cmds[1] == 'M {} {} l 0 {} '.format(side_len+offset, offset-thickness, side_len+thickness))
