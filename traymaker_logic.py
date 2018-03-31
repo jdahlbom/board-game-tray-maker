@@ -248,27 +248,40 @@ class TrayLaserCut():
                 start_x = 0
             else:
                 start_x = -left_edge.value["opposite"]["thickness"]
+
         elif thisTab in [FEMALE, TOP]:
             start_y = 0
             start_x = 0
             if leftTab in [MALE, END_HALF_TAB]:
                 start_x = -left_edge.value["opposite"]["thickness"]
 
-
-        draw_directives = {
-            "origin": (start_x,start_y),
-            "elements": []
-        }
+        if "notch_depth" in part:
+            if part["tabs"] is not MALE or leftTab is not MALE or rightTab is not MALE:
+                raise BaseException("Invalid use of notches, must be MALE-MALE-MALE piece")
+            draw_directives = {
+                "origin": (start_x, start_y+part["notch_depth"]),
+                "elements": [
+                    self.line(left_edge.value["opposite"]["thickness"], 0),
+                    self.line(0, -part["notch_depth"])
+                ]
+            }
+            start_x = start_x + left_edge.value["opposite"]["thickness"]
+        else:
+            draw_directives = {
+                "origin": (start_x, start_y),
+                "elements" : []
+            }
 
         if thisTab is TOP:
-            if self.indentradius > 0:
-                i_rad = self.indentradius
-                len_to_indent = length / 2 - start_x - i_rad
-                draw_directives["elements"].append(self.line(len_to_indent, 0))
-                draw_directives["elements"].append(self.halfcircle(i_rad))
+            if "indent" in part and part["indent"]["radius"] > 0:
+                indent_radius = part["indent"]["radius"]
+                indent_x_offset = part["indent"]["offset"]
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is [START_HALF_TAB, MALE] else 0
-                len_to_end = length / 2 + end_tab - i_rad
-                draw_directives["elements"].append(self.line(len_to_end, 0))
+                len_to_end = length - indent_radius * 2 - indent_x_offset + end_tab
+                draw_directives["elements"].extend([
+                    self.line(indent_x_offset-start_x, 0),
+                    self.halfcircle(indent_radius),
+                    self.line(len_to_end, 0)])
 
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
@@ -298,8 +311,7 @@ class TrayLaserCut():
                 currently_male_tab = False
 
             if n is 1:
-                (sx, sy) = draw_directives["origin"]
-                dx = dx - sx + first
+                dx = dx - start_x + first
 
             if n is int(divs):
                 dy = 0
@@ -308,7 +320,14 @@ class TrayLaserCut():
         end_tab = right_edge.value["opposite"]["thickness"] if rightTab in [MALE, START_HALF_TAB] else 0
         part_width = (gapWidth if not currently_male_tab else tabWidth) + end_tab
 
-        draw_directives["elements"].append( self.line(part_width, 0))
+        if "notch_depth" in part:
+            draw_directives["elements"].extend([
+                self.line(part_width - right_edge.value["opposite"]["thickness"], 0),
+                self.line(0, part["notch_depth"]),
+                self.line(right_edge.value["opposite"]["thickness"], 0)
+            ])
+        else:
+            draw_directives["elements"].append(self.line(part_width, 0))
 
         return [draw_directives]
 

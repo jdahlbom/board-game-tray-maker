@@ -157,7 +157,8 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279
+                                "length": 279,
+                                "notch_depth": 0.5
                             }
                         ]
                     },
@@ -293,7 +294,8 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279
+                                "length": 279,
+                                "notch_depth": 0.5
                             }
                         ]
                     },
@@ -376,7 +378,24 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279
+                                "length": 129,
+                                "indent": {
+                                    "offset": 80,
+                                    "radius": 7
+                                }
+                            },
+                            {
+                                "tabs": "TOP",
+                                "length": 30,
+                                "indent": {
+                                    "offset": 8,
+                                    "radius": 7
+                                }
+
+                            },
+                            {
+                                "tabs": "TOP",
+                                "length": 120
                             }
                         ],
                         "holes": [
