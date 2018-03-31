@@ -186,6 +186,13 @@ def tray_setup(tray_name, errorFn):
                                 "tabs": "TOP",
                                 "length": 116
                             }
+                        ],
+                        "holes": [
+                            {
+                                "opposite": "middle h-divider",
+                                "offset": 59,
+                                "shape": "START_HALF_TAB"
+                            }
                         ]
                     },
                     {
@@ -315,6 +322,13 @@ def tray_setup(tray_name, errorFn):
                             {
                                 "tabs": "TOP",
                                 "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "opposite": "middle h-divider",
+                                "offset": 55,
+                                "shape": "START_HALF_TAB"
                             }
                         ]
                     },
