@@ -36,7 +36,6 @@ def mock_square(side, offset=(0, 0)):
                 "parts": [
                     {"tabs": "TOP", "length": X}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": Y,
                 "opposite": opposite_piece
@@ -45,7 +44,6 @@ def mock_square(side, offset=(0, 0)):
                 "parts": [
                     {"tabs": "TOP", "length": Y}
                 ],
-                "translation": (X, 0),
                 "rotation": 1,
                 "depth": X,
                 "opposite": opposite_piece
@@ -54,7 +52,6 @@ def mock_square(side, offset=(0, 0)):
                 "parts": [
                     {"tabs": "TOP", "length": X}
                 ],
-                "translation": (X, Y),
                 "rotation": 2,
                 "depth": Y,
                 "opposite": opposite_piece
@@ -63,7 +60,6 @@ def mock_square(side, offset=(0, 0)):
                 "parts": [
                     {"tabs": "TOP", "length": Y}
                 ],
-                "translation": (0, Y),
                 "rotation": 3,
                 "depth": X,
                 "opposite": opposite_piece
@@ -87,7 +83,6 @@ def mock_female_edge(x=20, y=12):
                 "parts": [
                     {"tabs": "FEMALE", "length": x}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": y,
                 "opposite": opposite_piece
@@ -96,7 +91,6 @@ def mock_female_edge(x=20, y=12):
                 "parts": [
                     {"tabs": "FEMALE", "length": y}
                 ],
-                "translation": (x, 0),
                 "rotation": 1,
                 "depth": x,
                 "opposite": opposite_piece
@@ -121,7 +115,6 @@ def mock_female_male_edge(x, y):
                 "parts": [
                     {"tabs": "FEMALE", "length": x}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": y,
                 "opposite": opposite_piece
@@ -130,7 +123,6 @@ def mock_female_male_edge(x, y):
                 "parts": [
                     {"tabs": "MALE", "length": y}
                 ],
-                "translation": (x, 0),
                 "rotation": 1,
                 "depth": x,
                 "opposite": opposite_piece
@@ -154,7 +146,6 @@ def mock_male_male_edge(x, y):
                 "parts": [
                     {"tabs": "MALE", "length": x}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": y,
                 "opposite": opposite_piece
@@ -163,7 +154,6 @@ def mock_male_male_edge(x, y):
                 "parts": [
                     {"tabs": "MALE", "length": y}
                 ],
-                "translation": (x, 0),
                 "rotation": 1,
                 "depth": x,
                 "opposite": opposite_piece
@@ -188,7 +178,6 @@ def mock_top_male_edge(x, y):
                 "parts": [
                     {"tabs": "TOP", "length": x}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": y,
                 "opposite": opposite_piece
@@ -197,7 +186,6 @@ def mock_top_male_edge(x, y):
                 "parts": [
                     {"tabs": "MALE", "length": y}
                 ],
-                "translation": (x, 0),
                 "rotation": 1,
                 "depth": x,
                 "opposite": opposite_piece
@@ -222,7 +210,6 @@ def mock_top_female_edge(x, y):
                 "parts": [
                     {"tabs": "TOP", "length": x}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": y,
                 "opposite": opposite_piece
@@ -231,7 +218,6 @@ def mock_top_female_edge(x, y):
                 "parts": [
                     {"tabs": "FEMALE", "length": y}
                 ],
-                "translation": (x, 0),
                 "rotation": 1,
                 "depth": x,
                 "opposite": opposite_piece
@@ -257,7 +243,6 @@ def mock_half_tabs(side):
                 "parts": [
                     {"tabs": "MALE", "length": X}
                 ],
-                "translation": (0, 0),
                 "rotation": 0,
                 "depth": Y,
                 "opposite": opposite_piece
@@ -266,7 +251,6 @@ def mock_half_tabs(side):
                 "parts": [
                     {"tabs": "START_HALF_TAB", "length": Y}
                 ],
-                "translation": (X, 0),
                 "rotation": 1,
                 "depth": X,
                 "opposite": opposite_piece
@@ -275,7 +259,6 @@ def mock_half_tabs(side):
                 "parts": [
                     {"tabs": "FEMALE", "length": X}
                 ],
-                "translation": (X, Y),
                 "rotation": 2,
                 "depth": Y,
                 "opposite": opposite_piece
@@ -284,7 +267,6 @@ def mock_half_tabs(side):
                 "parts": [
                     {"tabs": "END_HALF_TAB", "length": Y}
                 ],
-                "translation": (0, Y),
                 "rotation": 3,
                 "depth": X,
                 "opposite": opposite_piece
@@ -302,10 +284,11 @@ def test_square_piece():
     traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
     square_element = mock_square(10)
     cmds = traycut.draw(square_element)
-    assert(cmds[0] == 'M 0 0 l 10 0 ')
-    assert(cmds[1] == 'M 10 0 l 0 10 ')
-    assert(cmds[2] == 'M 10 10 l -10 0 ')
-    assert(cmds[3] == 'M 0 10 l 0 -10 ')
+    offset = 4
+    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
+    assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset))
+    assert(cmds[2] == 'M {} {} l -10 0 '.format(offset+10,offset+10))
+    assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset+10))
 
 def test_female_female_tabbed_side():
     xlen = 20
@@ -318,7 +301,8 @@ def test_female_female_tabbed_side():
     traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
-    expected = 'M 0 0 ' + \
+    offset = 4
+    expected = 'M {} {} '.format(offset, offset) + \
         'l {} {} '.format(tab_size, 0) + \
         'l {} {} '.format(0, -thickness) +\
         'l {} {} '.format(tab_size, 0) + \
@@ -330,7 +314,7 @@ def test_female_female_tabbed_side():
         'l {} {} '.format(tab_size, 0)
     assert(cmds[0] == expected)
     thickness = pieces[0]["edges"][1]["opposite"]["thickness"]
-    expected = 'M {} 0 '.format(xlen) +\
+    expected = 'M {} {} '.format(xlen+offset, offset) +\
         'l 0 {} '.format(ytab) +\
         'l {} 0 '.format(thickness) +\
         'l 0 {} '.format(ytab) +\
@@ -354,8 +338,9 @@ def test_female_male_tabbed_side():
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
+    offset = 4
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
-    expected = 'M {} 0 '.format(-thickness) + \
+    expected = 'M {} {} '.format(-thickness+offset, offset) + \
                'l {} {} '.format(tab_size+thickness, 0) + \
                'l {} {} '.format(0, -thickness) + \
                'l {} {} '.format(tab_size, 0) + \
@@ -367,7 +352,7 @@ def test_female_male_tabbed_side():
                'l {} {} '.format(tab_size + thickness, 0)
     assert(cmds[0] == expected)
     thickness = pieces[0]["edges"][1]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(xlen + thickness, 0) + \
+    expected = 'M {} {} '.format(xlen + thickness + offset, offset) + \
                'l 0 {} '.format(ytab) + \
                'l {} 0 '.format(-thickness) + \
                'l 0 {} '.format(ytab) + \
@@ -391,7 +376,8 @@ def test_male_male_tabbed_side():
     traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(-thickness, -thickness) + \
+    offset = 4
+    expected = 'M {} {} '.format(-thickness + offset, -thickness + offset) + \
                'l {} {} '.format(tab_size+thickness, 0) + \
                'l {} {} '.format(0, thickness) + \
                'l {} {} '.format(tab_size, 0) + \
@@ -403,7 +389,7 @@ def test_male_male_tabbed_side():
                'l {} {} '.format(tab_size + thickness, 0)
     assert(cmds[0] == expected)
     thickness = pieces[0]["edges"][1]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(xlen + thickness, -thickness) + \
+    expected = 'M {} {} '.format(xlen + thickness + offset, -thickness + offset) + \
                'l 0 {} '.format(ytab+thickness) + \
                'l {} 0 '.format(-thickness) + \
                'l 0 {} '.format(ytab) + \
@@ -427,11 +413,12 @@ def test_top_male_tabbed_side():
     traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(-thickness, 0) + \
+    offset = 4
+    expected = 'M {} {} '.format(-thickness + offset, offset) + \
                'l {} {} '.format(xlen+thickness*2, 0)
     assert(cmds[0] == expected)
     thickness = pieces[0]["edges"][1]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(xlen + thickness, 0) + \
+    expected = 'M {} {} '.format(xlen + thickness + offset, offset) + \
                'l 0 {} '.format(ytab) + \
                'l {} 0 '.format(-thickness) + \
                'l 0 {} '.format(ytab) + \
@@ -454,11 +441,12 @@ def test_top_female_tabbed_side():
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
-    expected = 'M {} {} '.format(0, 0) + \
+    offset = 4
+    expected = 'M {} {} '.format(offset, offset) + \
                'l {} {} '.format(xlen, 0)
     assert(cmds[0] == expected)
     thickness = pieces[0]["edges"][1]["opposite"]["thickness"]
-    expected = 'M {} {} '.format(xlen, 0) + \
+    expected = 'M {} {} '.format(xlen + offset, offset) + \
                'l 0 {} '.format(ytab) + \
                'l {} 0 '.format(thickness) + \
                'l 0 {} '.format(ytab) + \
@@ -479,11 +467,13 @@ def test_square_with_holes():
     }]
     traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
-    assert(cmds[0] == 'M 0 0 l 10 0 ')
-    assert(cmds[1] == 'M 4 0 l 0 5 l 2 0 l 0 -5 l -2 0 ')
-    assert(cmds[2] == 'M 10 0 l 0 10 ')
-    assert(cmds[3] == 'M 10 10 l -10 0 ')
-    assert(cmds[4] == 'M 0 10 l 0 -10 ')
+    offset = 4
+    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
+    assert(cmds[1] == 'M {} {} l 0 5 l 2 0 l 0 -5 l -2 0 '.format(offset+4, offset))
+    assert(cmds[2] == 'M {} {} l 0 10 '.format(offset+10, offset))
+    assert(cmds[3] == 'M {} {} l -10 0 '.format(offset+10, offset+10))
+    assert(cmds[4] == 'M {} {} l 0 -10 '.format(offset, offset+10))
+
 
 def test_half_tabs():
     pieces = mock_half_tabs(12)
@@ -491,11 +481,12 @@ def test_half_tabs():
     opts["nomTab"] = 4
     traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
+    offset = 4
 
-    assert(cmds[0] == 'M -3 -3 l 7.0 0 l 0 3 l 4.0 0 l 0 -3 l 7.0 0 ')
-    assert(cmds[1] == 'M 15 -3 l 0 9 l -3 0 l 0 6 ')
-    assert(cmds[2] == 'M 12 12 l -4.0 0 l 0 3 l -4.0 0 l 0 -3 l -4.0 0 ')
-    assert(cmds[3] == 'M 0 12 l 0 -6 l -3 0 l 0 -9 ')
+    assert(cmds[0] == 'M {} {} l 7.0 0 l 0 3 l 4.0 0 l 0 -3 l 7.0 0 '.format(offset-3, offset-3))
+    assert(cmds[1] == 'M {} {} l 0 9 l -3 0 l 0 6 '.format(offset+15, offset-3))
+    assert(cmds[2] == 'M {} {} l -4.0 0 l 0 3 l -4.0 0 l 0 -3 l -4.0 0 '.format(offset+12, offset+12))
+    assert(cmds[3] == 'M {} {} l 0 -6 l -3 0 l 0 -9 '.format(offset, offset + 12))
 
 
 def test_two_squares():
@@ -503,13 +494,16 @@ def test_two_squares():
     pieces.extend(mock_square(10, (0, 20)))
     traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
     cmds = traycut.draw(pieces)
+    thickness = 3
+    offset = thickness + 1
+    p_height = 10
 
     assert(len(cmds) == 8)
-    assert(cmds[0] == 'M 0 0 l 10 0 ')
-    assert(cmds[1] == 'M 10 0 l 0 10 ')
-    assert(cmds[2] == 'M 10 10 l -10 0 ')
-    assert(cmds[3] == 'M 0 10 l 0 -10 ')
-    assert(cmds[4] == 'M 0 20 l 10 0 ')
-    assert(cmds[5] == 'M 10 20 l 0 10 ')
-    assert(cmds[6] == 'M 10 30 l -10 0 ')
-    assert(cmds[7] == 'M 0 30 l 0 -10 ')
+    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
+    assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset))
+    assert(cmds[2] == 'M {} {} l -10 0 '.format(offset+10, offset+10))
+    assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset+10))
+    assert(cmds[4] == 'M {} {} l 10 0 '.format(offset, offset + 2*(thickness+1) + p_height))
+    assert(cmds[5] == 'M {} {} l 0 10 '.format(offset+10, offset + 2*(thickness+1) + p_height))
+    assert(cmds[6] == 'M {} {} l -10 0 '.format(offset+10, offset + 2*(thickness+1) + 2*p_height))
+    assert(cmds[7] == 'M {} {} l 0 -10 '.format(offset, offset + 2*(thickness+1) + 2*p_height))

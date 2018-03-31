@@ -30,4 +30,3 @@ def test_effects_tray_syntax_works():
     pieces = gloomhaven.tray_setup("effects")
     lasercut = TrayLaserCut(options, mocked_unitfunc, error_print)
     cmds = lasercut.draw(pieces)
-    print(cmds)

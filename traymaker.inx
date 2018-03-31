@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-  <_name>Tabbed Tray Maker</_name>
+  <_name>Gloomhaven</_name>
   <id>eu.twot.render.traymaker</id>
 
   <dependency type="executable" location="extensions">traymaker.py</dependency>
@@ -40,7 +40,7 @@
   <effect>
     <object-type>all</object-type>
     <effects-menu>
-      <submenu _name="Gloomhaven" />
+      <submenu _name="Game Inserts" />
     </effects-menu>
   </effect>
   <script>

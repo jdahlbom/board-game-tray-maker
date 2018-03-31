@@ -44,7 +44,6 @@ class TrayLaserCut():
 
 
         for edge in piece["edges"]:
-            edge["translation"] = convert_tuple(edge["translation"])
             for part in edge["parts"]:
                 part["length"] = self.uconv * part["length"]
             if "depth" in edge:
@@ -56,6 +55,11 @@ class TrayLaserCut():
                     hole["opposite"]["thickness"] = self.uconv * hole["opposite"]["thickness"]
 
 
+    def max_thickness(self, piece):
+        return max(map(lambda edge: edge["opposite"]["thickness"],
+                filter(lambda edge: "opposite" in edge, piece["edges"])))
+
+
     def draw(self, pieces):
         error = ""
 
@@ -63,9 +67,11 @@ class TrayLaserCut():
             self.convert_piece(piece)
 
         all_directives = []
+        cumul_y_piece_offset = 0
 
         for piece in pieces:
             pieceDirectives = []
+            x_piece_offset = self.max_thickness(piece) + 1
 
             if "edges" not in piece:
                 continue
@@ -74,13 +80,18 @@ class TrayLaserCut():
             for edge in piece["edges"]:
                 edge["parts"] = dllist(edge["parts"])
 
-
             edge_node = piece["edges"].first
 
+            if "opposite" in edge_node.value:
+                cumul_y_piece_offset += edge_node.value["opposite"]["thickness"] + self.uconv*1
+            else:
+                cumul_y_piece_offset += self.uconv * 1
+
+            edge_translation_x = 0
+            edge_translation_y = 0
             while edge_node is not None:
                 edge = edge_node.value
 
-                translation_x, translation_y = edge["translation"]
                 rotation = edge["rotation"]
 
                 part_node = edge["parts"].first
@@ -93,20 +104,26 @@ class TrayLaserCut():
 
                     directives = self.g_side(edge_node, part_node)
                     directives = self.transform(directives, 0, (x_part_offset, 0))
-                    directives = self.transform(directives, rotation, (translation_x, translation_y))
+                    directives = self.transform(directives, rotation, (edge_translation_x, edge_translation_y))
                     pieceDirectives.extend(directives)
                     part_node = part_node.next
 
                 pieceDirectives.extend(self.face_path(edge_node))
                 edge_node = edge_node.next
+                if rotation % 2 == 0:
+                    edge_translation_x += piece["width"] * (1-rotation)
+                else:
+                    edge_translation_y += piece["height"] * (2-rotation)
 
-            piece_x, piece_y = piece["offset"]
             for directive in pieceDirectives:
                 (x, y) = directive["origin"]
-                cmds = "M {} {} ".format(x+piece_x, y+piece_y)
+                cmds = "M {} {} ".format(x+x_piece_offset, y+cumul_y_piece_offset)
                 for elem in directive["elements"]:
                     cmds += elem["draw"](elem)
                 all_directives.append(cmds)
+
+            cumul_y_piece_offset += piece["height"] + self.max_thickness(piece) + self.uconv * 1
+
 
         if error:
             self.errorFn('Warning: Box may be impractical')
@@ -226,13 +243,8 @@ class TrayLaserCut():
 
         start_x = 0
         start_y = 0
-        if thisTab is HINGE_FEMALE:
-            start_y = 0
-            dirs = [{"origin": (0,start_y), "elements": [self.line(length, 0)]}]
-         #   dirs.extend(self.living_hinge_cuts(length, start_y, depth-self.thickness, self.cut_length, self.gap_length, self.sep_distance))
-            return dirs
 
-        elif thisTab in [END_HALF_TAB, START_HALF_TAB]:
+        if thisTab in [END_HALF_TAB, START_HALF_TAB]:
             start_x = 0
             end_tab = 0
             if leftTab in [MALE, END_HALF_TAB]:
@@ -352,84 +364,3 @@ class TrayLaserCut():
             directives.append(directive)
             x_offset += width
         return directives
-
-
-    def living_hinge_cuts(self, hinge_length, start_y, hinge_width, cut_line_len, cut_line_vert_spacing, cut_line_horiz_spacing):
-        """
-        Return a list of cut lines as dicts. Each dict contains the end points for one cut line.
-        [{x1, y1, x2, y2}, ... ]
-
-        Parameters
-        x, y: the coordinates of the lower left corner of the bounding rect
-        dx, dy: width and height of the bounding rect
-        l: the nominal length of a cut line
-        d: the separation between cut lines in the y-direction
-        dd: the nominal separation between cut lines in the x-direction
-
-        l will be adjusted so that there is an integral number of cuts in the y-direction.
-        dd will be adjusted so that there is an integral number of cuts in the x-direction.
-        """
-        draw_directives = []
-
-        # use l as a starting guess. Adjust it so that we get an integer number of cuts in the y-direction
-        # First compute the number of cuts in the y-direction using l. This will not in general be an integer.
-        p = (hinge_width - cut_line_vert_spacing) / (cut_line_vert_spacing + cut_line_len)
-
-        #round p to the nearest integer
-        p = round(p)
-        #compute the new l that will result in p cuts in the y-direction.
-        cut_line_len = (hinge_width - cut_line_vert_spacing) / p - cut_line_vert_spacing
-
-        # use dd as a starting guess. Adjust it so that we get an even integer number of cut lines in the x-direction.
-        p = hinge_length / cut_line_horiz_spacing
-        p = round(p)
-        if p % 2 == 1:
-            p = p + 1
-        cut_line_horiz_spacing = hinge_length / p
-
-        #
-        # Column A cuts
-        #
-        currx = 0
-        donex = False
-        while not donex:
-            doney = False
-            starty = start_y
-            endy = (cut_line_len + cut_line_vert_spacing) / 2.0
-            while not doney:
-                cut_len = min(cut_line_len, endy)
-                if endy >= hinge_width:
-                    cut_len -= (endy - hinge_width)
-                # Add the end points of the line
-                draw_directives.append({'origin' : (currx, starty), 'elements': [self.line(0, cut_len)] })
-                starty = endy + cut_line_vert_spacing
-                endy = starty + cut_line_len
-                if starty >= hinge_width:
-                    doney = True
-            currx = currx + cut_line_horiz_spacing * 2.0
-            if currx - hinge_length > cut_line_horiz_spacing:
-                donex = True
-        #
-        #Column B cuts
-        #
-        currx = cut_line_horiz_spacing
-        donex = False
-        while not donex:
-            cut_len = cut_line_len
-            doney = False
-            starty = start_y + cut_line_vert_spacing
-            endy = starty + cut_line_len
-            while not doney:
-                if endy >= hinge_width:
-                    cut_len -= (endy-hinge_width)
-                # create a line
-                draw_directives.append({'origin' : (currx, starty), 'elements': [ self.line(0, cut_len)] })
-                starty = endy + cut_line_vert_spacing
-                endy = starty + cut_line_len
-                if starty >= hinge_width:
-                    doney = True
-            currx = currx + cut_line_horiz_spacing * 2.0
-            if currx > hinge_length:
-                donex = True
-
-        return draw_directives
