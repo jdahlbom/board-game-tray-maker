@@ -13,9 +13,8 @@ class TrayLaserCut():
     END_HALF_TAB = "END_HALF_TAB"
     START_HALF_TAB = "START_HALF_TAB"
 
-    def __init__(self, options, unittouu, errorFn):
+    def __init__(self, options, errorFn):
         self.options = options
-        self.unittouu = unittouu # Function reference to inkex-dependent conversion function.
         self.errorFn = errorFn
 
         self.uconv = self.options["uconv"] # Conversion rate from 1 <unit> to drawing units.
@@ -31,32 +30,6 @@ class TrayLaserCut():
         self.indentradius = 0
 
 
-    def convert_piece(self, piece):
-        def convert_tuple(tuple):
-            (x, y) = tuple
-            return x * self.uconv, y * self.uconv
-
-        for key in ["width","height","thickness"]:
-            piece[key] = self.uconv * piece[key]
-        if "edges" not in piece:
-            return
-
-
-        for edge in piece["edges"]:
-            for part in edge["parts"]:
-                part["length"] = self.uconv * part["length"]
-                if "pin_height" in part:
-                    part["pin_height"] = self.uconv * part["pin_height"]
-            if "depth" in edge:
-                edge["depth"] = self.uconv * edge["depth"]
-
-            if "holes" in edge:
-                for hole in edge["holes"]:
-                    hole["offset"] = self.uconv * hole["offset"]
-                    hole["opposite"]["thickness"] = self.uconv * hole["opposite"]["thickness"]
-                    if "length" in hole:
-                        hole["length"] = self.uconv * hole["length"]
-
 
     def max_thickness(self, piece):
         return max(map(lambda edge: edge["opposite"]["thickness"],
@@ -65,9 +38,6 @@ class TrayLaserCut():
 
     def draw(self, pieces):
         error = ""
-
-        for piece in pieces:
-            self.convert_piece(piece)
 
         all_directives = []
         cumul_y_piece_offset = 0
@@ -86,9 +56,9 @@ class TrayLaserCut():
             edge_node = piece["edges"].first
 
             if "opposite" in edge_node.value:
-                cumul_y_piece_offset += edge_node.value["opposite"]["thickness"] + self.uconv*1
+                cumul_y_piece_offset += edge_node.value["opposite"]["thickness"] + 1
             else:
-                cumul_y_piece_offset += self.uconv * 1
+                cumul_y_piece_offset += 1
 
             edge_translation_x = 0
             edge_translation_y = 0
@@ -122,12 +92,12 @@ class TrayLaserCut():
 
             for directive in pieceDirectives:
                 (x, y) = directive["origin"]
-                cmds = "M {} {} ".format(x+x_piece_offset, y+cumul_y_piece_offset)
+                cmds = "M {} {} ".format(self.uconv * (x+x_piece_offset), self.uconv * (y+cumul_y_piece_offset))
                 for elem in directive["elements"]:
                     cmds += elem["draw"](elem)
                 all_directives.append(cmds)
 
-            cumul_y_piece_offset += piece["height"] + self.max_thickness(piece) + self.uconv * 1
+            cumul_y_piece_offset += piece["height"] + self.max_thickness(piece) + 1
 
 
         if error:
@@ -142,7 +112,7 @@ class TrayLaserCut():
         def draw(line_element):
             (x,y) = line_element["coords"]
             (x,y) = self.rotateClockwise((x,y), line_element["rotations"])
-            return "l {} {} ".format(x, y)
+            return "l {} {} ".format(x * self.uconv, y * self.uconv)
 
         return {
             "type": "line",
@@ -160,7 +130,8 @@ class TrayLaserCut():
             x_angle = (rotations % 4) * 90
             end_point = ( 2 * radius, 0 )
             (end_x, end_y) = self.rotateClockwise(end_point, rotations)
-            return "a{},{} {} 0,0 {},{}".format(radius, radius, x_angle, end_x, end_y)
+            return "a{},{} {} 0,0 {},{}".format(radius * self.uconv, radius * self.uconv,
+                                                x_angle, end_x * self.uconv, end_y * self.uconv)
 
         return {
             "type": "arc",
@@ -225,7 +196,7 @@ class TrayLaserCut():
         if not divs%2: divs-=1   # make divs odd
         divs=float(divs)
         if divs > 9:
-            divs = 9
+            divs = 9.0
         gapWidth=tabWidth=length/divs
 
         # kerf correction

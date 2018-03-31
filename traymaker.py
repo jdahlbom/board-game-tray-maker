@@ -86,15 +86,15 @@ class TrayMaker(inkex.Effect):
         # Get script's option values.
         unit=self.options.unit
         uconv = self.unittouu( "1 {}".format(unit))
-        nomTab = self.unittouu( str(self.options.tab) + unit )
+        nomTab = self.options.tab
         equalTabs=self.options.equal
-        kerf = self.unittouu( str(self.options.kerf)  + unit )
-        clearance = self.unittouu( str(self.options.clearance)  + unit )
-        spacing = self.unittouu( str(self.options.spacing)  + unit )
+        kerf = self.options.kerf
+        clearance = self.options.clearance
+        spacing = self.options.spacing
 
-        cut_length = self.unittouu( str(self.options.cut_length)  + unit )
-        gap_length = self.unittouu( str(self.options.gap_length)  + unit )
-        sep_distance = self.unittouu( str(self.options.sep_distance)  + unit )
+        cut_length = self.options.cut_length
+        gap_length = self.options.gap_length
+        sep_distance = self.options.sep_distance
 
         correction=kerf-clearance
 
@@ -121,7 +121,7 @@ class TrayMaker(inkex.Effect):
             "sep_distance": sep_distance
         }
 
-        tray_cut = TrayLaserCut(options, self.unittouu, inkex.errormsg)
+        tray_cut = TrayLaserCut(options, inkex.errormsg)
         pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
         command_str = tray_cut.draw(pieces)
         for cmd in command_str:

@@ -1,9 +1,5 @@
 from traymaker_logic import TrayLaserCut
 
-def mocked_unitfunc(unitstr):
-    return 1
-
-
 options = {
     "unit": "mm",
     "uconv": 1,
@@ -310,7 +306,7 @@ def error_print(msg):
 
 
 def test_square_piece():
-    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(options, error_print)
     square_element = mock_square(10)
     cmds = traycut.draw(square_element)
     offset = 4
@@ -327,7 +323,7 @@ def test_female_female_tabbed_side():
     tab_size = 4.0
     opts = options
     opts["nomTab"] = tab_size
-    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(opts, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
@@ -365,7 +361,7 @@ def test_female_male_tabbed_side():
     tab_size = 4.0
     opts = options
     opts["nomTab"] = tab_size
-    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(opts, error_print)
     cmds = traycut.draw(pieces)
     offset = 4
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
@@ -402,7 +398,7 @@ def test_male_male_tabbed_side():
     tab_size = 4.0
     opts = options
     opts["nomTab"] = tab_size
-    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(opts, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
@@ -439,7 +435,7 @@ def test_top_male_tabbed_side():
     tab_size = 4.0
     opts = options
     opts["nomTab"] = tab_size
-    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(opts, error_print)
     cmds = traycut.draw(pieces)
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
@@ -468,7 +464,7 @@ def test_top_female_tabbed_side():
     tab_size = 4.0
     opts = options
     opts["nomTab"] = tab_size
-    traycut = TrayLaserCut(opts, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(opts, error_print)
     cmds = traycut.draw(pieces)
     offset = 4
     expected = 'M {} {} '.format(offset, offset) + \
@@ -494,7 +490,7 @@ def test_square_with_holes():
         "offset": 4,
         "shape": "START_HALF_TAB"
     }]
-    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(options, error_print)
     cmds = traycut.draw(pieces)
     offset = 4
     assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
@@ -508,7 +504,7 @@ def test_half_tabs():
     pieces = mock_half_tabs(12)
     opts = options
     opts["nomTab"] = 4
-    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(options, error_print)
     cmds = traycut.draw(pieces)
     offset = 4
 
@@ -521,7 +517,7 @@ def test_half_tabs():
 def test_two_squares():
     pieces = mock_square(10)
     pieces.extend(mock_square(10, (0, 20)))
-    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(options, error_print)
     cmds = traycut.draw(pieces)
     thickness = 3
     offset = thickness + 1
@@ -543,8 +539,22 @@ def test_top_and_half():
     pieces = mock_top_half_tabs(side_len)
     thickness = 3
     offset = thickness + 1
-    traycut = TrayLaserCut(options, mocked_unitfunc, error_print)
+    traycut = TrayLaserCut(options, error_print)
     cmds = traycut.draw(pieces)
     assert(len(cmds) == 2)
     assert(cmds[0] == 'M {} {} l 5 0 l 0 {} l 5 0 '.format(offset, offset, -thickness))
     assert(cmds[1] == 'M {} {} l 0 {} '.format(side_len+offset, offset-thickness, side_len+thickness))
+
+
+def test_conversion_with_top_and_half():
+    side_len = 10
+    pieces = mock_top_half_tabs(side_len)
+    opts = options
+    opts["uconv"] = 2.0
+    thickness = 3*opts["uconv"]
+    offset = thickness + 1*opts["uconv"]
+    traycut = TrayLaserCut(opts, error_print)
+    cmds = traycut.draw(pieces)
+    assert(len(cmds) == 2)
+    assert(cmds[0] == 'M {} {} l 10.0 0.0 l 0.0 {} l 10.0 0.0 '.format(offset, offset, -thickness))
+    assert(cmds[1] == 'M {} {} l 0.0 {} '.format(side_len*opts["uconv"]+offset, offset-thickness, side_len*opts["uconv"]+thickness))
