@@ -130,7 +130,7 @@ class TrayLaserCut():
             x_angle = (rotations % 4) * 90
             end_point = ( 2 * radius, 0 )
             (end_x, end_y) = self.rotateClockwise(end_point, rotations)
-            return "a{},{} {} 0,0 {},{}".format(radius * self.uconv, radius * self.uconv,
+            return "a {},{} {} 0,0 {},{} ".format(radius * self.uconv, radius * self.uconv,
                                                 x_angle, end_x * self.uconv, end_y * self.uconv)
 
         return {
@@ -276,13 +276,12 @@ class TrayLaserCut():
             if "indent" in part and part["indent"]["radius"] > 0:
                 indent_radius = part["indent"]["radius"]
                 indent_x_offset = part["indent"]["offset"]
-                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab is [START_HALF_TAB, MALE] else 0
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 len_to_end = length - indent_radius * 2 - indent_x_offset + end_tab
                 draw_directives["elements"].extend([
                     self.line(indent_x_offset-start_x, 0),
                     self.halfcircle(indent_radius),
                     self.line(len_to_end, 0)])
-
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 if "pin_height" in part_node.value and part_node.value["pin_height"] > 0:
