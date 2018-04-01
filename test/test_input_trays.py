@@ -77,6 +77,8 @@ def test_effects_tray_syntax_works():
     pieces = gloomhaven.tray_setup("effects", error_print)
     lasercut = TrayLaserCut(options, error_print)
     cmds = lasercut.draw(pieces)
+    small_terrain = gloomhaven.tray_setup("small_terrain", error_print)
+    lasercut.draw(small_terrain)
 
 
 def test_vdivider():
