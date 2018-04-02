@@ -41,7 +41,18 @@ def tray_setup(tray_name, errorFn):
                                 "length": 59
                             },
                             {
-                                "offset": 30,
+                                "offset": 15,
+                                "parts": [
+                                    {
+                                        "offset": 39,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 20
+                                    }
+                                ]
+                            },
+                            {
+                                "offset": 15,
                                 "opposite": "2 full v-divider",
                                 "parts": [
                                     {
@@ -719,7 +730,24 @@ def tray_setup(tray_name, errorFn):
                         ],
                         "holes": [
                             {
-                                "offset": 38.143,
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -737,8 +765,26 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "1 v-divider"
-                            },{
-                                "offset": 38.143,
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -756,8 +802,26 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "2 v-divider"
-                            },{
-                                "offset": 38.143,
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -775,8 +839,26 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "3 v-divider"
-                            },{
-                                "offset": 38.143,
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -794,8 +876,26 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "4 v-divider"
-                            },{
-                                "offset": 38.143,
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -813,8 +913,26 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "5 v-divider"
-                            },{
-                                "offset": 38.143,
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 12.823,
                                 "parts": [
                                     {
                                         "length": 37.33,
@@ -832,6 +950,23 @@ def tray_setup(tray_name, errorFn):
                                     },
                                 ],
                                 "opposite": "6 v-divider"
+                            },
+                            {
+                                "offset": 12.82,
+                                "parts": [
+                                    {
+                                        "offset": 25.83,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    },
+                                    {
+                                        "offset": 14.33,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 12.5,
+                                        "length": 25
+                                    }
+                                ],
                             },
                         ]
                     },
@@ -1264,6 +1399,8 @@ def tray_setup(tray_name, errorFn):
                 edge["opposite"] = {"thickness": opposite_piece["thickness"]}
             if "holes" in edge:
                 for hole in edge["holes"]:
+                    if "opposite" not in hole:
+                        continue
                     opposite_name = hole["opposite"]
                     opposite_piece = next((piece for piece in new_pieces if piece["name"] == opposite_name), None)
                     if opposite_piece is None or "thickness" not in opposite_piece:

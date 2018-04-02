@@ -140,6 +140,27 @@ class TrayLaserCut():
             "draw": draw
         }
 
+    def cubic_bezier_corner(self, end_point_rel, corner_rel):
+        def draw(cubic_bezier):
+            end_point = cubic_bezier["end_point_rel"]
+            corner = cubic_bezier["corner_rel"]
+            rotations = cubic_bezier["rotations"]
+            (end_x, end_y) = self.rotateClockwise(end_point, rotations)
+            (corner_x, corner_y) = self.rotateClockwise(corner, rotations)
+
+            (end_x, end_y) = (end_x * self.uconv, end_y * self.uconv)
+            (corner_x, corner_y) = (corner_x * self.uconv, corner_y * self.uconv)
+
+            return "c {},{} {},{} {},{}".format(corner_x, corner_y, corner_x, corner_y, end_x, end_y)
+
+        return {
+            "type": "cubic_bezier",
+            "rotations": 0,
+            "end_point_rel": end_point_rel,
+            "corner_rel": corner_rel,
+            "draw": draw
+        }
+
     def rotateClockwise(self, (x,y), rotations):
         coords = (x,y)
         for n in range(0, rotations):
@@ -400,7 +421,6 @@ class TrayLaserCut():
                 ]}
                 directives.append(directive)
             elif shape is FEMALE:
-                #TODO: Ugly hardcoding of div amount, doesnt always match reality.
                 tabs = self.invert_tabs(self.compute_male_tabs(part_length, holes=True))
                 total_y_offset = y_offset
                 for tab in tabs:
@@ -413,6 +433,15 @@ class TrayLaserCut():
                     ]}
                     directives.append(directive)
                     total_y_offset += tab["length"]
+            elif shape is "C_BEZIER_RECT":
+                directives.append({"origin": (x_offset + width/2.0, y_offset),
+                             "elements": [
+                                 self.cubic_bezier_corner((width/2.0, part_length/2.0), (width/2.0, 0)),
+                                 self.cubic_bezier_corner((-width/2.0, part_length/2.0), (0, part_length/2.0)),
+                                 self.cubic_bezier_corner((-width/2.0, -part_length/2.0), (-width/2.0, 0)),
+                                 self.cubic_bezier_corner((width/2.0, -part_length/2.0), (0, -part_length/2.0)),
+                             ]
+                             })
             else:
                 self.errorFn("Unsupported")
             return directives
@@ -423,8 +452,11 @@ class TrayLaserCut():
         directives = []
         for hole_part in edge["holes"]:
             x_offset += hole_part["offset"]
-            width = hole_part["opposite"]["thickness"]
             if "shape" in hole_part:
+                if "width" not in hole_part:
+                    width = hole_part["opposite"]["thickness"]
+                else:
+                    width = hole_part["width"]
                 shape = hole_part["shape"]
                 part_length = depth
                 if "length" in hole_part:
@@ -434,6 +466,10 @@ class TrayLaserCut():
             elif "parts" in hole_part:
                 y_offset = 0
                 for part in hole_part["parts"]:
+                    if "width" not in part:
+                        width = hole_part["opposite"]["thickness"]
+                    else:
+                        width = part["width"]
                     shape = part["shape"]
                     part_length = part["length"]
                     if "offset" in part:
