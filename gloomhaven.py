@@ -1376,6 +1376,911 @@ def tray_setup(tray_name, errorFn):
                 "name": "2 h-divider",
                 "copy_of": "1 h-divider"
             },
+        ],
+        "large_terrain": [
+            {
+                "name": "bottom",
+                "width": 279,
+                "height": 116,
+                "thickness": 3,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 279
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 4,
+                                "parts": [
+                                    {
+                                        "offset": 36,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 14,
+                                        "length": 10
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 2,
+                                "parts": [
+                                    {
+                                        "length": 46,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "1 up v-divider"
+                            },
+                            {
+                                "offset": 23,
+                                "parts": [
+                                    {
+                                        "offset": 20,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 25,
+                                "parts": [
+                                    {
+                                        "length": 46,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "2 up v-divider"
+                            },
+                            {
+                                "offset": 58,
+                                "shape": "FEMALE",
+                                "length": 46,
+                                "opposite": "3 up v-divider"
+                            },
+                            {
+                                "offset": 25.5,
+                                "parts": [
+                                    {
+                                        "offset": 11,
+                                        "length": 20,
+                                        "width": 16,
+                                        "shape": "C_BEZIER_RECT"
+
+                                    },
+                                ],
+                            },
+                            {
+                                "offset": 25,
+                                "parts": [
+                                    {
+                                        "length": 22,
+                                        "shape": "FEMALE"
+                                    },
+                                    {
+                                        "offset": 2,
+                                        "length": 22,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "4 up v-divider"
+                            },
+                            {
+                                "offset": 23,
+                                "parts": [
+                                    {
+                                        "offset": 11,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 24
+                                    }
+                                ],
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "short side wall",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 279
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "length": 67,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "1 down v-divider"
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "length": 67,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "2 down v-divider"
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "length": 67,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "3 down v-divider"
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 11.5,
+                                "parts": [
+                                    {
+                                        "length": 67,
+                                        "shape": "FEMALE"
+                                    }
+                                ],
+                                "opposite": "4 down v-divider"
+                            },
+                            {
+                                "offset": 15,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ],
+                            },
+                            {
+                                "offset": 44,
+                                "parts": [
+                                    {
+                                        "offset": 23.5,
+                                        "shape": "C_BEZIER_RECT",
+                                        "width": 16,
+                                        "length": 20
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "short side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 116
+                            },
+                        ],
+                        "holes": [
+                            {
+                                "shape": "FEMALE",
+                                "length": 279,
+                                "offset": 67,
+                                "opposite": "middle h-divider"
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "long side wall",
+                "width": 279,
+                "height": 13,
+                "thickness": 3,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 279,
+                                "pin_height": 0.5
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 22,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "1 up v-divider"
+                            },{
+                                "offset": 62,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "2 up v-divider"
+                            },{
+                                "offset": 58,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "3 up v-divider"
+                            },{
+                                "offset": 67,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "4 up v-divider"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "short side wall",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 279,
+                                "notch_depth": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "short side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "short side wall",
+                "width": 116,
+                "height": 13,
+                "thickness": 3,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 116
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 46,
+                                "opposite": "middle h-divider",
+                                "shape": "START_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 116
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "long side wall 2",
+                "width": 279,
+                "height": 13,
+                "thickness": 3,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 279,
+                                "pin_height": 0.5
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 39,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "1 down v-divider"
+                            },{
+                                "offset": 39,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "2 down v-divider"
+                            },{
+                                "offset": 39,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "3 down v-divider"
+                            },{
+                                "offset": 39,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "4 down v-divider"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "short side wall",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 279,
+                                "notch_depth": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "short side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "MALE",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "short side wall 2",
+                "copy_of": "short side wall"
+            },
+            {
+                "name": "1 up v-divider",
+                "width": 46,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 46
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 16,
+                                "opposite": "1 small h-divider",
+                                "shape": "START_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 46
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "middle h-divider",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "2 up v-divider",
+                "copy_of": "1 up v-divider"
+            },
+            {
+                "name": "3 up v-divider",
+                "width": 46,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 46,
+                                "indent": {
+                                    "radius": 8,
+                                    "offset": 15
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 46
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "4 up v-divider",
+                "width": 46,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 46
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 22,
+                                "opposite": "2 small h-divider",
+                                "shape": "START_HALF_TAB"
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 46
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "middle h-divider",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "1 down v-divider",
+                "width": 67,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 67,
+                                "indent": {
+                                    "offset": 25.5,
+                                    "radius": 8
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "long side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 67
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "middle h-divider",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+            },
+            {
+                "name": "2 down v-divider",
+                "copy_of": "1 down v-divider"
+
+            },
+            {
+                "name": "3 down v-divider",
+                "copy_of": "1 down v-divider"
+
+            },
+            {
+                "name": "4 down v-divider",
+                "copy_of": "1 down v-divider"
+
+            },
+            {
+                "name": "middle h-divider",
+                "width": 279,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 24,
+                                "indent": {
+                                    "offset": 3,
+                                    "radius": 8
+                                }
+                            },
+                            {
+                                "tabs": "TOP",
+                                "length": 64,
+                                "indent": {
+                                    "offset": 23,
+                                    "radius": 8
+                                }
+                            },
+                            {
+                                "tabs": "TOP",
+                                "length": 191
+                            }
+                        ],
+                        "holes": [
+                            {
+                                "offset": 22,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "1 up v-divider"
+                            },{
+                                "offset": 62,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "2 up v-divider"
+                            },{
+                                "offset": 26,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "4 down v-divider"
+                            },{
+                                "offset": 30,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "3 up v-divider"
+                            },{
+                                "offset": 7,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "3 down v-divider"
+                            },{
+                                "offset": 39,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "2 down v-divider"
+                            },{
+                                "offset": 16,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "4 up v-divider"
+                            },{
+                                "offset": 21,
+                                "shape": "START_HALF_TAB",
+                                "opposite": "1 down v-divider"
+                            },
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "short side wall",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "FEMALE",
+                                "length": 279
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "short side wall 2",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+
+            },
+
+            {
+                "name": "1 small h-divider",
+                "width": 62,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 62
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "1 up v-divider",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "bottom",
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 62
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "2 up v-divider",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+
+            },
+            {
+                "name": "2 small h-divider",
+                "copy_of": "1 small h-divider"
+            },
+        ],
+        "bosses": [
+            {
+                "name": "mock",
+                "thickness": 2,
+                "width": 62,
+                "height": 13,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 16,
+                        "opposite": "1 small h-divider",
+                        "parts": []
+                    }
+                ]
+            },
+            {
+                "name": "1 small h-divider",
+                "width": 62,
+                "height": 13,
+                "thickness": 2,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "depth": 13,
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 62
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 1,
+                        "opposite": "mock",
+                        "parts": [
+                            {
+                                "tabs": "START_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 2,
+                        "opposite": "mock",
+                        "parts": [
+                            {
+                                "tabs": "TOP",
+                                "length": 62
+                            }
+                        ]
+                    },
+                    {
+                        "rotation": 3,
+                        "opposite": "mock",
+                        "parts": [
+                            {
+                                "tabs": "END_HALF_TAB",
+                                "length": 13
+                            }
+                        ]
+                    }
+                ],
+
+            },
+
         ]
     }
 

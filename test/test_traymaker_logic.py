@@ -362,6 +362,63 @@ def mock_multipart_top_with_indent():
         ]
     }]
 
+def mock_half_tabs_odd_edge_length():
+    opposite_piece = {
+        "thickness": 3
+    }
+
+    return [
+    {
+        "name": "1 small h-divider",
+        "width": 62,
+        "height": 13,
+        "thickness": 2,
+        "edges": [
+            {
+                "rotation": 0,
+                "depth": 13,
+                "opposite": opposite_piece,
+                "parts": [
+                    {
+                        "tabs": "TOP",
+                        "length": 62
+                    }
+                ]
+            },
+            {
+                "rotation": 1,
+                "opposite": opposite_piece,
+                "parts": [
+                    {
+                        "tabs": "START_HALF_TAB",
+                        "length": 13
+                    }
+                ]
+            },
+            {
+                "rotation": 2,
+                "opposite": opposite_piece,
+                "parts": [
+                    {
+                        "tabs": "TOP",
+                        "length": 62
+                    }
+                ]
+            },
+            {
+                "rotation": 3,
+                "opposite": opposite_piece,
+                "parts": [
+                    {
+                        "tabs": "END_HALF_TAB",
+                        "length": 13
+                    }
+                ]
+            }
+        ],
+
+    }]
+
 
 def error_print(msg):
     print(msg)
@@ -556,7 +613,7 @@ def test_square_with_holes():
     cmds = traycut.draw(pieces)
     offset = 4
     assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
-    assert(cmds[1] == 'M {} {} l 0 5 l 2 0 l 0 -5 l -2 0 '.format(offset+4, offset))
+    assert(cmds[1] == 'M {} {} l 0 5.0 l 2 0 l 0 -5.0 l -2 0 '.format(offset+4, offset))
     assert(cmds[2] == 'M {} {} l 0 10 '.format(offset+10, offset))
     assert(cmds[3] == 'M {} {} l -10 0 '.format(offset+10, offset+10))
     assert(cmds[4] == 'M {} {} l 0 -10 '.format(offset, offset+10))
@@ -571,9 +628,9 @@ def test_half_tabs():
     offset = 4
 
     assert(cmds[0] == 'M {} {} l 7.0 0 l 0 3 l 4.0 0 l 0 -3 l 7.0 0 '.format(offset-3, offset-3))
-    assert(cmds[1] == 'M {} {} l 0 9 l -3 0 l 0 6 '.format(offset+15, offset-3))
+    assert(cmds[1] == 'M {} {} l 0 9.0 l -3 0 l 0 6.0 '.format(offset+15, offset-3))
     assert(cmds[2] == 'M {} {} l -4.0 0 l 0 3 l -4.0 0 l 0 -3 l -4.0 0 '.format(offset+12, offset+12))
-    assert(cmds[3] == 'M {} {} l 0 -6 l -3 0 l 0 -9 '.format(offset, offset + 12))
+    assert(cmds[3] == 'M {} {} l 0 -6.0 l -3 0 l 0 -9.0 '.format(offset, offset + 12))
 
 
 def test_two_squares():
@@ -604,7 +661,7 @@ def test_top_and_half():
     traycut = TrayLaserCut(deepcopy(options), error_print)
     cmds = traycut.draw(pieces)
     assert(len(cmds) == 2)
-    assert(cmds[0] == 'M {} {} l 5 0 l 0 {} l 5 0 '.format(offset, offset, -thickness))
+    assert(cmds[0] == 'M {} {} l 5.0 0 l 0 {} l 5.0 0 '.format(offset, offset, -thickness))
     assert(cmds[1] == 'M {} {} l 0 {} '.format(side_len+offset, offset-thickness, side_len+thickness))
 
 
@@ -629,7 +686,7 @@ def test_multipart_top():
     assert(len(cmds) == 3)
     assert(cmds[0] == 'M 4 4 l 6 0 ')
     assert(cmds[1] == 'M 10 4 l 9 0 ')
-    assert(cmds[2] == 'M 19 4 l 0 6 l -3 0 l 0 6 ')
+    assert(cmds[2] == 'M 19 4 l 0 6.0 l -3 0 l 0 6.0 ')
 
 def test_multipart_top_indent():
     pieces = mock_multipart_top_with_indent()
@@ -638,4 +695,16 @@ def test_multipart_top_indent():
     assert(len(cmds) == 3)
     assert(cmds[0] == 'M 4 4 l 13.07 0 a 7,7 0 0,0 14,0 l 13.06 0 ')
     assert(cmds[1] == 'M 44.13 4 l 13.07 0 a 7,7 0 0,0 14,0 l 16.06 0 ')
-    assert(cmds[2] == 'M 87.26 4 l 0 6 l -3 0 l 0 6 ')
+    assert(cmds[2] == 'M 87.26 4 l 0 6.0 l -3 0 l 0 6.0 ')
+
+def test_half_tabs_with_odd_length():
+    opts = deepcopy(options)
+    opts["nomTab"] = 15
+    pieces = mock_half_tabs_odd_edge_length()
+    traycut = TrayLaserCut(opts, error_print)
+    cmds = traycut.draw(pieces)
+    assert(len(cmds) == 4)
+    assert(cmds[0] == 'M 1 4 l 68 0 ')
+    assert(cmds[1] == 'M 69 4 l 0 6.5 l -3 0 l 0 6.5 ')
+    assert(cmds[2] == 'M 66 17 l -62 0 ')
+    assert(cmds[3] == 'M 4 17 l 0 -6.5 l -3 0 l 0 -6.5 ')

@@ -88,7 +88,7 @@ def test_vdivider():
     tw = 116 / 9.0
     assert(len(cmds) == 4)
     assert(cmds[0] == 'M 1 1 l 122 0 ')
-    assert(cmds[1] == 'M 123 1 l 0 6 l -3 0 l 0 6 ')
+    assert(cmds[1] == 'M 123 1 l 0 6.0 l -3 0 l 0 6.0 ')
     assert(cmds[2] == 'M 120 13 ' +
             'l {} 0 l 0 3 l {} 0 l 0 -3 '.format(-tw, -tw) +
             'l {} 0 l 0 3 l {} 0 l 0 -3 '.format(-tw, -tw) +

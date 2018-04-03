@@ -225,7 +225,7 @@ class TrayLaserCut():
         # kerf correction
         gapWidth -= self.correction
         tabWidth += self.correction
-        first = self.correction/2
+        first = self.correction/2.0
 
         leftTab = NO_EDGE
         rightTab = NO_EDGE
@@ -252,17 +252,17 @@ class TrayLaserCut():
             if thisTab in START_HALF_TAB:
                 dirs = {"origin": (start_x, -thickness),
                         "elements": [
-                            self.line(part_node.value["length"]/2-start_x, 0),
+                            self.line(part_node.value["length"]/2.0-start_x, 0),
                             self.line(0, thickness),
-                            self.line(part_node.value["length"]/2+end_tab, 0)
+                            self.line(part_node.value["length"]/2.0+end_tab, 0)
                         ]}
                 return [dirs]
             if thisTab in END_HALF_TAB:
                 dirs = {"origin": (start_x, 0),
                         "elements": [
-                            self.line(part_node.value["length"]/2-start_x, 0),
+                            self.line(part_node.value["length"]/2.0-start_x, 0),
                             self.line(0, -thickness),
-                            self.line(part_node.value["length"]/2+end_tab, 0)
+                            self.line(part_node.value["length"]/2.0+end_tab, 0)
                         ]}
                 return [dirs]
         elif thisTab is MALE:
@@ -406,17 +406,17 @@ class TrayLaserCut():
             directives = []
             if shape is START_HALF_TAB:
                 directive = {"origin": (x_offset, y_offset), "elements": [
-                    self.line(0, depth/2),
+                    self.line(0, depth/2.0),
                     self.line(width, 0),
-                    self.line(0, -depth/2),
+                    self.line(0, -depth/2.0),
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
             elif shape is END_HALF_TAB:
-                directive = {"origin": (x_offset, depth/2 + y_offset), "elements": [
-                    self.line(0, depth/2),
+                directive = {"origin": (x_offset, depth/2.0 + y_offset), "elements": [
+                    self.line(0, depth/2.0),
                     self.line(width, 0),
-                    self.line(0, -depth/2),
+                    self.line(0, -depth/2.0),
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
