@@ -15,7 +15,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -119,7 +119,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -129,7 +129,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -147,7 +147,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -161,12 +161,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
-
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279,
+                                "length": "piece.width",
                                 "pin_height": 0.5
                             }
                         ],
@@ -209,7 +207,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -219,7 +217,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279,
+                                "length": "piece.width",
                                 "notch_depth": 0.5
                             }
                         ]
@@ -230,7 +228,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -247,7 +245,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -264,7 +262,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -274,7 +272,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -284,7 +282,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -303,7 +301,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279,
+                                "length": "piece.width",
                                 "pin_height": 0.5
                             }
                         ],
@@ -346,7 +344,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -356,7 +354,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279,
+                                "length": "piece.width",
                                 "notch_depth": 0.5
                             }
                         ]
@@ -367,7 +365,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -385,7 +383,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -402,7 +400,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -412,7 +410,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -422,7 +420,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -436,7 +434,6 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -504,7 +501,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -514,7 +511,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -524,12 +521,11 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
                 ],
-
             },
             {
                 "name": "1 full v-divider",
@@ -543,7 +539,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -560,7 +556,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -588,12 +584,11 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
-                ],
-
+                ]
             },
 
             {
@@ -620,11 +615,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 55
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -634,7 +628,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -644,7 +638,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 55
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -654,7 +648,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -673,7 +667,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 59
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -683,7 +677,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -693,7 +687,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 59
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -703,7 +697,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -725,7 +719,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -972,12 +966,11 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "rotation": 1,
-                        "translation": (279, 0),
                         "opposite": "short side wall",
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -987,7 +980,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -997,7 +990,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1011,12 +1004,11 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
 
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279,
+                                "length": "piece.width",
                                 "pin_height": 0.5
                             }
                         ],
@@ -1054,7 +1046,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1064,7 +1056,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279,
+                                "length": "piece.width",
                                 "notch_depth": 0.5
                             }
                         ]
@@ -1075,7 +1067,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1092,7 +1084,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1114,7 +1106,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1124,7 +1116,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -1134,7 +1126,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1156,11 +1148,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1182,7 +1173,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1218,7 +1209,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1252,7 +1243,6 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 12,
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -1345,7 +1335,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1355,7 +1345,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -1365,7 +1355,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 12
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1390,7 +1380,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1488,7 +1478,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1498,7 +1488,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1616,13 +1606,12 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 116
+                                "length": "piece.height"
                             },
                         ],
                         "holes": [
                             {
                                 "shape": "FEMALE",
-                                "length": 279,
                                 "offset": 67,
                                 "opposite": "middle h-divider"
                             }
@@ -1638,12 +1627,11 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
 
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279,
+                                "length": "piece.width",
                                 "pin_height": 0.5
                             }
                         ],
@@ -1673,7 +1661,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1683,7 +1671,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279,
+                                "length": "piece.width",
                                 "notch_depth": 0.5
                             }
                         ]
@@ -1694,7 +1682,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1711,7 +1699,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1728,7 +1716,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1738,7 +1726,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 116
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -1748,7 +1736,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1767,7 +1755,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 279,
+                                "length": "piece.width",
                                 "pin_height": 0.5
                             }
                         ],
@@ -1797,7 +1785,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1807,7 +1795,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 279,
+                                "length": "piece.width",
                                 "notch_depth": 0.5
                             }
                         ]
@@ -1818,7 +1806,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "MALE",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1840,7 +1828,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 46
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1857,7 +1845,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1867,7 +1855,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 46
+                                "length": "piece.width"
                             },
                         ]
                     },
@@ -1877,7 +1865,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1895,11 +1883,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 46,
+                                "length": "piece.width",
                                 "indent": {
                                     "radius": 8,
                                     "offset": 15
@@ -1913,7 +1900,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1923,7 +1910,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 46
+                                "length": "piece.width"
                             },
                         ]
                     },
@@ -1933,7 +1920,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -1947,11 +1934,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 46
+                                "length": "piece.width"
                             }
                         ],
                         "holes": [
@@ -1968,7 +1954,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -1978,7 +1964,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 46
+                                "length": "piece.width"
                             },
                         ]
                     },
@@ -1988,7 +1974,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -2002,11 +1988,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 67,
+                                "length": "piece.width",
                                 "indent": {
                                     "offset": 25.5,
                                     "radius": 8
@@ -2020,7 +2005,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -2030,7 +2015,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 67
+                                "length": "piece.width"
                             },
                         ]
                     },
@@ -2040,7 +2025,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -2069,7 +2054,6 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -2134,7 +2118,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -2144,7 +2128,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "FEMALE",
-                                "length": 279
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -2154,7 +2138,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -2170,11 +2154,10 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 62
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -2184,7 +2167,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "START_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     },
@@ -2194,7 +2177,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "TOP",
-                                "length": 62
+                                "length": "piece.width"
                             }
                         ]
                     },
@@ -2204,7 +2187,7 @@ def tray_setup(tray_name, errorFn):
                         "parts": [
                             {
                                 "tabs": "END_HALF_TAB",
-                                "length": 13
+                                "length": "piece.height"
                             }
                         ]
                     }
@@ -2215,72 +2198,6 @@ def tray_setup(tray_name, errorFn):
                 "name": "2 small h-divider",
                 "copy_of": "1 small h-divider"
             },
-        ],
-        "bosses": [
-            {
-                "name": "mock",
-                "thickness": 2,
-                "width": 62,
-                "height": 13,
-                "edges": [
-                    {
-                        "rotation": 0,
-                        "depth": 16,
-                        "opposite": "1 small h-divider",
-                        "parts": []
-                    }
-                ]
-            },
-            {
-                "name": "1 small h-divider",
-                "width": 62,
-                "height": 13,
-                "thickness": 2,
-                "edges": [
-                    {
-                        "rotation": 0,
-                        "depth": 13,
-                        "parts": [
-                            {
-                                "tabs": "TOP",
-                                "length": 62
-                            }
-                        ]
-                    },
-                    {
-                        "rotation": 1,
-                        "opposite": "mock",
-                        "parts": [
-                            {
-                                "tabs": "START_HALF_TAB",
-                                "length": 13
-                            }
-                        ]
-                    },
-                    {
-                        "rotation": 2,
-                        "opposite": "mock",
-                        "parts": [
-                            {
-                                "tabs": "TOP",
-                                "length": 62
-                            }
-                        ]
-                    },
-                    {
-                        "rotation": 3,
-                        "opposite": "mock",
-                        "parts": [
-                            {
-                                "tabs": "END_HALF_TAB",
-                                "length": 13
-                            }
-                        ]
-                    }
-                ],
-
-            },
-
         ]
     }
 
@@ -2297,7 +2214,15 @@ def tray_setup(tray_name, errorFn):
             new_pieces.append(piece)
 
     for piece in new_pieces:
+        piece_width = piece["width"]
+        piece_height = piece["height"]
         for edge in piece["edges"]:
+            for part in edge["parts"]:
+                if part["length"] is "piece.width":
+                    part["length"] = piece_width
+                elif part["length"] is "piece.height":
+                    part["length"] = piece_height
+
             if "opposite" in edge:
                 opposite_name = edge["opposite"]
                 opposite_piece = next((piece for piece in new_pieces if piece["name"] == opposite_name), None)
