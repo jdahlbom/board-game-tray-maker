@@ -452,6 +452,7 @@ class TrayLaserCut():
         directives = []
         for hole_part in edge["holes"]:
             x_offset += hole_part["offset"]
+            width = None
             if "shape" in hole_part:
                 if "width" not in hole_part:
                     width = hole_part["opposite"]["thickness"]
@@ -477,5 +478,7 @@ class TrayLaserCut():
                     directives.extend(draw_shapes(part_length, shape, x_offset, y_offset, width))
                     y_offset += part_length
 
+            if not width:
+                self.errorFn("{}".format(hole_part))
             x_offset += width
         return directives
