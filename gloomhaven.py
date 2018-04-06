@@ -2197,7 +2197,7 @@ def tray_setup(tray_name, errorFn):
                 "copy_of": "1 small h-divider"
             },
         ],
-        "monster_cards": [
+        "monsters": [
             {
                 "name": "bottom",
                 "width": 269,
@@ -2617,7 +2617,7 @@ def tray_setup(tray_name, errorFn):
                 "name": "1 h-divider",
                 "width": 269,
                 "height": 13,
-                "thickness": 3,
+                "thickness": 2,
                 "edges": [
                     {
                         "rotation": 0,
@@ -2682,7 +2682,232 @@ def tray_setup(tray_name, errorFn):
                 "name": "2 h-divider",
                 "copy_of": "1 h-divider"
             },
-            
+            {
+                "name": "base plate short",
+                "thickness": 2,
+                "width": 39.5,
+                "height": 50,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "parts": [
+                            {
+                                "length": "piece.width",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 1,
+                        "parts": [
+                            {
+                                "length": "piece.height",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 2,
+                        "parts": [
+                            {
+                                "length": "piece.width",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 3,
+                        "parts": [
+                            {
+                                "length": "piece.height",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    }
+                ]
+            },
+            {
+                "name": "base plate short 2",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 3",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 4",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 5",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 6",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 7",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 8",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 9",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 10",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 11",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 12",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 13",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 14",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 15",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 16",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 17",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base plate short 18",
+                "copy_of": "base plate short"
+            },
+            {
+                "name": "base angle short",
+                "thickness": 2,
+                "width": 39.5,
+                "height": 9.3,
+                "edges": [
+                    {
+                        "rotation": 0,
+                        "parts": [
+                            {
+                                "length": "piece.width",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 1,
+                        "parts": [
+                            {
+                                "length": "piece.height",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 2,
+                        "parts": [
+                            {
+                                "length": "piece.width",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    },
+                    {
+                        "rotation": 3,
+                        "parts": [
+                            {
+                                "length": "piece.height",
+                                "tabs": "TOP"
+                            }
+                        ],
+                    }
+                ]
+            },
+            {
+                "name": "base angle short 2",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 3",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 4",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 5",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 6",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 7",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 8",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 9",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 10",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 11",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 12",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 13",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 14",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 15",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 16",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 17",
+                "copy_of": "base angle short"
+            },
+            {
+                "name": "base angle short 18",
+                "copy_of": "base angle short"
+            },
+
+
         ]
     }
 

@@ -32,6 +32,8 @@ class TrayLaserCut():
 
 
     def max_thickness(self, piece):
+        if not list(filter(lambda edge: "opposite" in edge, piece["edges"])):
+            return 0
         return max(map(lambda edge: edge["opposite"]["thickness"],
                 filter(lambda edge: "opposite" in edge, piece["edges"])))
 
