@@ -1396,7 +1396,7 @@ def tray_setup(tray_name, errorFn):
                                 ],
                             },
                             {
-                                "offset": 2,
+                                "offset": 4,
                                 "parts": [
                                     {
                                         "length": 46,
@@ -1406,7 +1406,7 @@ def tray_setup(tray_name, errorFn):
                                 "opposite": "1 up v-divider"
                             },
                             {
-                                "offset": 23,
+                                "offset": 21,
                                 "parts": [
                                     {
                                         "offset": 20,
@@ -1475,8 +1475,18 @@ def tray_setup(tray_name, errorFn):
                         "holes": [
                             {
                                 "offset": 22,
-                                "shape": "START_HALF_TAB",
-                                "opposite": "2 small h-divider"
+                                "opposite": "2 small h-divider",
+                                "parts": [
+                                    {
+                                        "length": 21,
+                                        "shape": "FEMALE",
+                                    },
+                                    {
+                                        "offset": 20,
+                                        "length": 21,
+                                        "shape": "FEMALE"
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -1612,6 +1622,22 @@ def tray_setup(tray_name, errorFn):
                                 "shape": "FEMALE",
                                 "offset": 67,
                                 "opposite": "middle h-divider"
+                            },
+                            {
+                                "offset": 28,
+                                "opposite": "1 small h-divider",
+                                "parts": [
+                                    {
+                                        "offset": 24,
+                                        "length": 21,
+                                        "shape": "FEMALE"
+                                    },
+                                    {
+                                        "offset": 20,
+                                        "length": 21,
+                                        "shape": "FEMALE"
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -1822,7 +1848,6 @@ def tray_setup(tray_name, errorFn):
                 "edges": [
                     {
                         "rotation": 0,
-                        "depth": 13,
                         "parts": [
                             {
                                 "tabs": "TOP",
@@ -2174,8 +2199,16 @@ def tray_setup(tray_name, errorFn):
                         "opposite": "bottom",
                         "parts": [
                             {
-                                "tabs": "TOP",
-                                "length": "piece.width"
+                                "length": 21,
+                                "tabs": "FEMALE",
+                            },
+                            {
+                                "length": 20,
+                                "tabs": "TOP"
+                            },
+                            {
+                                "length": 21,
+                                "tabs": "FEMALE"
                             }
                         ]
                     },
