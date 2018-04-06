@@ -1462,13 +1462,13 @@ def tray_setup(tray_name, errorFn):
                                     ],
                                 },
                                 {
-                                    "offset": 25,
+                                    "offset": 25.5,
                                     "length": 46,
                                     "shape": "FEMALE",
                                     "opposite": "4 up v-divider"
                                 },
                                 {
-                                    "offset": 23,
+                                    "offset": 22.5,
                                     "parts": [
                                         {
                                             "offset": 11,
@@ -1746,7 +1746,12 @@ def tray_setup(tray_name, errorFn):
                             ],
                             "holes": [
                                 {
-                                    "offset": 46,
+                                    "offset": 22,
+                                    "opposite": "2 small h-divider",
+                                    "shape": "START_HALF_TAB"
+                                },
+                                {
+                                    "offset": 22,
                                     "opposite": "middle h-divider",
                                     "shape": "START_HALF_TAB"
                                 }
@@ -1854,7 +1859,57 @@ def tray_setup(tray_name, errorFn):
                 },
                 {
                     "name": "short side wall 2",
-                    "copy_of": "short side wall"
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 46,
+                                    "opposite": "middle h-divider",
+                                    "shape": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
                 },
                 {
                     "name": "1 up v-divider",
@@ -2125,15 +2180,15 @@ def tray_setup(tray_name, errorFn):
                                     "shape": "START_HALF_TAB",
                                     "opposite": "2 up v-divider"
                                 },{
-                                    "offset": 26,
+                                    "offset": 27,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "4 down v-divider"
                                 },{
-                                    "offset": 30,
+                                    "offset": 29,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "3 up v-divider"
                                 },{
-                                    "offset": 7,
+                                    "offset": 8,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "3 down v-divider"
                                 },{
@@ -2141,11 +2196,11 @@ def tray_setup(tray_name, errorFn):
                                     "shape": "START_HALF_TAB",
                                     "opposite": "2 down v-divider"
                                 },{
-                                    "offset": 16,
+                                    "offset": 15,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "4 up v-divider"
                                 },{
-                                    "offset": 21,
+                                    "offset": 22,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "1 down v-divider"
                                 },
