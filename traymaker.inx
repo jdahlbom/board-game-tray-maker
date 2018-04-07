@@ -24,7 +24,7 @@
     <option value="monster_cards">Monster Cards</option>
     <option value="event_cards">Event Cards</option>
     <option value="player_trays">Player Trays</option>
-    <option value="player_trays">Figurines</option>
+    <option value="figurines">Figurines</option>
   </param>
 
   <param name="tab" type="float" precision="2" min="0.0" max="10000.0" _gui-text="Maximum/Preferred Tab Width">20.0</param>

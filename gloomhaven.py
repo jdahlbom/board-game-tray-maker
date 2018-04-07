@@ -1,4 +1,6 @@
 from copy import deepcopy
+import math
+import json
 
 def tray_setup(tray_name, errorFn):
     trays = {
@@ -706,6 +708,60 @@ def tray_setup(tray_name, errorFn):
                             }
                         ],
 
+                    },
+                    {
+                        "name": "angled bottom 59 parts",
+                        "width": 27.6,
+                        "slot_height": 59,
+                        "thickness": 2,
+                        "composite_type": "angled base"
+                    },
+                    {
+                        "name": "angled bottom 59 parts 2",
+                        "copy_of": "angled bottom 59 parts"
+                    },
+                    {
+                        "name": "angled bottom 59 parts 3",
+                        "copy_of": "angled bottom 59 parts"
+                    },
+                    {
+                        "name": "angled bottom 59 parts 4",
+                        "copy_of": "angled bottom 59 parts"
+                    },
+                    {
+                        "name": "angled bottom 59 parts 5",
+                        "copy_of": "angled bottom 59 parts"
+                    },
+                    {
+                        "name": "angled bottom 59 parts 6",
+                        "copy_of": "angled bottom 59 parts"
+                    },
+                    {
+                        "name": "angled bottom 55 parts",
+                        "width": 27.6,
+                        "slot_height": 55,
+                        "thickness": 2,
+                        "composite_type": "angled base"
+                    },
+                    {
+                        "name": "angled bottom 55 parts 2",
+                        "copy_of": "angled bottom 55 parts"
+                    },
+                    {
+                        "name": "angled bottom 55 parts 3",
+                        "copy_of": "angled bottom 55 parts"
+                    },
+                    {
+                        "name": "angled bottom 55 parts 4",
+                        "copy_of": "angled bottom 55 parts"
+                    },
+                    {
+                        "name": "angled bottom 55 parts 5",
+                        "copy_of": "angled bottom 55 parts"
+                    },
+                    {
+                        "name": "angled bottom 55 parts 6",
+                        "copy_of": "angled bottom 55 parts"
                     },
 
                 ]
@@ -2578,7 +2634,27 @@ def tray_setup(tray_name, errorFn):
                             "parts": [
                                 {
                                     "tabs": "TOP",
-                                    "length": "piece.width"
+                                    "length": 40,
+                                    "indent": {
+                                        "offset": 10,
+                                        "radius": 10
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 42,
+                                    "indent": {
+                                        "offset": 12,
+                                        "radius": 10
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 42,
+                                    "indent": {
+                                        "offset": 12,
+                                        "radius": 10
+                                    }
                                 }
                             ],
                             "holes": [
@@ -2795,229 +2871,61 @@ def tray_setup(tray_name, errorFn):
                     "copy_of": "1 h-divider"
                 },
                 {
-                    "name": "base plate short",
+                    "name": "angled bottom parts",
+                    "width": 39.6,
+                    "slot_height": 59,
                     "thickness": 2,
-                    "width": 39.5,
-                    "height": 50,
-                    "edges": [
-                        {
-                            "rotation": 0,
-                            "parts": [
-                                {
-                                    "length": "piece.width",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 1,
-                            "parts": [
-                                {
-                                    "length": "piece.height",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 2,
-                            "parts": [
-                                {
-                                    "length": "piece.width",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 3,
-                            "parts": [
-                                {
-                                    "length": "piece.height",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        }
-                    ]
+                    "composite_type": "angled base"
                 },
                 {
-                    "name": "base plate short 2",
-                    "copy_of": "base plate short"
+                    "name": "angled bottom parts 2",
+                    "copy_of": "angled bottom parts"
                 },
                 {
-                    "name": "base plate short 3",
-                    "copy_of": "base plate short"
+                    "name": "angled bottom parts 3",
+                    "copy_of": "angled bottom parts"
                 },
                 {
-                    "name": "base plate short 4",
-                    "copy_of": "base plate short"
+                    "name": "angled bottom parts 4",
+                    "copy_of": "angled bottom parts"
                 },
                 {
-                    "name": "base plate short 5",
-                    "copy_of": "base plate short"
+                    "name": "angled bottom parts 5",
+                    "copy_of": "angled bottom parts"
                 },
                 {
-                    "name": "base plate short 6",
-                    "copy_of": "base plate short"
+                    "name": "angled bottom parts 6",
+                    "copy_of": "angled bottom parts"
                 },
                 {
-                    "name": "base plate short 7",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 8",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 9",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 10",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 11",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 12",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 13",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 14",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 15",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 16",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 17",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base plate short 18",
-                    "copy_of": "base plate short"
-                },
-                {
-                    "name": "base angle short",
+                    "name": "long angled bottom parts",
+                    "width": 39.6,
+                    "slot_height": 72,
                     "thickness": 2,
-                    "width": 39.5,
-                    "height": 9.3,
-                    "edges": [
-                        {
-                            "rotation": 0,
-                            "parts": [
-                                {
-                                    "length": "piece.width",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 1,
-                            "parts": [
-                                {
-                                    "length": "piece.height",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 2,
-                            "parts": [
-                                {
-                                    "length": "piece.width",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        },
-                        {
-                            "rotation": 3,
-                            "parts": [
-                                {
-                                    "length": "piece.height",
-                                    "tabs": "TOP"
-                                }
-                            ],
-                        }
-                    ]
+                    "composite_type": "angled base"
                 },
                 {
-                    "name": "base angle short 2",
-                    "copy_of": "base angle short"
+                    "name": "long angled bottom parts 2",
+                    "copy_of": "long angled bottom parts"
                 },
                 {
-                    "name": "base angle short 3",
-                    "copy_of": "base angle short"
+                    "name": "long angled bottom parts 3",
+                    "copy_of": "long angled bottom parts"
                 },
                 {
-                    "name": "base angle short 4",
-                    "copy_of": "base angle short"
+                    "name": "long angled bottom parts 4",
+                    "copy_of": "long angled bottom parts"
                 },
                 {
-                    "name": "base angle short 5",
-                    "copy_of": "base angle short"
+                    "name": "long angled bottom parts 5",
+                    "copy_of": "long angled bottom parts"
                 },
                 {
-                    "name": "base angle short 6",
-                    "copy_of": "base angle short"
+                    "name": "long angled bottom parts 6",
+                    "copy_of": "long angled bottom parts"
                 },
-                {
-                    "name": "base angle short 7",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 8",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 9",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 10",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 11",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 12",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 13",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 14",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 15",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 16",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 17",
-                    "copy_of": "base angle short"
-                },
-                {
-                    "name": "base angle short 18",
-                    "copy_of": "base angle short"
-                },
+
+
             ]
         }
     }
@@ -3030,6 +2938,62 @@ def tray_setup(tray_name, errorFn):
     }
     pieces = trays[tray_name]["pieces"]
     new_pieces = []
+
+    def generate_rectangle_edges(width, height):
+        return [
+            {
+                "rotation": 0,
+                "parts": [{
+                    "length": width,
+                    "tabs": "TOP"
+                }]
+            },
+            {
+                "rotation": 1,
+                "parts": [{
+                    "length": height,
+                    "tabs": "TOP"
+                }]
+            },
+            {
+                "rotation": 2,
+                "parts": [{
+                    "length": width,
+                    "tabs": "TOP"
+                }]
+            },
+            {
+                "rotation": 3,
+                "parts": [{
+                    "length": height,
+                    "tabs": "TOP"
+                }]
+            }
+        ]
+
+    def compute_angled_base_pieces(piece):
+        width = piece["width"]
+        base_height = piece["slot_height"]
+        angle_deg = 15
+        flat_height = base_height * 0.8
+        angled_height = 1.0 / math.cos(angle_deg * math.pi/360) * base_height * 0.2
+        return [
+            {
+                "name": "{}-flat".format(piece["name"]),
+                "width": width,
+                "height": flat_height,
+                "thickness": piece["thickness"],
+                "edges": generate_rectangle_edges("piece.width", "piece.height")
+            },
+            {
+                "name": "{}-slope".format(piece["name"]),
+                "width": width,
+                "height": angled_height,
+                "thickness": piece["thickness"],
+                "edges": generate_rectangle_edges("piece.width", "piece.height")
+            }
+        ]
+
     for piece in pieces:
         if "copy_of" in piece:
             copyable = next( fpiece for fpiece in pieces if fpiece["name"] == piece["copy_of"])
@@ -3039,8 +3003,20 @@ def tray_setup(tray_name, errorFn):
             new_pieces.append(copy)
         else:
             new_pieces.append(piece)
+    pieces = deepcopy(new_pieces)
+    new_pieces = []
 
-    for piece in new_pieces:
+    for piece in pieces:
+        if "composite_type" in piece:
+            if piece["composite_type"] is "angled base":
+                new_pieces.extend(compute_angled_base_pieces(piece))
+        else:
+            new_pieces.append(piece)
+
+    pieces = deepcopy(new_pieces)
+    new_pieces = []
+
+    for piece in pieces:
         for dim_key in ["width", "height"]:
             if piece[dim_key] in dims.keys():
                 piece[dim_key] = dims[piece[dim_key]]
@@ -3050,24 +3026,27 @@ def tray_setup(tray_name, errorFn):
 
         for edge in piece["edges"]:
             for part in edge["parts"]:
-                if part["length"] is "piece.width":
+                if part["length"] == "piece.width":
                     part["length"] = piece_width
-                elif part["length"] is "piece.height":
+                elif part["length"] == "piece.height":
                     part["length"] = piece_height
 
             if "opposite" in edge:
                 opposite_name = edge["opposite"]
-                opposite_piece = next((piece for piece in new_pieces if piece["name"] == opposite_name), None)
+                opposite_piece = next((piece for piece in pieces if piece["name"] == opposite_name), None)
                 edge["opposite"] = {"thickness": opposite_piece["thickness"]}
             if "holes" in edge:
                 for hole in edge["holes"]:
                     if "opposite" not in hole:
                         continue
                     opposite_name = hole["opposite"]
-                    opposite_piece = next((piece for piece in new_pieces if piece["name"] == opposite_name), None)
+                    opposite_piece = next((piece for piece in pieces if piece["name"] == opposite_name), None)
                     if opposite_piece is None or "thickness" not in opposite_piece:
                         errorFn("Opposite piece [{}] missing for piece [{}] in tray [{}]".format(opposite_name, piece["name"], tray_name))
                         opposite_piece = {"thickness": 2}
                     hole["opposite"] = {"thickness": opposite_piece["thickness"]}
+        new_pieces.append(piece)
+
+
     return new_pieces
 

@@ -1,5 +1,6 @@
 from traymaker_logic import TrayLaserCut
 import gloomhaven
+import json
 
 options = {
     "unit": "mm",

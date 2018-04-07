@@ -216,6 +216,7 @@ class TrayLaserCut():
 
         nomTab = self.nom_tab
         divs=int(length/nomTab)  # divisions
+
         if not divs%2: divs-=1   # make divs odd
         divs=float(divs)
         if divs > 9:
