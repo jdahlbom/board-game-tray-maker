@@ -49,18 +49,18 @@ def tray_setup(tray_name, errorFn):
                                         "length": 59
                                     },
                                     {
-                                        "offset": 15,
+                                        "offset": 9,
                                         "parts": [
                                             {
                                                 "offset": 39,
                                                 "shape": "C_BEZIER_RECT",
-                                                "width": 12.5,
+                                                "width": 12,
                                                 "length": 20
                                             }
                                         ]
                                     },
                                     {
-                                        "offset": 15,
+                                        "offset": 9,
                                         "opposite": "2 full v-divider",
                                         "parts": [
                                             {
@@ -762,6 +762,60 @@ def tray_setup(tray_name, errorFn):
                     {
                         "name": "angled bottom 55 parts 6",
                         "copy_of": "angled bottom 55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts",
+                        "width": 20.6,
+                        "slot_height": 55,
+                        "thickness": 2,
+                        "composite_type": "angled base"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts 2",
+                        "copy_of": "angled bottom l-21-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts 3",
+                        "copy_of": "angled bottom l-21-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts 4",
+                        "copy_of": "angled bottom l-21-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts 5",
+                        "copy_of": "angled bottom l-21-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-21-55 parts 6",
+                        "copy_of": "angled bottom l-21-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts",
+                        "width": 27.6,
+                        "slot_height": 55,
+                        "thickness": 2,
+                        "composite_type": "angled base"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts 2",
+                        "copy_of": "angled bottom l-28-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts 3",
+                        "copy_of": "angled bottom l-28-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts 4",
+                        "copy_of": "angled bottom l-28-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts 5",
+                        "copy_of": "angled bottom l-28-55 parts"
+                    },
+                    {
+                        "name": "angled bottom l-28-55 parts 6",
+                        "copy_of": "angled bottom l-28-55 parts"
                     },
 
                 ]
