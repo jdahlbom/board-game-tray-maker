@@ -409,17 +409,17 @@ class TrayLaserCut():
             directives = []
             if shape is START_HALF_TAB:
                 directive = {"origin": (x_offset, y_offset), "elements": [
-                    self.line(0, depth/2.0),
+                    self.line(0, part_length/2.0),
                     self.line(width, 0),
-                    self.line(0, -depth/2.0),
+                    self.line(0, -part_length/2.0),
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
             elif shape is END_HALF_TAB:
-                directive = {"origin": (x_offset, depth/2.0 + y_offset), "elements": [
-                    self.line(0, depth/2.0),
+                directive = {"origin": (x_offset, part_length/2.0 + y_offset), "elements": [
+                    self.line(0, part_length/2.0),
                     self.line(width, 0),
-                    self.line(0, -depth/2.0),
+                    self.line(0, -part_length/2.0),
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)

@@ -6,8 +6,8 @@ def tray_setup(tray_name, errorFn):
     trays = {
         "effects": {
                 "dimensions": {
-                    "width": 279,
-                    "height": 116,
+                    "width": 269,
+                    "height": 124,
                     "depth": 12
                 },
                 "pieces": [
@@ -38,7 +38,7 @@ def tray_setup(tray_name, errorFn):
                                             {
                                                 "offset": 2,
                                                 "shape": "FEMALE",
-                                                "length": 55
+                                                "length": 63
                                             }
                                         ]
                                     },
@@ -70,12 +70,12 @@ def tray_setup(tray_name, errorFn):
                                             {
                                                 "offset": 2,
                                                 "shape": "FEMALE",
-                                                "length": 55
+                                                "length": 63
                                             }
                                         ]
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "3 full v-divider",
                                         "parts": [
                                             {
@@ -85,12 +85,12 @@ def tray_setup(tray_name, errorFn):
                                             {
                                                 "offset": 2,
                                                 "shape": "FEMALE",
-                                                "length": 55
+                                                "length": 63
                                             }
                                         ]
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "4 full v-divider",
                                         "parts": [
                                             {
@@ -100,12 +100,12 @@ def tray_setup(tray_name, errorFn):
                                             {
                                                 "offset": 2,
                                                 "shape": "FEMALE",
-                                                "length": 55
+                                                "length": 63
                                             }
                                         ]
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "5 full v-divider",
                                         "parts": [
                                             {
@@ -115,7 +115,7 @@ def tray_setup(tray_name, errorFn):
                                             {
                                                 "offset": 2,
                                                 "shape": "FEMALE",
-                                                "length": 55
+                                                "length": 63
                                             }
                                         ]
                                     }
@@ -143,8 +143,8 @@ def tray_setup(tray_name, errorFn):
                                 "holes": [
                                     {
                                         "shape": "FEMALE",
-                                        "length": 55,
-                                        "offset": 226,
+                                        "length": 63,
+                                        "offset": 216,
                                         "opposite": "1 half-divider"
                                     }
                                 ]
@@ -163,8 +163,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "long side wall",
-                        "width": 279,
-                        "height": 12,
+                        "width": "tray.width",
+                        "height": "tray.depth",
                         "thickness": 3,
                         "edges": [
                             {
@@ -193,17 +193,17 @@ def tray_setup(tray_name, errorFn):
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "3 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "4 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "5 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     }
@@ -244,8 +244,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "short side wall",
-                        "width": 116,
-                        "height": 12,
+                        "width": "tray.height",
+                        "height": "tray.depth",
                         "thickness": 3,
                         "edges": [
                             {
@@ -299,8 +299,8 @@ def tray_setup(tray_name, errorFn):
 
                     {
                         "name": "long side wall 2",
-                        "width": 279,
-                        "height": 12,
+                        "width": "tray.width",
+                        "height": "tray.depth",
                         "thickness": 3,
                         "edges": [
                             {
@@ -314,22 +314,22 @@ def tray_setup(tray_name, errorFn):
                                 ],
                                 "holes": [
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "5 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "4 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "3 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "2 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
@@ -381,8 +381,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "short side wall 2",
-                        "width": 116,
-                        "height": 12,
+                        "width": "tray.height",
+                        "height": "tray.depth",
                         "thickness": 3,
                         "edges": [
                             {
@@ -396,7 +396,7 @@ def tray_setup(tray_name, errorFn):
                                 "holes": [
                                     {
                                         "opposite": "middle h-divider",
-                                        "offset": 55,
+                                        "offset": 63,
                                         "shape": "START_HALF_TAB"
                                     }
                                 ]
@@ -435,8 +435,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "middle h-divider",
-                        "width": 279,
-                        "height": 12,
+                        "width": "tray.width",
+                        "height": "tray.depth",
                         "thickness": 2,
                         "edges": [
                             {
@@ -461,7 +461,7 @@ def tray_setup(tray_name, errorFn):
                                     },
                                     {
                                         "tabs": "TOP",
-                                        "length": 120
+                                        "length": 110
                                     }
                                 ],
                                 "holes": [
@@ -486,17 +486,17 @@ def tray_setup(tray_name, errorFn):
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "3 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "4 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     },
                                     {
-                                        "offset": 28,
+                                        "offset": 25.5,
                                         "opposite": "5 full v-divider",
                                         "shape": "START_HALF_TAB"
                                     }
@@ -536,8 +536,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "1 full v-divider",
-                        "width": 116,
-                        "height": 12,
+                        "width": "tray.height",
+                        "height": "tray.depth",
                         "thickness": 2,
                         "edges": [
                             {
@@ -572,7 +572,7 @@ def tray_setup(tray_name, errorFn):
                                 "parts": [
                                     {
                                         "tabs": "FEMALE",
-                                        "length": 55
+                                        "length": 63
                                     },
                                     {
                                         "tabs": "TOP",
@@ -615,8 +615,8 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "1 half-divider",
-                        "width": 55,
-                        "height": 12,
+                        "width": 63,
+                        "height": "tray.depth",
                         "thickness": 2,
                         "edges": [
                             {
@@ -664,7 +664,7 @@ def tray_setup(tray_name, errorFn):
                     {
                         "name": "2 half-divider",
                         "width": 59,
-                        "height": 12,
+                        "height": "tray.depth",
                         "thickness": 2,
                         "edges": [
                             {
@@ -711,113 +711,41 @@ def tray_setup(tray_name, errorFn):
                     },
                     {
                         "name": "angled bottom 59 parts",
-                        "width": 27.6,
+                        "width": 25.2,
+                        "slot_height": 59,
+                        "thickness": 2,
+                        "composite_type": "angled base",
+                        "number_of_copies": 4
+                    },
+                    {
+                        "name": "angled bottom 63 parts",
+                        "width": 25.2,
+                        "slot_height": 63,
+                        "thickness": 2,
+                        "composite_type": "angled base",
+                        "number_of_copies": 4
+                    },
+                    {
+                        "name": "angled bottom l-21-59 parts",
+                        "width": 20.6,
                         "slot_height": 59,
                         "thickness": 2,
                         "composite_type": "angled base"
                     },
                     {
-                        "name": "angled bottom 59 parts 2",
-                        "copy_of": "angled bottom 59 parts"
-                    },
-                    {
-                        "name": "angled bottom 59 parts 3",
-                        "copy_of": "angled bottom 59 parts"
-                    },
-                    {
-                        "name": "angled bottom 59 parts 4",
-                        "copy_of": "angled bottom 59 parts"
-                    },
-                    {
-                        "name": "angled bottom 59 parts 5",
-                        "copy_of": "angled bottom 59 parts"
-                    },
-                    {
-                        "name": "angled bottom 59 parts 6",
-                        "copy_of": "angled bottom 59 parts"
-                    },
-                    {
-                        "name": "angled bottom 55 parts",
-                        "width": 27.6,
-                        "slot_height": 55,
-                        "thickness": 2,
-                        "composite_type": "angled base"
-                    },
-                    {
-                        "name": "angled bottom 55 parts 2",
-                        "copy_of": "angled bottom 55 parts"
-                    },
-                    {
-                        "name": "angled bottom 55 parts 3",
-                        "copy_of": "angled bottom 55 parts"
-                    },
-                    {
-                        "name": "angled bottom 55 parts 4",
-                        "copy_of": "angled bottom 55 parts"
-                    },
-                    {
-                        "name": "angled bottom 55 parts 5",
-                        "copy_of": "angled bottom 55 parts"
-                    },
-                    {
-                        "name": "angled bottom 55 parts 6",
-                        "copy_of": "angled bottom 55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-21-55 parts",
+                        "name": "angled bottom l-21-63 parts",
                         "width": 20.6,
-                        "slot_height": 55,
+                        "slot_height": 63,
                         "thickness": 2,
                         "composite_type": "angled base"
                     },
                     {
-                        "name": "angled bottom l-21-55 parts 2",
-                        "copy_of": "angled bottom l-21-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-21-55 parts 3",
-                        "copy_of": "angled bottom l-21-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-21-55 parts 4",
-                        "copy_of": "angled bottom l-21-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-21-55 parts 5",
-                        "copy_of": "angled bottom l-21-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-21-55 parts 6",
-                        "copy_of": "angled bottom l-21-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-28-55 parts",
+                        "name": "angled bottom l-28-63 parts",
                         "width": 27.6,
-                        "slot_height": 55,
+                        "slot_height": 63,
                         "thickness": 2,
                         "composite_type": "angled base"
                     },
-                    {
-                        "name": "angled bottom l-28-55 parts 2",
-                        "copy_of": "angled bottom l-28-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-28-55 parts 3",
-                        "copy_of": "angled bottom l-28-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-28-55 parts 4",
-                        "copy_of": "angled bottom l-28-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-28-55 parts 5",
-                        "copy_of": "angled bottom l-28-55 parts"
-                    },
-                    {
-                        "name": "angled bottom l-28-55 parts 6",
-                        "copy_of": "angled bottom l-28-55 parts"
-                    },
-
                 ]
             },
         "small_terrain": {
@@ -2981,6 +2909,644 @@ def tray_setup(tray_name, errorFn):
 
 
             ]
+        },
+        "monster_cards": {
+            "dimensions": {
+                "width": 269,
+                "height": 124,
+                "depth": 46
+            },
+            "pieces": [
+                {
+                    "name": "bottom",
+                    "width": "tray.width",
+                    "height": "tray.height",
+                    "thickness": 3,
+                    "edges": [
+
+                        {
+                            "rotation": 0,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ],
+                            "holes":  [
+                                {
+                                    "offset": 69,
+                                    "shape": "FEMALE",
+                                    "opposite": "1 v-divider"
+                                },
+                                {
+                                    "offset": 0,
+                                    "shape": "FEMALE",
+                                    "opposite": "2 v-divider"
+                                },
+                                {
+                                    "offset": 69,
+                                    "shape": "FEMALE",
+                                    "opposite": "3 v-divider"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                    "pin_height": 0.5
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 69,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "1 v-divider"
+                                },{
+                                    "offset": 0,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "2 v-divider"
+                                },{
+                                    "offset": 69,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "3 v-divider"
+                                },
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width",
+                                    "notch_depth": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "short side wall",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall 2",
+                    "copy_of": "long side wall"
+                },
+                {
+                    "name": "short side wall 2",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "1 v-divider",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 6,
+                                    "opposite": "card stack separator",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ],
+
+                },
+                {
+                    "name": "2 v-divider",
+                    "copy_of": "1 v-divider"
+                },
+                {
+                    "name": "3 v-divider",
+                    "copy_of": "1 v-divider"
+                },
+                {
+                    "name": "card stack separator",
+                    "thickness": 2,
+                    "width": 69,
+                    "height": "tray.depth",
+                    "number_of_copies": 27,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+
+                                    "indent": {
+                                        "offset": 10,
+                                        "radius": 24.5
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "1 v-divider",
+                            "parts": [
+                                {
+                                    "length": 20,
+                                    "tabs": "START_HALF_TAB"
+                                },
+                                {
+                                    "length": 26,
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "2 v-divider",
+                            "parts": [
+                                {
+                                    "length": 26,
+                                    "tabs": "TOP"
+                                },
+                                {
+                                    "length": 20,
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     }
 
@@ -3057,7 +3623,19 @@ def tray_setup(tray_name, errorFn):
             new_pieces.append(copy)
         else:
             new_pieces.append(piece)
+
+        if "number_of_copies" in piece:
+            num_copies = piece["number_of_copies"]
+            for i in range(1, num_copies):
+                new_piece = deepcopy(piece)
+                del(new_piece["number_of_copies"])
+                new_piece["name"] = "{}-copy {}".format(piece["name"], i)
+                new_pieces.append(new_piece)
+            del(piece["number_of_copies"])
+
     pieces = deepcopy(new_pieces)
+
+#    print(json.dumps(pieces, indent=4))
     new_pieces = []
 
     for piece in pieces:
@@ -3088,6 +3666,9 @@ def tray_setup(tray_name, errorFn):
             if "opposite" in edge:
                 opposite_name = edge["opposite"]
                 opposite_piece = next((piece for piece in pieces if piece["name"] == opposite_name), None)
+                if not opposite_piece or "thickness" not in opposite_piece:
+                    errorFn("Opposite piece [{}] missing for edge [{}] in piece [{}] in tray [{}]".format(opposite_name, edge, piece["name"], tray_name))
+                    continue
                 edge["opposite"] = {"thickness": opposite_piece["thickness"]}
             if "holes" in edge:
                 for hole in edge["holes"]:
@@ -3095,9 +3676,9 @@ def tray_setup(tray_name, errorFn):
                         continue
                     opposite_name = hole["opposite"]
                     opposite_piece = next((piece for piece in pieces if piece["name"] == opposite_name), None)
-                    if opposite_piece is None or "thickness" not in opposite_piece:
+                    if not opposite_piece or "thickness" not in opposite_piece:
                         errorFn("Opposite piece [{}] missing for piece [{}] in tray [{}]".format(opposite_name, piece["name"], tray_name))
-                        opposite_piece = {"thickness": 2}
+                        continue
                     hole["opposite"] = {"thickness": opposite_piece["thickness"]}
         new_pieces.append(piece)
 

@@ -75,7 +75,7 @@ def error_print(msg):
 
 
 def test_effects_tray_syntax_works():
-    for trayname in ["effects", "small_terrain", "large_terrain", "monsters"]:
+    for trayname in ["effects", "small_terrain", "large_terrain", "monsters", "monster_cards"]:
         pieces = gloomhaven.tray_setup(trayname, error_print)
         lasercut = TrayLaserCut(options, error_print)
         cmds = lasercut.draw(pieces)
@@ -95,3 +95,7 @@ def test_vdivider():
             'l {} 0 l 0 3 l {} 0 l 0 -3 '.format(-tw, -tw) +
             'l {} 0 l 0 3 l {} 0 l 0 -3 '.format(-tw, -tw) +
             'l {} 0 '.format(-tw))
+
+
+if __name__ == "__main__":
+    test_effects_tray_syntax_works()
