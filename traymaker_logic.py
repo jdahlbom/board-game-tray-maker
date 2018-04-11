@@ -39,7 +39,7 @@ class TrayLaserCut():
                 filter(lambda edge: "opposite" in edge, piece["edges"])))
 
 
-    def draw(self, pieces, thickness):
+    def draw(self, pieces, thickness, sort_pieces=False):
         error = ""
 
         all_directives = []
@@ -47,6 +47,9 @@ class TrayLaserCut():
 
         filtered_pieces = list(filter(lambda piece: piece["thickness"] == thickness, pieces))
         max_width = max(map(lambda piece: piece["width"], filtered_pieces))
+
+        if sort_pieces:
+            filtered_pieces = sorted(filtered_pieces, key=lambda piece: (piece["height"], piece["width"]))
 
         current_row_max_height = 0
         cumul_x_piece_offset = 0
