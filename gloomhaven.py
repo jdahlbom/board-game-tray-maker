@@ -3577,7 +3577,31 @@ def tray_setup(tray_name, errorFn):
                             ],
                             "holes":  [
                                 {
-                                    "offset": 65,
+                                    "offset": 15,
+                                    "opposite": "large card slot elevation",
+                                    "parts": [
+                                        {
+                                            "offset": 1,
+                                            "length": 88,
+                                            "shape": "FEMALE"
+                                        }
+                                    ]
+
+                                },
+                                {
+                                    "offset": 29,
+                                    "opposite": "large card slot elevation",
+                                    "parts": [
+                                        {
+                                            "offset": 1,
+                                            "length": 88,
+                                            "shape": "FEMALE"
+                                        }
+                                    ]
+
+                                },
+                                {
+                                    "offset": 15,
                                     "opposite": "1 v-divider",
                                     "parts": [
                                         {
@@ -3587,7 +3611,31 @@ def tray_setup(tray_name, errorFn):
                                     ]
                                 },
                                 {
-                                    "offset": 65,
+                                    "offset": 15,
+                                    "opposite": "large card slot elevation",
+                                    "parts": [
+                                        {
+                                            "offset": 1,
+                                            "length": 88,
+                                            "shape": "FEMALE"
+                                        }
+                                    ]
+
+                                },
+                                {
+                                    "offset": 29,
+                                    "opposite": "large card slot elevation",
+                                    "parts": [
+                                        {
+                                            "offset": 1,
+                                            "length": 88,
+                                            "shape": "FEMALE"
+                                        }
+                                    ]
+
+                                },
+                                {
+                                    "offset": 15,
                                     "opposite": "2 v-divider",
                                     "parts": [
                                         {
@@ -3813,8 +3861,33 @@ def tray_setup(tray_name, errorFn):
                             "parts": [
                                 {
                                     "tabs": "TOP",
-                                    "length": "piece.width",
-                                    "pin_height": 0.5
+                                    "length": 133,
+                                    "pin_height": 0.5,
+                                    "sloped_indent": {
+                                        "offset": 20,
+                                        "top_width": 93,
+                                        "bottom_width": 78,
+                                        "depth": 26
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 75,
+                                    "indent": {
+                                        "radius": 20,
+                                        "offset": 17.5
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 61,
+                                    "pin_height": 0.5,
+                                    "sloped_indent": {
+                                        "offset": 10,
+                                        "top_width": 41,
+                                        "bottom_width": 26,
+                                        "depth": 26
+                                    }
                                 }
                             ],
                             "holes": [
@@ -4268,7 +4341,53 @@ def tray_setup(tray_name, errorFn):
                 {
                     "name": "unused road card separator",
                     "copy_of": "scrapped city card separator"
-                }
+                },
+                {
+                    "name": "large card slot elevation",
+                    "thickness": 3,
+                    "width": 88,
+                    "height": 5,
+                    "number_of_copies": 4,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ]
+                },
             ]
         }
     }
