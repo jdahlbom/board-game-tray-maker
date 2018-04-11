@@ -65,9 +65,16 @@ class TrayMaker(inkex.Effect):
         self.OptionParser.add_option('--sep_distance',action='store',type='float',
                                      dest='sep_distance',default=0,help='distance between successive lines of hinge cuts.')
 
+    def create_layer(self, parent, layer_name):
+        # Create a new layer.
+        layer = inkex.etree.SubElement(parent, 'g')
+        layer.set(inkex.addNS('label', 'inkscape'), layer_name)
+        layer.set(inkex.addNS('groupmode', 'inkscape'), 'layer')
+        return layer
+
 
     def effect(self):
-        global parent,nomTab,equalTabs,thickness,correction,error
+        global nomTab,equalTabs,thickness,correction,error
 
         # Get access to main SVG document element and get its dimensions.
         svg = self.document.getroot()
@@ -75,13 +82,6 @@ class TrayMaker(inkex.Effect):
         # Get the attibutes:
         widthDoc  = self.unittouu(svg.get('width'))
         heightDoc = self.unittouu(svg.get('height'))
-
-        # Create a new layer.
-        layer = inkex.etree.SubElement(svg, 'g')
-        layer.set(inkex.addNS('label', 'inkscape'), 'newlayer')
-        layer.set(inkex.addNS('groupmode', 'inkscape'), 'layer')
-
-        parent=self.current_layer
 
         # Get script's option values.
         unit=self.options.unit
@@ -122,13 +122,18 @@ class TrayMaker(inkex.Effect):
         }
 
         tray_cut = TrayLaserCut(options, inkex.errormsg)
-        pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
-        command_str = tray_cut.draw(pieces)
-        for cmd in command_str:
-            self.drawS(cmd)
+        for thickness in [2, 3]:
+            pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
+            command_dict = tray_cut.draw(pieces, thickness)
+            layer = self.create_layer(svg, "{}-{}mm".format(self.options.tray_name, thickness))
+            for cmds in command_dict:
+                grouped_piece = inkex.etree.SubElement(layer, 'g')
+                grouped_piece.set(inkex.addNS('groupmode', 'inkscape'), 'group')
+                cmd = " ".join(cmds["cut"])
+                self.drawS(grouped_piece, cmd)
 
 
-    def drawS(self, XYstring):         # Draw lines from a list
+    def drawS(self, parent, XYstring):         # Draw lines from a list
         name='part'
         style = { 'stroke': '#000000', 'fill': 'none' }
         drw = {'style':simplestyle.formatStyle(style),inkex.addNS('label','inkscape'):name,'d':XYstring}

@@ -1,6 +1,7 @@
 
 from llist import dllist
 from math import pi as PI
+import json
 
 class TrayLaserCut():
     global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB
@@ -38,13 +39,13 @@ class TrayLaserCut():
                 filter(lambda edge: "opposite" in edge, piece["edges"])))
 
 
-    def draw(self, pieces):
+    def draw(self, pieces, thickness):
         error = ""
 
         all_directives = []
         cumul_y_piece_offset = 0
 
-        for piece in pieces:
+        for piece in filter(lambda piece: piece["thickness"] == thickness, pieces):
             pieceDirectives = []
             x_piece_offset = self.max_thickness(piece) + 1
 
@@ -92,12 +93,14 @@ class TrayLaserCut():
                 else:
                     edge_translation_y += piece["height"] * (2-rotation)
 
+            commands = []
             for directive in pieceDirectives:
                 (x, y) = directive["origin"]
                 cmds = "M {} {} ".format(self.uconv * (x+x_piece_offset), self.uconv * (y+cumul_y_piece_offset))
                 for elem in directive["elements"]:
                     cmds += elem["draw"](elem)
-                all_directives.append(cmds)
+                commands.append(cmds)
+            all_directives.append({"cut": commands})
 
             cumul_y_piece_offset += piece["height"] + self.max_thickness(piece) + 1
 

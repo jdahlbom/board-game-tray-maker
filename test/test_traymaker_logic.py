@@ -427,7 +427,8 @@ def error_print(msg):
 def test_square_piece():
     traycut = TrayLaserCut(deepcopy(options), error_print)
     square_element = mock_square(10)
-    cmds = traycut.draw(square_element)
+    cmds = traycut.draw(square_element,3)
+    cmds = cmds[0]["cut"]
     offset = 4
     assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
     assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset))
@@ -443,7 +444,8 @@ def test_female_female_tabbed_side():
     opts = deepcopy(options)
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
     expected = 'M {} {} '.format(offset, offset) + \
@@ -481,7 +483,8 @@ def test_female_male_tabbed_side():
     opts = deepcopy(options)
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     offset = 4
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     expected = 'M {} {} '.format(-thickness+offset, offset) + \
@@ -518,7 +521,8 @@ def test_male_male_tabbed_side():
     opts = deepcopy(options)
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
     expected = 'M {} {} '.format(-thickness + offset, -thickness + offset) + \
@@ -555,7 +559,8 @@ def test_top_male_tabbed_side():
     opts = deepcopy(options)
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
     expected = 'M {} {} '.format(-thickness + offset, offset) + \
@@ -584,7 +589,9 @@ def test_top_female_tabbed_side():
     opts = options
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
+
     offset = 4
     expected = 'M {} {} '.format(offset, offset) + \
                'l {} {} '.format(xlen, 0)
@@ -610,7 +617,9 @@ def test_square_with_holes():
         "shape": "START_HALF_TAB"
     }]
     traycut = TrayLaserCut(deepcopy(options), error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
+
     offset = 4
     assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
     assert(cmds[1] == 'M {} {} l 0 5.0 l 2 0 l 0 -5.0 l -2 0 '.format(offset+4, offset))
@@ -624,7 +633,9 @@ def test_half_tabs():
     opts = deepcopy(options)
     opts["nomTab"] = 4
     traycut = TrayLaserCut(options, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
+
     offset = 4
 
     assert(cmds[0] == 'M {} {} l 7.0 0 l 0 3 l 4.0 0 l 0 -3 l 7.0 0 '.format(offset-3, offset-3))
@@ -637,20 +648,24 @@ def test_two_squares():
     pieces = mock_square(10)
     pieces.extend(mock_square(10, (0, 20)))
     traycut = TrayLaserCut(deepcopy(options), error_print)
-    cmds = traycut.draw(pieces)
     thickness = 3
+    piece_cmds = traycut.draw(pieces, thickness)
+
     offset = thickness + 1
     p_height = 10
 
-    assert(len(cmds) == 8)
+    cmds = piece_cmds[0]["cut"]
+    assert(len(cmds) == 4)
     assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset))
     assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset))
     assert(cmds[2] == 'M {} {} l -10 0 '.format(offset+10, offset+10))
     assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset+10))
-    assert(cmds[4] == 'M {} {} l 10 0 '.format(offset, offset + 2*(thickness+1) + p_height))
-    assert(cmds[5] == 'M {} {} l 0 10 '.format(offset+10, offset + 2*(thickness+1) + p_height))
-    assert(cmds[6] == 'M {} {} l -10 0 '.format(offset+10, offset + 2*(thickness+1) + 2*p_height))
-    assert(cmds[7] == 'M {} {} l 0 -10 '.format(offset, offset + 2*(thickness+1) + 2*p_height))
+    cmds = piece_cmds[1]["cut"]
+    assert(len(cmds) == 4)
+    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset + 2*(thickness+1) + p_height))
+    assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset + 2*(thickness+1) + p_height))
+    assert(cmds[2] == 'M {} {} l -10 0 '.format(offset+10, offset + 2*(thickness+1) + 2*p_height))
+    assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset + 2*(thickness+1) + 2*p_height))
 
 
 def test_top_and_half():
@@ -659,7 +674,8 @@ def test_top_and_half():
     thickness = 3
     offset = thickness + 1
     traycut = TrayLaserCut(deepcopy(options), error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 2)
     assert(cmds[0] == 'M {} {} l 5.0 0 l 0 {} l 5.0 0 '.format(offset, offset, -thickness))
     assert(cmds[1] == 'M {} {} l 0 {} '.format(side_len+offset, offset-thickness, side_len+thickness))
@@ -673,7 +689,8 @@ def test_conversion_with_top_and_half():
     thickness = 3*opts["uconv"]
     offset = thickness + 1*opts["uconv"]
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 2)
     assert(cmds[0] == 'M {} {} l 10.0 0.0 l 0.0 {} l 10.0 0.0 '.format(offset, offset, -thickness))
     assert(cmds[1] == 'M {} {} l 0.0 {} '.format(side_len*opts["uconv"]+offset, offset-thickness, side_len*opts["uconv"]+thickness))
@@ -682,7 +699,8 @@ def test_conversion_with_top_and_half():
 def test_multipart_top():
     pieces = mock_multipart_top()
     traycut = TrayLaserCut(deepcopy(options), error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 3)
     assert(cmds[0] == 'M 4 4 l 6 0 ')
     assert(cmds[1] == 'M 10 4 l 9 0 ')
@@ -691,7 +709,8 @@ def test_multipart_top():
 def test_multipart_top_indent():
     pieces = mock_multipart_top_with_indent()
     traycut = TrayLaserCut(deepcopy(options), error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,3)
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 3)
     assert(cmds[0] == 'M 4 4 l 13.07 0 a 7,7 0 0,0 14,0 l 13.06 0 ')
     assert(cmds[1] == 'M 44.13 4 l 13.07 0 a 7,7 0 0,0 14,0 l 16.06 0 ')
@@ -702,7 +721,8 @@ def test_half_tabs_with_odd_length():
     opts["nomTab"] = 15
     pieces = mock_half_tabs_odd_edge_length()
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces)
+    cmds = traycut.draw(pieces,2)
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 4)
     assert(cmds[0] == 'M 1 4 l 68 0 ')
     assert(cmds[1] == 'M 69 4 l 0 6.5 l -3 0 l 0 6.5 ')

@@ -78,14 +78,15 @@ def test_effects_tray_syntax_works():
     for trayname in ["effects", "small_terrain", "large_terrain", "monsters", "monster_cards"]:
         pieces = gloomhaven.tray_setup(trayname, error_print)
         lasercut = TrayLaserCut(options, error_print)
-        cmds = lasercut.draw(pieces)
+        cmds = lasercut.draw(pieces, 3)
 
 
 def test_vdivider():
     pieces = [ mock_vdivider() ]
     lasercut = TrayLaserCut(options, error_print)
-    cmds = lasercut.draw(pieces)
+    cmds = lasercut.draw(pieces, 2)
     tw = 116 / 9.0
+    cmds = cmds[0]["cut"]
     assert(len(cmds) == 4)
     assert(cmds[0] == 'M 1 1 l 122 0 ')
     assert(cmds[1] == 'M 123 1 l 0 6.0 l -3 0 l 0 6.0 ')
