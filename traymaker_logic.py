@@ -45,7 +45,12 @@ class TrayLaserCut():
         all_directives = []
         cumul_y_piece_offset = 0
 
-        for piece in filter(lambda piece: piece["thickness"] == thickness, pieces):
+        filtered_pieces = list(filter(lambda piece: piece["thickness"] == thickness, pieces))
+        max_width = max(map(lambda piece: piece["width"], filtered_pieces))
+
+        current_row_max_height = 0
+        cumul_x_piece_offset = 0
+        for piece in filtered_pieces:
             pieceDirectives = []
             x_piece_offset = self.max_thickness(piece) + 1
 
@@ -58,12 +63,18 @@ class TrayLaserCut():
 
             edge_node = piece["edges"].first
 
-            if "opposite" in edge_node.value:
-                cumul_y_piece_offset += edge_node.value["opposite"]["thickness"] + 1
-            else:
-                cumul_y_piece_offset += 1
+            if cumul_x_piece_offset + piece["width"] > max_width:
+                cumul_x_piece_offset = 0
+                cumul_y_piece_offset += current_row_max_height
+                current_row_max_height = 0
 
-            edge_translation_x = 0
+            if cumul_x_piece_offset == 0:
+                if "opposite" in edge_node.value:
+                    cumul_y_piece_offset += edge_node.value["opposite"]["thickness"] + 1
+                else:
+                    cumul_y_piece_offset += 1
+
+            edge_translation_x = cumul_x_piece_offset
             edge_translation_y = 0
             while edge_node is not None:
                 edge = edge_node.value
@@ -102,8 +113,10 @@ class TrayLaserCut():
                 commands.append(cmds)
             all_directives.append({"cut": commands})
 
-            cumul_y_piece_offset += piece["height"] + self.max_thickness(piece) + 1
+            if current_row_max_height < piece["height"] + self.max_thickness(piece) + 1:
+                current_row_max_height = piece["height"] + self.max_thickness(piece) + 1
 
+            cumul_x_piece_offset += piece["width"] + 2*(self.max_thickness(piece) + 1)
 
         if error:
             self.errorFn('Warning: Box may be impractical')
