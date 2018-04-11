@@ -3756,6 +3756,46 @@ def tray_setup(tray_name, errorFn):
                                     "offset": 69,
                                     "shape": "START_HALF_TAB",
                                     "opposite": "3 v-divider"
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -4051,6 +4091,98 @@ def tray_setup(tray_name, errorFn):
                                     "length": "piece.width"
                                 }
                             ],
+                            "holes": [
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
                         {
                             "rotation": 1,
@@ -4113,6 +4245,98 @@ def tray_setup(tray_name, errorFn):
                                     "length": "piece.width"
                                 }
                             ],
+                            "holes": [
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                            ]
                         },
                         {
                             "rotation": 1,
@@ -4175,6 +4399,48 @@ def tray_setup(tray_name, errorFn):
                                     "tabs": "TOP"
                                 }
                             ],
+                            "holes": [
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 10.6,
+                                    "opposite": "small card v-divider",
+                                    "parts": [
+                                        {
+                                            "length": 20,
+                                            "shape": "START_HALF_TAB"
+                                        }
+                                    ]
+                                },
+                            ]
                         },
                         {
                             "rotation": 1,
@@ -4314,7 +4580,7 @@ def tray_setup(tray_name, errorFn):
                                     "tabs": "TOP",
                                     "indent": {
                                         "radius": 15,
-                                        "offset": 19.5
+                                        "offset": 17
                                     }
                                 }
                             ]
@@ -4388,6 +4654,125 @@ def tray_setup(tray_name, errorFn):
                         }
                     ]
                 },
+                {
+                    "name": "small card divider",
+                    "width": 69,
+                    "height": 45,
+                    "thickness": 2,
+                    "number_of_copies": 10,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                    "indent": {
+                                        "radius": 20,
+                                        "offset": 14.5
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "3 v-divider",
+                            "parts": [
+                                {
+                                    "length": 20,
+                                    "tabs": "START_HALF_TAB"
+                                },
+                                {
+                                    "length": 25,
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "2 v-divider",
+                            "parts": [
+                                {
+                                    "length": 25,
+                                    "tabs": "TOP"
+                                },
+                                {
+                                    "length": 20,
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "small card v-divider",
+                    "width": 69,
+                    "height": 45,
+                    "thickness": 2,
+                    "number_of_copies": 5,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                    "indent": {
+                                        "radius": 20,
+                                        "offset": 14.5
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": 20,
+                                    "tabs": "START_HALF_TAB"
+                                },
+                                {
+                                    "length": 25,
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "small card h-divider",
+                            "parts": [
+                                {
+                                    "length": 25,
+                                    "tabs": "TOP"
+                                },
+                                {
+                                    "length": 20,
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ]
+                }
+
             ]
         }
     }
