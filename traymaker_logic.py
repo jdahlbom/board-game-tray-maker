@@ -46,6 +46,8 @@ class TrayLaserCut():
         cumul_y_piece_offset = 0
 
         filtered_pieces = list(filter(lambda piece: piece["thickness"] == thickness, pieces))
+        if not filtered_pieces:
+            return []
         max_width = max(map(lambda piece: piece["width"], filtered_pieces))
 
         if sort_pieces:
@@ -152,7 +154,7 @@ class TrayLaserCut():
             end_point = ( 2 * radius, 0 )
             (end_x, end_y) = self.rotateClockwise(end_point, rotations)
             return "a {},{} {} 0,0 {},{} ".format(radius * self.uconv, radius * self.uconv,
-                                                x_angle, end_x * self.uconv, end_y * self.uconv)
+                                                  x_angle, end_x * self.uconv, end_y * self.uconv)
 
         return {
             "type": "arc",
@@ -160,6 +162,46 @@ class TrayLaserCut():
             "rotations": 0,
             "draw": draw
         }
+
+    def convert_coords(self, coords):
+        (x, y) = coords
+        return (x * self.uconv, y * self.uconv)
+
+    def cubic_bezier_curve(self, corner1, corner2, end_point, rotations):
+        corner1 = self.convert_coords(corner1)
+        corner2 = self.convert_coords(corner2)
+        end_point = self.convert_coords(end_point)
+        (c1_x, c1_y) = self.rotateClockwise(corner1, rotations)
+        (c2_x, c2_y) = self.rotateClockwise(corner2, rotations)
+        (end_x, end_y) = self.rotateClockwise(end_point, rotations)
+        return "c {},{} {},{} {},{} ".format(c1_x, c1_y, c2_x, c2_y, end_x, end_y)
+
+    def cubic_sloped_indent(self, top_width, bottom_width, depth):
+        # relative arc
+        def draw(indent_element):
+            depth = indent_element["depth"]
+            slope_width = (indent_element["top_width"] - indent_element["bottom_width"]) / 2.0
+            slope_corner_offsetx = slope_width / 2.0
+            corner1 = ( slope_corner_offsetx, 0 )
+            corner2 = ( slope_width - slope_corner_offsetx, depth )
+            end_point = ( slope_width, depth )
+            down_slope_cmd = self.cubic_bezier_curve(corner1, corner2, end_point, indent_element["rotations"])
+            base_cmd = "l {} 0 ".format(indent_element["bottom_width"] * self.uconv)
+            corner1 = ( slope_corner_offsetx, 0 )
+            corner2 = ( slope_width - slope_corner_offsetx, -depth )
+            end_point = ( slope_width, -depth )
+            up_slope_cmd = self.cubic_bezier_curve(corner1, corner2, end_point, indent_element["rotations"])
+            return down_slope_cmd + base_cmd + up_slope_cmd
+
+        return {
+                "type": "sloped_indent",
+                "top_width": top_width,
+                "bottom_width": bottom_width,
+                "depth": depth,
+                "rotations": 0,
+                "draw": draw
+            }
+
 
     def cubic_bezier_corner(self, end_point_rel, corner_rel):
         def draw(cubic_bezier):
@@ -327,6 +369,17 @@ class TrayLaserCut():
                     self.line(indent_x_offset-start_x, 0),
                     self.halfcircle(indent_radius),
                     self.line(len_to_end, 0)])
+            elif "sloped_indent" in part:
+                top_width = part["sloped_indent"]["top_width"]
+                bottom_width = part["sloped_indent"]["bottom_width"]
+                indent_depth = part["sloped_indent"]["depth"]
+                indent_offset = part["sloped_indent"]["offset"]
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
+                len_to_end = length - top_width - indent_offset + end_tab
+                draw_directives["elements"].extend([
+                    self.line(indent_offset-start_x, 0),
+                    self.cubic_sloped_indent(top_width, bottom_width, indent_depth),
+                    self.line(len_to_end, 0)])
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 if "pin_height" in part_node.value and part_node.value["pin_height"] > 0:
@@ -465,7 +518,7 @@ class TrayLaserCut():
                              ]
                              })
             else:
-                self.errorFn("Unsupported")
+                self.errorFn("Unsupported shape: {}".format(shape))
             return directives
 
         if "holes" not in edge:

@@ -125,6 +125,8 @@ class TrayMaker(inkex.Effect):
         for thickness in [2, 3]:
             pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
             command_dict = tray_cut.draw(pieces, thickness, sort_pieces=True)
+            if not command_dict:
+                continue
             layer = self.create_layer(svg, "{}-{}mm".format(self.options.tray_name, thickness))
             for cmds in command_dict:
                 grouped_piece = inkex.etree.SubElement(layer, 'g')

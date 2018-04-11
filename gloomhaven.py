@@ -3551,6 +3551,725 @@ def tray_setup(tray_name, errorFn):
                     ]
                 }
             ]
+        },
+        "event_cards": {
+            "dimensions": {
+                "width": 269,
+                "height": 124,
+                "depth": 46
+            },
+            "pieces": [
+                {
+                    "name": "bottom",
+                    "width": "tray.width",
+                    "height": "tray.height",
+                    "thickness": 3,
+                    "edges": [
+
+                        {
+                            "rotation": 0,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ],
+                            "holes":  [
+                                {
+                                    "offset": 65,
+                                    "opposite": "1 v-divider",
+                                    "parts": [
+                                        {
+                                            "shape": "FEMALE",
+                                            "length": 90
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 65,
+                                    "opposite": "2 v-divider",
+                                    "parts": [
+                                        {
+                                            "shape": "FEMALE",
+                                            "length": 90
+                                        },
+                                        {
+                                            "offset": 3,
+                                            "shape": "FEMALE",
+                                            "length": 31
+                                        }
+                                    ]
+                                },
+                                {
+                                    "offset": 69,
+                                    "opposite": "3 v-divider",
+                                    "parts": [
+                                        {
+                                            "shape": "FEMALE",
+                                            "length": 69
+                                        },
+                                        {
+                                            "offset": 3,
+                                            "shape": "FEMALE",
+                                            "length": 52
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 69,
+                                    "opposite": "small card h-divider",
+                                    "parts": [
+                                        {
+                                            "shape": "FEMALE",
+                                            "length": 61
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 31,
+                                    "opposite": "large card h-divider",
+                                    "parts": [
+                                        {
+                                            "length": 133,
+                                            "shape": "FEMALE"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                    "pin_height": 0.5,
+                                    "indent": {
+                                        "radius": 20,
+                                        "offset": 150.5
+                                    }
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 65,
+                                    "opposite": "1 v-divider",
+                                    "shape": "START_HALF_TAB"
+                                },
+                                {
+                                    "offset": 65,
+                                    "opposite": "2 v-divider",
+                                    "shape": "START_HALF_TAB"
+                                },
+                                {
+                                    "offset": 69,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "3 v-divider"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width",
+                                    "notch_depth": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "short side wall",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                    "indent": {
+                                        "radius": 20,
+                                        "offset": 14.5
+                                    }
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 69,
+                                    "opposite": "small card h-divider",
+                                    "shape": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall 2",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                    "pin_height": 0.5
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 133,
+                                    "opposite": "2 v-divider",
+                                    "shape": "START_HALF_TAB"
+                                },
+                                {
+                                    "offset": 69,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "3 v-divider"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width",
+                                    "notch_depth": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "short side wall 2",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 31,
+                                    "opposite": "large card h-divider",
+                                    "shape": "START_HALF_TAB",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "1 v-divider",
+                    "thickness": 3,
+                    "width": 90,
+                    "height": "tray.depth",
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "large card h-divider",
+                            "parts": [
+                                {
+                                    "tabs": "START_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "END_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "2 v-divider",
+                    "thickness": 3,
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "START_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": 31
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 3
+                                },
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": 90
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "opposite": "large card h-divider",
+                                    "offset": 31,
+                                    "shape": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "END_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ],
+                        }
+                    ]
+                },
+                {
+                    "name": "3 v-divider",
+                    "thickness": 3,
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "START_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": 52
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 3
+                                },
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": 69
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "opposite": "small card h-divider",
+                                    "offset": 52,
+                                    "shape": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "END_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "small card h-divider",
+                    "thickness": 3,
+                    "width": 61,
+                    "height": "tray.depth",
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "3 v-divider",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "START_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "large card h-divider",
+                    "thickness": 3,
+                    "width": 133,
+                    "height": "tray.depth",
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": 65,
+                                    "tabs": "TOP",
+                                    "sloped_indent": {
+                                        "depth": 41,
+                                        "top_width": 45,
+                                        "bottom_width": 30,
+                                        "offset": 10
+                                    }
+                                },
+                                {
+                                    "length": 3,
+                                    "tabs": "TOP"
+                                },
+                                {
+                                    "length": 65,
+                                    "tabs": "TOP",
+                                    "sloped_indent": {
+                                        "depth": 41,
+                                        "top_width": 45,
+                                        "bottom_width": 30,
+                                        "offset": 10
+                                    }
+                                },
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 65,
+                                    "opposite": "1 v-divider",
+                                    "shape": "START_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "2 v-divider",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "END_HALF_TAB"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "scrapped city card separator",
+                    "width": 64,
+                    "height": 89,
+                    "thickness": 2,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                    "indent": {
+                                        "radius": 15,
+                                        "offset": 19.5
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "unused city card separator",
+                    "copy_of": "scrapped city card separator"
+                },
+                {
+                    "name": "scrapped road card separator",
+                    "copy_of": "scrapped city card separator"
+                },
+                {
+                    "name": "unused road card separator",
+                    "copy_of": "scrapped city card separator"
+                }
+            ]
         }
     }
 
