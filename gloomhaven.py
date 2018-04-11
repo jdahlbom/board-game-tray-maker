@@ -3059,7 +3059,11 @@ def tray_setup(tray_name, errorFn):
                             "parts": [
                                 {
                                     "tabs": "TOP",
-                                    "length": "piece.width"
+                                    "length": "piece.width",
+                                    "indent": {
+                                        "radius": 30,
+                                        "offset": 32
+                                    }
                                 }
                             ],
                         },
@@ -3635,7 +3639,6 @@ def tray_setup(tray_name, errorFn):
 
     pieces = deepcopy(new_pieces)
 
-#    print(json.dumps(pieces, indent=4))
     new_pieces = []
 
     for piece in pieces:
