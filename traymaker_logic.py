@@ -383,12 +383,12 @@ class TrayLaserCut():
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 if "pin_height" in part_node.value and part_node.value["pin_height"] > 0:
-
-                    draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
-                    draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
-                    draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))
+                    if leftTab is MALE:
+                        draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
+                        draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
+                        draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))
                     draw_directives["elements"].append(self.line(length, 0))
-                    if end_tab > 0:
+                    if end_tab > 0 and rightTab is MALE:
                         draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
                         draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
                         draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))

@@ -4772,7 +4772,342 @@ def tray_setup(tray_name, errorFn):
                         }
                     ]
                 }
+            ]
+        },
+        "figurines": {
+            "dimensions": {
+                "width": 269,
+                "height": 124,
+                "depth": 30
+            },
+            "pieces": [
+                {
+                    "name": "bottom",
+                    "width": "tray.width",
+                    "height": "tray.height",
+                    "thickness": 3,
+                    "edges": [
 
+                        {
+                            "rotation": 0,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 57,
+                                    "opposite": "1 h-divider",
+                                    "shape": "FEMALE"
+                                },
+                                {
+                                    "offset": 4,
+                                    "opposite": "2 h-divider",
+                                    "shape": "FEMALE"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ],
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": 20,
+                                    "tabs": "TOP",
+                                    "pin_height": 0.5
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 114.5,
+                                    "sloped_indent": {
+                                        "offset": 0,
+                                        "top_width": 100,
+                                        "bottom_width": 80,
+                                        "depth": 15
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 114.5,
+                                    "sloped_indent": {
+                                        "offset": 14.5,
+                                        "top_width": 100,
+                                        "bottom_width": 80,
+                                        "depth": 15
+                                    }
+                                },
+                                {
+                                    "length": 20,
+                                    "tabs": "TOP",
+                                    "pin_height": 0.5
+                                },
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width",
+                                    "notch_depth": 0.5
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "short side wall",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                }
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 57,
+                                    "opposite": "1 h-divider",
+                                    "shape": "FEMALE"
+                                },
+                                {
+                                    "offset": 4,
+                                    "opposite": "2 h-divider",
+                                    "shape": "FEMALE"
+                                },
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "MALE",
+                                    "length": "piece.width"
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "long side wall 2",
+                    "copy_of": "long side wall"
+                },
+                {
+                    "name": "short side wall 2",
+                    "copy_of": "short side wall"
+                },
+                {
+                    "name": "1 h-divider",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": 133,
+                                    "sloped_indent": {
+                                        "offset": 20,
+                                        "top_width": 100,
+                                        "bottom_width": 80,
+                                        "depth": 15
+                                    }
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 3
+                                },
+                                {
+                                    "tabs": "TOP",
+                                    "length": 133,
+                                    "sloped_indent": {
+                                        "offset": 14.5,
+                                        "top_width": 100,
+                                        "bottom_width": 80,
+                                        "depth": 15
+                                    }
+                                },
+                            ],
+                            "holes": [
+                                {
+                                    "offset": 133,
+                                    "shape": "START_HALF_TAB",
+                                    "opposite": "1 v-divider"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.width",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "FEMALE",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "name": "2 h-divider",
+                    "copy_of": "1 h-divider"
+                },
+                {
+                    "name": "1 v-divider",
+                    "width": 4,
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                }
+                            ],
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "tabs": "START_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "tabs": "TOP",
+                                    "length": "piece.width",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "tabs": "END_HALF_TAB",
+                                    "length": "piece.height"
+                                }
+                            ]
+                        }
+                    ]
+                }
             ]
         }
     }
