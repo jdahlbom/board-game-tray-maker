@@ -5109,6 +5109,330 @@ def tray_setup(tray_name, errorFn):
                     ]
                 }
             ]
+        },
+        "bosses-1": {
+            "dimensions": {
+                "width": 269,
+                "height": 124,
+                "depth": 3
+            },
+            "pieces": [
+                {
+                    "name": "bottom",
+                    "width": "tray.width",
+                    "height": "tray.height",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "long side wall",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "pin_height": 0.5,
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                }
+                            ]
+                        },
+                        {
+
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "MALE",
+
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "short side wall",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "long side wall 2",
+                    "copy_of": "long side wall"
+                },
+                {
+                    "name": "short side wall 2",
+                    "copy_of": "short side wall"
+                }
+            ]
+        },
+        "bosses-2": {
+            "dimensions": {
+                "width": 279,
+                "height": 116,
+                "depth": 3
+            },
+            "pieces": [
+                {
+                    "name": "bottom",
+                    "width": "tray.width",
+                    "height": "tray.height",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "long side wall",
+                    "width": "tray.width",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "pin_height": 0.5,
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                }
+                            ]
+                        },
+                        {
+
+                            "rotation": 1,
+                            "opposite": "short side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "MALE",
+
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "short side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "short side wall",
+                    "width": "tray.height",
+                    "height": "tray.depth",
+                    "thickness": 3,
+                    "edges": [
+                        {
+                            "rotation": 0,
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "TOP",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 1,
+                            "opposite": "long side wall",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 2,
+                            "opposite": "bottom",
+                            "parts": [
+                                {
+                                    "length": "piece.width",
+                                    "tabs": "MALE",
+                                }
+                            ]
+                        },
+                        {
+                            "rotation": 3,
+                            "opposite": "long side wall 2",
+                            "parts": [
+                                {
+                                    "length": "piece.height",
+                                    "tabs": "FEMALE",
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "long side wall 2",
+                    "copy_of": "long side wall"
+                },
+                {
+                    "name": "short side wall 2",
+                    "copy_of": "short side wall"
+                }
+            ]
         }
     }
 
