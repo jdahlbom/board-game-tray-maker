@@ -76,7 +76,7 @@ def error_print(msg):
 
 def test_effects_tray_syntax_works():
     for trayname in ["effects", "small_terrain", "large_terrain", "monsters", "monster_cards", "event_cards",
-                     "figurines", "bosses-1", "bosses-2"]:
+                     "figurines", "bosses-1", "bosses-2", "player_tray"]:
         pieces = gloomhaven.tray_setup(trayname, error_print)
         lasercut = TrayLaserCut(options, error_print)
         cmds = lasercut.draw(pieces, 3)

@@ -380,6 +380,18 @@ class TrayLaserCut():
                     self.line(indent_offset-start_x, 0),
                     self.cubic_sloped_indent(top_width, bottom_width, indent_depth),
                     self.line(len_to_end, 0)])
+            elif "box_indent" in part:
+                bottom_width = part["box_indent"]["bottom_width"]
+                indent_depth = part["box_indent"]["depth"]
+                indent_offset = part["box_indent"]["offset"]
+                end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
+                len_to_end = length - bottom_width - indent_offset + end_tab
+                draw_directives["elements"].extend([
+                    self.line(indent_offset-start_x, 0),
+                    self.line(0, indent_depth),
+                    self.line(bottom_width, 0),
+                    self.line(0, -indent_depth),
+                    self.line(len_to_end, 0)])
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 if "pin_height" in part_node.value and part_node.value["pin_height"] > 0:
@@ -495,6 +507,19 @@ class TrayLaserCut():
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
+            elif shape is MALE:
+                tabs = self.compute_male_tabs(part_length, holes=True)
+                total_y_offset = y_offset
+                for tab in tabs:
+                    total_y_offset += tab["offset"]
+                    directive = {"origin": (x_offset, total_y_offset), "elements": [
+                        self.line(0, tab["length"]),
+                        self.line(width, 0),
+                        self.line(0, -tab["length"]),
+                        self.line(-width, 0)
+                    ]}
+                    directives.append(directive)
+                    total_y_offset += tab["length"]
             elif shape is FEMALE:
                 tabs = self.invert_tabs(self.compute_male_tabs(part_length, holes=True))
                 total_y_offset = y_offset
