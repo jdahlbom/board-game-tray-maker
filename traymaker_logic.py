@@ -38,8 +38,7 @@ class TrayLaserCut():
         return max(map(lambda edge: edge["opposite"]["thickness"],
                 filter(lambda edge: "opposite" in edge, piece["edges"])))
 
-
-    def draw(self, pieces, thickness, sort_pieces=False):
+    def draw(self, pieces, thickness, sort_pieces=False, tray_number=None):
         error = ""
 
         all_directives = []
@@ -57,7 +56,6 @@ class TrayLaserCut():
         cumul_x_piece_offset = 0
         for piece in filtered_pieces:
             pieceDirectives = []
-            x_piece_offset = self.max_thickness(piece) + 1
 
             if "edges" not in piece:
                 continue
@@ -109,14 +107,20 @@ class TrayLaserCut():
                 else:
                     edge_translation_y += piece["height"] * (2-rotation)
 
-            commands = []
-            for directive in pieceDirectives:
+            def convert_directive(directive):
                 (x, y) = directive["origin"]
-                cmds = "M {} {} ".format(self.uconv * (x+x_piece_offset), self.uconv * (y+cumul_y_piece_offset))
-                for elem in directive["elements"]:
-                    cmds += elem["draw"](elem)
-                commands.append(cmds)
-            all_directives.append({"cut": commands})
+                cmds = "M {} {} ".format(self.uconv * x, self.uconv * y)
+                return cmds + "".join(map(lambda elem: elem["draw"](elem), directive["elements"]))
+
+            x_piece_offset = self.max_thickness(piece) + 1
+            commands = list(map(convert_directive, self.transform(pieceDirectives, 0, (x_piece_offset, cumul_y_piece_offset))))
+            engrave_directives = self.draw_piece_number(1, 1, 3, tray_number) if tray_number else []
+
+
+            all_directives.append({
+                "cut": commands,
+                "engrave": list(map(convert_directive, self.transform(engrave_directives, 0, (x_piece_offset + cumul_x_piece_offset, cumul_y_piece_offset))))
+            })
 
             if current_row_max_height < piece["height"] + self.max_thickness(piece) + 1:
                 current_row_max_height = piece["height"] + self.max_thickness(piece) + 1
@@ -128,8 +132,6 @@ class TrayLaserCut():
             return ""
         else:
             return all_directives
-
-
 
     def line(self, x, y):
         def draw(line_element):
@@ -582,3 +584,73 @@ class TrayLaserCut():
                 self.errorFn("{}".format(hole_part))
             x_offset += width
         return directives
+
+
+    def draw_piece_number(self, x,y, max_height, number):
+        height = 100.0
+        scale = max_height / height
+        def V(char_x, char_y):
+            width = 60.0
+            return {
+                "width": (width * 1.1) * scale,
+                "directive": {
+                "origin": (char_x,char_y),
+                    "elements": [
+                        self.line(width / 2.0 * scale, height * scale),
+                        self.line(width / 2.0 * scale, -height * scale)
+                    ]
+                }
+            }
+
+        def X(char_x, char_y):
+            width = 60.0
+            return {
+                "width": (width * 1.1) * scale,
+                "directive": {
+                    "origin": (char_x,char_y),
+                    "elements": [
+                        self.line(width * scale, height * scale),
+                        self.line(-width * scale, 0),
+                        self.line(width * scale, -height * scale)
+                    ]
+                }
+            }
+
+        def I(char_x, char_y):
+            width = 20.0
+            return {
+                "width": (width * 1.1) * scale,
+                "directive": {
+                    "origin": (char_x + scale*width/2.0,char_y),
+                    "elements": [
+                        self.line(0, height * scale)
+                    ]
+                }
+            }
+
+
+
+        roman_numeral = []
+        x_offset = 0
+        while number > 0:
+            if number >= 10:
+                char = X(x + x_offset, y)
+                x_offset += char["width"]
+                roman_numeral.append(char["directive"])
+                number -= 10
+            elif number == 9 or number == 4:
+                char = I(x + x_offset, y)
+                x_offset += char["width"]
+                roman_numeral.append(char["directive"])
+                number += 1
+            elif number >= 5:
+                char = V(x + x_offset, y)
+                x_offset += char["width"]
+                roman_numeral.append(char["directive"])
+                number -= 5
+            elif number < 4:
+                char = I(x + x_offset, y)
+                x_offset += char["width"]
+                roman_numeral.append(char["directive"])
+                number -= 1
+        return roman_numeral

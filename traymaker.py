@@ -37,6 +37,8 @@ NO_EDGE = 3
 HINGE_FEMALE = 4
 CURVE = 5
 
+CUT_COLOR='#000000'
+ENGRAVE_COLOR='#FF0000'
 
 class TrayMaker(inkex.Effect):
 
@@ -122,22 +124,29 @@ class TrayMaker(inkex.Effect):
         }
 
         tray_cut = TrayLaserCut(options, inkex.errormsg)
-        for thickness in [2, 3]:
-            pieces = gloomhaven.tray_setup(self.options.tray_name, inkex.errormsg)
-            command_dict = tray_cut.draw(pieces, thickness, sort_pieces=True)
-            if not command_dict:
-                continue
-            layer = self.create_layer(svg, "{}-{}mm".format(self.options.tray_name, thickness))
-            for cmds in command_dict:
-                grouped_piece = inkex.etree.SubElement(layer, 'g')
-                grouped_piece.set(inkex.addNS('groupmode', 'inkscape'), 'group')
-                cmd = " ".join(cmds["cut"])
-                self.drawS(grouped_piece, cmd)
 
+        def draw_tray(tray_name, tray_number=None):
+            pieces = gloomhaven.tray_setup(tray_name, inkex.errormsg)
+            for thick in set(map(lambda piece: int(piece["thickness"]), pieces)):
+                command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_number)
+                layer = self.create_layer(svg, "{}-{}mm".format(tray_name, thick))
+                for cmds in command_dict:
+                    grouped_piece = inkex.etree.SubElement(layer, 'g')
+                    grouped_piece.set(inkex.addNS('groupmode', 'inkscape'), 'group')
+                    self.drawS(grouped_piece, " ".join(cmds["cut"]), CUT_COLOR)
+                    self.drawS(grouped_piece, " ".join(cmds["engrave"]), ENGRAVE_COLOR)
 
-    def drawS(self, parent, XYstring):         # Draw lines from a list
+        if self.options.tray_name == 'all':
+            tray_number = 0
+            for tray_name in ['monsters', 'effects', 'small_terrain', 'large_terrain', 'monster_cards', 'event_cards', 'player_tray', 'figurines', 'bosses-1', 'bosses-2']:
+                tray_number += 1
+                draw_tray(tray_name, tray_number)
+        else:
+            draw_tray(self.options.tray_name)
+
+    def drawS(self, parent, XYstring, strokeColor=CUT_COLOR):         # Draw lines from a list
         name='part'
-        style = { 'stroke': '#000000', 'fill': 'none' }
+        style = { 'stroke': strokeColor, 'fill': 'none' }
         drw = {'style':simplestyle.formatStyle(style),inkex.addNS('label','inkscape'):name,'d':XYstring}
         inkex.etree.SubElement(parent, inkex.addNS('path','svg'), drw )
 

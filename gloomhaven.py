@@ -5957,6 +5957,12 @@ def tray_setup(tray_name, errorFn):
                     hole["opposite"] = {"thickness": opposite_piece["thickness"]}
         new_pieces.append(piece)
 
+    if "copies" in trays[tray_name]:
+        copies = trays[tray_name]["copies"]
+        all_pieces = []
+        for i in range(0, copies):
+            all_pieces.extend(new_pieces)
+        return all_pieces
 
     return new_pieces
 
