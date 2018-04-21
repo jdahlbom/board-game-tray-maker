@@ -15,7 +15,10 @@
     <option value="in">in</option>
   </param>
 
+  <param name="simplify" _gui-text="Simplify shapes" type="boolean"></param>
+
   <param name="tray_name" _gui-text="Gloomhaven Insert Part" type="optiongroup" appearance="minimal">
+    <option value="all">All trays</option>
     <option value="monsters">Monsters</option>
     <option value="effects">Effect markers</option>
     <option value="small_terrain">Small terrain pieces</option>

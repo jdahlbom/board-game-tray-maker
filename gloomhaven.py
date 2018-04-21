@@ -172,42 +172,64 @@ def tray_setup(tray_name, errorFn):
                                 "parts": [
                                     {
                                         "tabs": "TOP",
-                                        "length": "piece.width",
+                                        "length": 21,
                                         "pin_height": 0.5
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "1 full v-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 104,
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "2 half-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 30,
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "2 full v-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 25.5,
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "3 full v-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 25.5,
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "4 full v-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 25.5,
+                                    },
+                                    {
+                                        "tabs": "VERTICAL_HALF_HOLE",
+                                        "length": 2,
+                                        "hole_opposite": "5 full v-divider"
+                                    },
+                                    {
+                                        "tabs": "TOP",
+                                        "length": 25.5,
                                     }
                                 ],
-                                "holes": [
-                                    {
-                                        "offset": 21,
-                                        "opposite": "1 full v-divider",
-                                        "shape": "START_HALF_TAB"
-                                    },
-                                    {
-                                        "offset": 104,
-                                        "opposite": "2 half-divider",
-                                        "shape": "START_HALF_TAB"
-                                    },
-                                    {
-                                        "offset": 30,
-                                        "opposite": "2 full v-divider",
-                                        "shape": "START_HALF_TAB"
-                                    },
-                                    {
-                                        "offset": 25.5,
-                                        "opposite": "3 full v-divider",
-                                        "shape": "START_HALF_TAB"
-                                    },
-                                    {
-                                        "offset": 25.5,
-                                        "opposite": "4 full v-divider",
-                                        "shape": "START_HALF_TAB"
-                                    },
-                                    {
-                                        "offset": 25.5,
-                                        "opposite": "5 full v-divider",
-                                        "shape": "START_HALF_TAB"
-                                    }
-                                ]
                             },
                             {
                                 "rotation": 1,

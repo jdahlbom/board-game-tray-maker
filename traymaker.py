@@ -48,6 +48,8 @@ class TrayMaker(inkex.Effect):
         # Define options
         self.OptionParser.add_option('--tray_name',action='store',type='string',
                                      dest='tray_name',default='effects',help='Tray name')
+        self.OptionParser.add_option('--simplify',action='store', type='string',
+                                     dest='simplify',default=False,help='Simplify design for printing')
         self.OptionParser.add_option('--unit',action='store',type='string',
                                      dest='unit',default='mm',help='Measure Units')
         self.OptionParser.add_option('--tab',action='store',type='float',
@@ -98,6 +100,8 @@ class TrayMaker(inkex.Effect):
         gap_length = self.options.gap_length
         sep_distance = self.options.sep_distance
 
+        simplify = (self.options.simplify == "true")
+
         correction=kerf-clearance
 
         # check input values mainly to avoid python errors
@@ -120,7 +124,8 @@ class TrayMaker(inkex.Effect):
             "spacing": spacing,
             "cut_length": cut_length,
             "gap_length": gap_length,
-            "sep_distance": sep_distance
+            "sep_distance": sep_distance,
+            "simplify": simplify
         }
 
         tray_cut = TrayLaserCut(options, inkex.errormsg)

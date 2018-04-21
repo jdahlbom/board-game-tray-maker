@@ -13,7 +13,8 @@ options = {
     "cut_length": 5,
     "gap_length": 2,
     "sep_distance": 1,
-    "indentradius": 0
+    "indentradius": 0,
+    "simplify": False
 }
 
 opposite_piece = {

@@ -4,7 +4,7 @@ from math import pi as PI
 import json
 
 class TrayLaserCut():
-    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB
+    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB, VERTICAL_HALF_HOLE
 
     FEMALE = "FEMALE"
     MALE = "MALE"
@@ -13,6 +13,7 @@ class TrayLaserCut():
     NO_EDGE = "NO_EDGE"
     END_HALF_TAB = "END_HALF_TAB"
     START_HALF_TAB = "START_HALF_TAB"
+    VERTICAL_HALF_HOLE = "VERTICAL_HALF_HOLE"
 
     def __init__(self, options, errorFn):
         self.options = options
@@ -27,6 +28,7 @@ class TrayLaserCut():
         self.gap_length = self.options["gap_length"]
         self.sep_distance = self.options["sep_distance"]
         self.correction = self.kerf - self.clearance
+        self.simplify = self.options["simplify"]
 
         self.indentradius = 0
 
@@ -93,7 +95,7 @@ class TrayLaserCut():
                         x_part_offset += prev_part.value["length"]
                         prev_part = prev_part.prev
 
-                    part_directives = self.g_side(edge_node, part_node)
+                    part_directives = self.g_side(piece, edge_node, part_node)
                     edge_directives.extend(self.transform(part_directives, 0, (x_part_offset, 0)))
                     part_node = part_node.next
 
@@ -155,8 +157,11 @@ class TrayLaserCut():
             x_angle = (rotations % 4) * 90
             end_point = ( 2 * radius, 0 )
             (end_x, end_y) = self.rotateClockwise(end_point, rotations)
-            return "a {},{} {} 0,0 {},{} ".format(radius * self.uconv, radius * self.uconv,
-                                                  x_angle, end_x * self.uconv, end_y * self.uconv)
+            if self.simplify:
+                return "l {},{} l {},{} l {},{}".format(0, radius*self.uconv, radius*self.uconv*2.0, 0, 0, -radius*self.uconv)
+            else:
+                return "a {},{} {} 0,0 {},{} ".format(radius * self.uconv, radius * self.uconv,
+                                                      x_angle, end_x * self.uconv, end_y * self.uconv)
 
         return {
             "type": "arc",
@@ -182,6 +187,8 @@ class TrayLaserCut():
         # relative arc
         def draw(indent_element):
             depth = indent_element["depth"]
+            if self.simplify:
+                return "l {},{} l {},{} l {},{}".format(0, depth*self.uconv, indent_element["top_width"]*self.uconv, 0, 0, -depth*self.uconv)
             slope_width = (indent_element["top_width"] - indent_element["bottom_width"]) / 2.0
             slope_corner_offsetx = slope_width / 2.0
             corner1 = ( slope_corner_offsetx, 0 )
@@ -216,7 +223,10 @@ class TrayLaserCut():
             (end_x, end_y) = (end_x * self.uconv, end_y * self.uconv)
             (corner_x, corner_y) = (corner_x * self.uconv, corner_y * self.uconv)
 
-            return "c {},{} {},{} {},{}".format(corner_x, corner_y, corner_x, corner_y, end_x, end_y)
+            if self.simplify:
+                return "l {},{} l {},{} ".format(corner_x, corner_y, end_x-corner_x, end_y-corner_y)
+            else:
+                return "c {},{} {},{} {},{}".format(corner_x, corner_y, corner_x, corner_y, end_x, end_y)
 
         return {
             "type": "cubic_bezier",
@@ -258,7 +268,7 @@ class TrayLaserCut():
     # MALE means this edge should have tabs at corners, (unless neighboring edge of the face is FEMALE)
     # FEMALE means this edge should have holes at corners.
 
-    def g_side(self, edge_node, part_node):
+    def g_side(self, piece, edge_node, part_node):
         def prevnode(node):
             if node.prev is not None:
                 return node.prev
@@ -273,6 +283,9 @@ class TrayLaserCut():
                 node = node.prev
             return node
 
+        depth = piece["height"]
+        if edge_node.value["rotation"] % 2 == 1:
+            depth = piece["width"]
 
         part = part_node.value
         length = part["length"]
@@ -333,7 +346,7 @@ class TrayLaserCut():
                 return [dirs]
         elif thisTab is MALE:
             start_y = -edge_node.value["opposite"]["thickness"]
-            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE, START_HALF_TAB]:
+            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE, START_HALF_TAB, VERTICAL_HALF_HOLE]:
                 start_x = 0
             else:
                 start_x = -left_edge.value["opposite"]["thickness"]
@@ -344,7 +357,7 @@ class TrayLaserCut():
             if leftTab in [MALE, END_HALF_TAB]:
                 start_x = -left_edge.value["opposite"]["thickness"]
 
-        if "notch_depth" in part:
+        if "notch_depth" in part and not self.simplify:
             if part["tabs"] is not MALE or leftTab is not MALE or rightTab is not MALE:
                 raise BaseException("Invalid use of notches, must be MALE-MALE-MALE piece")
             draw_directives = {
@@ -396,7 +409,7 @@ class TrayLaserCut():
                     self.line(len_to_end, 0)])
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
-                if "pin_height" in part_node.value and part_node.value["pin_height"] > 0:
+                if "pin_height" in part_node.value and part_node.value["pin_height"] > 0 and not self.simplify:
                     if leftTab is MALE:
                         draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
                         draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
@@ -408,6 +421,14 @@ class TrayLaserCut():
                         draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))
                 else:
                     draw_directives["elements"].append(self.line(length - start_x + end_tab, 0))
+            return [draw_directives]
+
+        if thisTab is VERTICAL_HALF_HOLE:
+            draw_directives["elements"].extend([
+                self.line(0, depth / 2.0),
+                self.line(part_node.value["length"], 0),
+                self.line(0, -depth / 2.0)
+            ])
             return [draw_directives]
 
         currently_male_tab = True if thisTab is MALE else False
