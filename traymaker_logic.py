@@ -137,15 +137,18 @@ class TrayLaserCut():
 
     def line(self, x, y):
         def draw(line_element):
-            (x,y) = line_element["coords"]
-            (x,y) = self.rotateClockwise((x,y), line_element["rotations"])
+            (x,y) = end_point(line_element)
             return "l {} {} ".format(x * self.uconv, y * self.uconv)
+
+        def end_point(line_element):
+            return self.rotateClockwise(line_element["coords"], line_element["rotations"])
 
         return {
             "type": "line",
             "coords": (x,y),
             "rotations": 0,
-            "draw": draw
+            "draw": draw,
+            "end_point": end_point
         }
 
 
@@ -155,19 +158,25 @@ class TrayLaserCut():
             radius = arc_element["radius"]
             rotations = arc_element["rotations"]
             x_angle = (rotations % 4) * 90
-            end_point = ( 2 * radius, 0 )
-            (end_x, end_y) = self.rotateClockwise(end_point, rotations)
+            (end_x, end_y) = end_point(arc_element)
             if self.simplify:
                 return "l {},{} l {},{} l {},{}".format(0, radius*self.uconv, radius*self.uconv*2.0, 0, 0, -radius*self.uconv)
             else:
                 return "a {},{} {} 0,0 {},{} ".format(radius * self.uconv, radius * self.uconv,
                                                       x_angle, end_x * self.uconv, end_y * self.uconv)
 
+        def end_point(arc_element):
+            radius = arc_element["radius"]
+            rotations = arc_element["rotations"]
+            end_point = ( 2 * radius, 0 )
+            return self.rotateClockwise(end_point, rotations)
+
         return {
             "type": "arc",
             "radius": radius,
             "rotations": 0,
-            "draw": draw
+            "draw": draw,
+            "end_point": end_point
         }
 
     def convert_coords(self, coords):
@@ -202,13 +211,17 @@ class TrayLaserCut():
             up_slope_cmd = self.cubic_bezier_curve(corner1, corner2, end_point, indent_element["rotations"])
             return down_slope_cmd + base_cmd + up_slope_cmd
 
+        def end_point(indent_element):
+            return indent_element["top_width"], 0
+
         return {
                 "type": "sloped_indent",
                 "top_width": top_width,
                 "bottom_width": bottom_width,
                 "depth": depth,
                 "rotations": 0,
-                "draw": draw
+                "draw": draw,
+                "end_point": end_point
             }
 
 
@@ -228,13 +241,19 @@ class TrayLaserCut():
             else:
                 return "c {},{} {},{} {},{}".format(corner_x, corner_y, corner_x, corner_y, end_x, end_y)
 
+        def end_point(cubic_bezier):
+            end_point = cubic_bezier["end_point_rel"]
+            rotations = cubic_bezier["rotations"]
+            return self.rotateClockwise(end_point, rotations)
+
         return {
-            "type": "cubic_bezier",
-            "rotations": 0,
-            "end_point_rel": end_point_rel,
-            "corner_rel": corner_rel,
-            "draw": draw
-        }
+                "type": "cubic_bezier",
+                "rotations": 0,
+                "end_point_rel": end_point_rel,
+                "corner_rel": corner_rel,
+                "draw": draw,
+                "end_point": end_point
+            }
 
     def rotateClockwise(self, (x,y), rotations):
         coords = (x,y)
