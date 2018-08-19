@@ -311,13 +311,14 @@ class TrayLaserCut():
         nomTab = self.nom_tab
         divs=int(length/nomTab)  # divisions
 
-        if not divs%2: divs-=1   # make divs odd
-        divs=float(divs)
+        if not divs % 2:
+            divs -= 1   # make divs odd
+        divs = float(divs)
         if divs > 9:
             divs = 9.0
         if divs < 3:
             divs = 3.0
-        gapWidth=tabWidth=length/divs
+        gapWidth = tabWidth = length/divs
 
         # kerf correction
         gapWidth -= self.correction
@@ -362,7 +363,7 @@ class TrayLaserCut():
                             self.line(part_node.value["length"]/2.0+end_tab, 0)
                         ]}
                 return [dirs]
-        elif thisTab is MALE:
+        elif thisTab == MALE:
             start_y = -edge_node.value["opposite"]["thickness"]
             if leftTab in [FEMALE, TOP, NO_EDGE, START_HALF_TAB, VERTICAL_HALF_HOLE]:
                 start_x = 0
@@ -376,7 +377,7 @@ class TrayLaserCut():
                 start_x = -left_edge.value["opposite"]["thickness"]
 
         if "notch_depth" in part and not self.simplify:
-            if part["tabs"] is not MALE or leftTab is not MALE or rightTab is not MALE:
+            if part["tabs"] != MALE or leftTab != MALE or rightTab != MALE:
                 raise BaseException("Invalid use of notches, must be MALE-MALE-MALE piece")
             draw_directives = {
                 "origin": (start_x, start_y+part["notch_depth"]),
@@ -392,7 +393,7 @@ class TrayLaserCut():
                 "elements" : []
             }
 
-        if thisTab is TOP:
+        if thisTab == TOP:
             if "indent" in part and part["indent"]["radius"] > 0:
                 indent_radius = part["indent"]["radius"]
                 indent_x_offset = part["indent"]["offset"]
@@ -428,12 +429,12 @@ class TrayLaserCut():
             else:
                 end_tab = nextnode(edge_node).value["opposite"]["thickness"] if rightTab in [START_HALF_TAB, MALE] else 0
                 if "pin_height" in part_node.value and part_node.value["pin_height"] > 0 and not self.simplify:
-                    if leftTab is MALE:
+                    if leftTab == MALE:
                         draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
                         draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
                         draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))
                     draw_directives["elements"].append(self.line(length, 0))
-                    if end_tab > 0 and rightTab is MALE:
+                    if end_tab > 0 and rightTab == MALE:
                         draw_directives["elements"].append(self.line(0, -part_node.value["pin_height"]))
                         draw_directives["elements"].append(self.line(left_edge.value["opposite"]["thickness"], 0))
                         draw_directives["elements"].append(self.line(0, part_node.value["pin_height"]))
@@ -441,7 +442,7 @@ class TrayLaserCut():
                     draw_directives["elements"].append(self.line(length - start_x + end_tab, 0))
             return [draw_directives]
 
-        if thisTab is VERTICAL_HALF_HOLE:
+        if thisTab == VERTICAL_HALF_HOLE:
             draw_directives["elements"].extend([
                 self.line(0, depth / 2.0),
                 self.line(part_node.value["length"], 0),
@@ -449,8 +450,8 @@ class TrayLaserCut():
             ])
             return [draw_directives]
 
-        currently_male_tab = True if thisTab is MALE else False
-        for n in range(1,int(divs)):
+        currently_male_tab = True if thisTab == MALE else False
+        for n in range(1, int(divs)):
             if not currently_male_tab:
                 dx = gapWidth
                 dy = -edge_node.value["opposite"]["thickness"]
@@ -484,12 +485,13 @@ class TrayLaserCut():
     def compute_male_tabs(self, length, holes=False):
         nomTab = self.nom_tab
         divs=int(length/nomTab)  # divisions
-        if not divs%2: divs-=1   # make divs odd
+        if not divs % 2:
+            divs -= 1   # make divs odd
         if divs > 9:
             divs = 9
         if divs < 3:
             divs = 3
-        gapWidth=tabWidth=length/float(divs)
+        gapWidth = tabWidth = length/float(divs)
 
         if holes:
             temp = gapWidth
@@ -532,7 +534,7 @@ class TrayLaserCut():
 
         def draw_shapes(part_length, shape, x_offset, y_offset, width):
             directives = []
-            if shape is START_HALF_TAB:
+            if shape == START_HALF_TAB:
                 directive = {"origin": (x_offset, y_offset), "elements": [
                     self.line(0, part_length/2.0),
                     self.line(width, 0),
@@ -540,7 +542,7 @@ class TrayLaserCut():
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
-            elif shape is END_HALF_TAB:
+            elif shape == END_HALF_TAB:
                 directive = {"origin": (x_offset, part_length/2.0 + y_offset), "elements": [
                     self.line(0, part_length/2.0),
                     self.line(width, 0),
@@ -548,7 +550,7 @@ class TrayLaserCut():
                     self.line(-width, 0)
                 ]}
                 directives.append(directive)
-            elif shape is MALE:
+            elif shape == MALE:
                 tabs = self.compute_male_tabs(part_length, holes=True)
                 total_y_offset = y_offset
                 for tab in tabs:
@@ -561,7 +563,7 @@ class TrayLaserCut():
                     ]}
                     directives.append(directive)
                     total_y_offset += tab["length"]
-            elif shape is FEMALE:
+            elif shape == FEMALE:
                 tabs = self.invert_tabs(self.compute_male_tabs(part_length, holes=True))
                 total_y_offset = y_offset
                 for tab in tabs:
@@ -574,7 +576,7 @@ class TrayLaserCut():
                     ]}
                     directives.append(directive)
                     total_y_offset += tab["length"]
-            elif shape is "C_BEZIER_RECT":
+            elif shape == "C_BEZIER_RECT":
                 directives.append({"origin": (x_offset + width/2.0, y_offset),
                              "elements": [
                                  self.cubic_bezier_corner((width/2.0, part_length/2.0), (width/2.0, 0)),
