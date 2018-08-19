@@ -4,11 +4,10 @@ from math import pi as PI
 import json
 
 class TrayLaserCut():
-    global FEMALE, MALE, HINGE_FEMALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB, VERTICAL_HALF_HOLE
+    global FEMALE, MALE, TOP, NO_EDGE, END_HALF_TAB, START_HALF_TAB, VERTICAL_HALF_HOLE
 
     FEMALE = "FEMALE"
     MALE = "MALE"
-    HINGE_FEMALE = "HINGE_FEMALE"
     TOP = "TOP"
     NO_EDGE = "NO_EDGE"
     END_HALF_TAB = "END_HALF_TAB"
@@ -365,7 +364,7 @@ class TrayLaserCut():
                 return [dirs]
         elif thisTab is MALE:
             start_y = -edge_node.value["opposite"]["thickness"]
-            if leftTab in [FEMALE, HINGE_FEMALE, TOP, NO_EDGE, START_HALF_TAB, VERTICAL_HALF_HOLE]:
+            if leftTab in [FEMALE, TOP, NO_EDGE, START_HALF_TAB, VERTICAL_HALF_HOLE]:
                 start_x = 0
             else:
                 start_x = -left_edge.value["opposite"]["thickness"]

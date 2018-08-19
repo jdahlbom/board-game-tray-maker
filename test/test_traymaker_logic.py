@@ -522,7 +522,7 @@ def test_male_male_tabbed_side():
     opts = deepcopy(options)
     opts["nomTab"] = tab_size
     traycut = TrayLaserCut(opts, error_print)
-    cmds = traycut.draw(pieces,3)
+    cmds = traycut.draw(pieces, 3)
     cmds = cmds[0]["cut"]
     thickness = pieces[0]["edges"][0]["opposite"]["thickness"]
     offset = 4
