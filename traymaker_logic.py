@@ -46,7 +46,7 @@ class TrayLaserCut():
         all_directives = []
         cumul_y_piece_offset = 0
 
-        filtered_pieces = list(filter(lambda piece: piece["thickness"] == thickness, pieces))
+        filtered_pieces = list(filter(lambda piece: str(piece["thickness"]) == thickness, pieces))
         if not filtered_pieces:
             return []
         max_width = max(map(lambda piece: piece["width"], filtered_pieces))

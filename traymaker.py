@@ -80,6 +80,9 @@ class TrayMaker(inkex.Effect):
     def effect(self):
         global nomTab,equalTabs,thickness,correction,error
 
+        THICKNESS_THICK_MM = 3.5
+        THICKNESS_SLIM_MM = 2
+
         # Get access to main SVG document element and get its dimensions.
         svg = self.document.getroot()
 
@@ -130,9 +133,10 @@ class TrayMaker(inkex.Effect):
 
         tray_cut = TrayLaserCut(options, inkex.errormsg)
 
+
         def draw_tray(tray_name, tray_number=None):
-            pieces = gloomhaven.tray_setup(tray_name, inkex.errormsg)
-            for thick in set(map(lambda piece: int(piece["thickness"]), pieces)):
+            pieces = gloomhaven.tray_setup(tray_name, (THICKNESS_THICK_MM, THICKNESS_SLIM_MM), inkex.errormsg)
+            for thick in set(map(lambda piece: str(piece["thickness"]), pieces)):
                 command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_number)
                 layer = self.create_layer(svg, "{}-{}mm".format(tray_name, thick))
                 for cmds in command_dict:
@@ -143,7 +147,7 @@ class TrayMaker(inkex.Effect):
 
         if self.options.tray_name == 'all':
             tray_number = 0
-            for tray_name in ['monsters', 'effects', 'small_terrain', 'large_terrain', 'monster_cards', 'event_cards', 'player_tray', 'figurines', 'bosses-1', 'bosses-2']:
+            for tray_name in gloomhaven.tray_names():
                 tray_number += 1
                 draw_tray(tray_name, tray_number)
         else:
