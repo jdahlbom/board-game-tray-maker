@@ -22,11 +22,9 @@ __version__ = "0.91" ### please report bugs, suggestions etc to bugs@twot.eu ###
 ## unittouu method changed to InkScape 0.91 style ##
 ## this version will NOT work in InkScape 0.48    ##
 
-from math import pi as PI
-import sys,inkex,simplestyle,gettext
+import inkex, simplestyle, gettext
 from traymaker_logic import TrayLaserCut
 import gloomhaven
-from llist import dllist
 
 _ = gettext.gettext
 
@@ -46,28 +44,28 @@ class TrayMaker(inkex.Effect):
         # Call the base class constructor.
         inkex.Effect.__init__(self)
         # Define options
-        self.OptionParser.add_option('--tray_name',action='store',type='string',
-                                     dest='tray_name',default='effects',help='Tray name')
-        self.OptionParser.add_option('--simplify',action='store', type='string',
-                                     dest='simplify',default=False,help='Simplify design for printing')
-        self.OptionParser.add_option('--unit',action='store',type='string',
-                                     dest='unit',default='mm',help='Measure Units')
-        self.OptionParser.add_option('--tab',action='store',type='float',
-                                     dest='tab',default=25,help='Nominal Tab Width')
-        self.OptionParser.add_option('--equal',action='store',type='int',
-                                     dest='equal',default=0,help='Equal/Prop Tabs')
-        self.OptionParser.add_option('--kerf',action='store',type='float',
-                                     dest='kerf',default=0.5,help='Kerf (width) of cut')
-        self.OptionParser.add_option('--clearance',action='store',type='float',
-                                     dest='clearance',default=0.01,help='Clearance of joints')
-        self.OptionParser.add_option('--spacing',action='store',type='float',
-                                     dest='spacing',default=25,help='Part Spacing')
-        self.OptionParser.add_option('--cut_length',action='store',type='float',
-                                     dest='cut_length',default=0,help='length of the cuts for the hinge.')
-        self.OptionParser.add_option('--gap_length',action='store',type='float',
-                                     dest='gap_length',default=0,help='separation distance between successive hinge cuts.')
-        self.OptionParser.add_option('--sep_distance',action='store',type='float',
-                                     dest='sep_distance',default=0,help='distance between successive lines of hinge cuts.')
+        self.OptionParser.add_option('--tray_name', action='store', type='string',
+                                     dest='tray_name', default='effects', help='Tray name')
+        self.OptionParser.add_option('--simplify', action='store', type='string',
+                                     dest='simplify', default=False, help='Simplify design for printing')
+        self.OptionParser.add_option('--unit', action='store', type='string',
+                                     dest='unit', default='mm', help='Measure Units')
+        self.OptionParser.add_option('--tab', action='store', type='float',
+                                     dest='tab', default=25, help='Nominal Tab Width')
+        self.OptionParser.add_option('--equal', action='store', type='int',
+                                     dest='equal', default=0, help='Equal/Prop Tabs')
+        self.OptionParser.add_option('--kerf', action='store', type='float',
+                                     dest='kerf', default=0.5, help='Kerf (width) of cut')
+        self.OptionParser.add_option('--clearance', action='store', type='float',
+                                     dest='clearance', default=0.01, help='Clearance of joints')
+        self.OptionParser.add_option('--spacing', action='store', type='float',
+                                     dest='spacing', default=25, help='Part Spacing')
+        self.OptionParser.add_option('--cut_length', action='store', type='float',
+                                     dest='cut_length', default=0, help='length of the cuts for the hinge.')
+        self.OptionParser.add_option('--gap_length', action='store', type='float',
+                                     dest='gap_length', default=0, help='separation distance between successive hinge cuts.')
+        self.OptionParser.add_option('--sep_distance', action='store', type='float',
+                                     dest='sep_distance', default=0, help='distance between successive lines of hinge cuts.')
 
     def create_layer(self, parent, layer_name):
         # Create a new layer.
@@ -76,9 +74,8 @@ class TrayMaker(inkex.Effect):
         layer.set(inkex.addNS('groupmode', 'inkscape'), 'layer')
         return layer
 
-
     def effect(self):
-        global nomTab,equalTabs,thickness,correction,error
+        global nomTab, equalTabs, thickness, correction, error
 
         THICKNESS_THICK_MM = 3.5
         THICKNESS_SLIM_MM = 2
@@ -91,10 +88,10 @@ class TrayMaker(inkex.Effect):
         heightDoc = self.unittouu(svg.get('height'))
 
         # Get script's option values.
-        unit=self.options.unit
-        uconv = self.unittouu( "1 {}".format(unit))
+        unit = self.options.unit
+        uconv = self.unittouu("1 {}".format(unit))
         nomTab = self.options.tab
-        equalTabs=self.options.equal
+        equalTabs = self.options.equal
         kerf = self.options.kerf
         clearance = self.options.clearance
         spacing = self.options.spacing
@@ -105,15 +102,15 @@ class TrayMaker(inkex.Effect):
 
         simplify = (self.options.simplify == "true")
 
-        correction=kerf-clearance
+        correction = kerf - clearance
 
         # check input values mainly to avoid python errors
         # TODO restrict values to *correct* solutions
-        error=0
+        error = 0
 
-        if spacing<kerf:
+        if spacing < kerf:
             inkex.errormsg(_('Error: Spacing too small'))
-            error=1
+            error = 1
         if error:
             exit()
 
@@ -133,11 +130,10 @@ class TrayMaker(inkex.Effect):
 
         tray_cut = TrayLaserCut(options, inkex.errormsg)
 
-
-        def draw_tray(tray_name, tray_number=None):
-            pieces = gloomhaven.tray_setup(tray_name, (THICKNESS_THICK_MM, THICKNESS_SLIM_MM), inkex.errormsg)
+        def draw_tray(trayname, tray_num=None):
+            pieces = gloomhaven.tray_setup(trayname, (THICKNESS_THICK_MM, THICKNESS_SLIM_MM), inkex.errormsg)
             for thick in set(map(lambda piece: str(piece["thickness"]), pieces)):
-                command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_number)
+                command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_num)
                 layer = self.create_layer(svg, "{}-{}mm".format(tray_name, thick))
                 for cmds in command_dict:
                     grouped_piece = inkex.etree.SubElement(layer, 'g')
@@ -154,16 +150,13 @@ class TrayMaker(inkex.Effect):
             draw_tray(self.options.tray_name)
 
     def drawS(self, parent, XYstring, strokeColor=CUT_COLOR):         # Draw lines from a list
-        name='part'
-        style = { 'stroke': strokeColor, 'fill': 'none' }
-        drw = {'style':simplestyle.formatStyle(style),inkex.addNS('label','inkscape'):name,'d':XYstring}
-        inkex.etree.SubElement(parent, inkex.addNS('path','svg'), drw )
-
-
+        name = 'part'
+        style = {'stroke': strokeColor, 'fill': 'none'}
+        drw = {'style': simplestyle.formatStyle(style), inkex.addNS('label', 'inkscape'): name, 'd': XYstring}
+        inkex.etree.SubElement(parent, inkex.addNS('path', 'svg'), drw)
 
 
 if __name__ == "__main__":
     # Create effect instance and apply it.
     effect = TrayMaker()
     effect.affect()
-
