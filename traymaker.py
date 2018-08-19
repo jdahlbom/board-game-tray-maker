@@ -28,13 +28,6 @@ import gloomhaven
 
 _ = gettext.gettext
 
-TOP = 0
-MALE = 1
-FEMALE = 2
-NO_EDGE = 3
-HINGE_FEMALE = 4
-CURVE = 5
-
 CUT_COLOR='#000000'
 ENGRAVE_COLOR='#FF0000'
 
