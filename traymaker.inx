@@ -15,6 +15,12 @@
     <option value="in">in</option>
   </param>
 
+  <param name="cutarea" _gui-text="Cut Area" type="optiongroup" appearance="minimal">
+    <option value="420">A2 (420 mm)</option>
+    <option value="300">30 cm (300 mm)</option>
+    <option value="210">A4 (210 mm)</option>
+  </param>
+
   <param name="simplify" _gui-text="Simplify shapes" type="boolean"></param>
 
   <param name="tray_name" _gui-text="Gloomhaven Insert Part" type="optiongroup" appearance="minimal">

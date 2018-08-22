@@ -43,6 +43,8 @@ class TrayMaker(inkex.Effect):
                                      dest='simplify', default=False, help='Simplify design for printing')
         self.OptionParser.add_option('--unit', action='store', type='string',
                                      dest='unit', default='mm', help='Measure Units')
+        self.OptionParser.add_option('--cutarea', action='store', type='int',
+                                     dest='cutarea', default='420', help='Width of Cut Area')
         self.OptionParser.add_option('--tab', action='store', type='float',
                                      dest='tab', default=25, help='Nominal Tab Width')
         self.OptionParser.add_option('--equal', action='store', type='int',
@@ -83,6 +85,7 @@ class TrayMaker(inkex.Effect):
         # Get script's option values.
         unit = self.options.unit
         uconv = self.unittouu("1 {}".format(unit))
+        cutarea = self.options.cutarea
         nomTab = self.options.tab
         equalTabs = self.options.equal
         kerf = self.options.kerf
@@ -126,8 +129,8 @@ class TrayMaker(inkex.Effect):
         def draw_tray(trayname, tray_num=None):
             pieces = gloomhaven.tray_setup(trayname, (THICKNESS_THICK_MM, THICKNESS_SLIM_MM), inkex.errormsg)
             for thick in set(map(lambda piece: str(piece["thickness"]), pieces)):
-                command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_num)
-                layer = self.create_layer(svg, "{}-{}mm".format(tray_name, thick))
+                command_dict = tray_cut.draw(pieces, thick, sort_pieces=True, tray_number=tray_num, max_width=cutarea)
+                layer = self.create_layer(svg, "{}-{}mm".format(trayname, thick))
                 for cmds in command_dict:
                     grouped_piece = inkex.etree.SubElement(layer, 'g')
                     grouped_piece.set(inkex.addNS('groupmode', 'inkscape'), 'group')
