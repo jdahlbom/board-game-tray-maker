@@ -27,7 +27,6 @@ def mock_square(side, offset=(0, 0)):
     return [{
         "width": X,
         "height": Y,
-        "offset": offset,
         "thickness": 3,
         "edges": [
             {
@@ -646,8 +645,9 @@ def test_half_tabs():
 
 
 def test_two_squares():
-    pieces = mock_square(10)
-    pieces.extend(mock_square(10, (0, 20)))
+    sidelen = 10
+    pieces = mock_square(sidelen)
+    pieces.extend(mock_square(sidelen))
     traycut = TrayLaserCut(deepcopy(options), error_print)
     thickness = 3
     piece_cmds = traycut.draw(pieces, thickness)
@@ -663,10 +663,10 @@ def test_two_squares():
     assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset+10))
     cmds = piece_cmds[1]["cut"]
     assert(len(cmds) == 4)
-    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset, offset + 2*(thickness+1) + p_height))
-    assert(cmds[1] == 'M {} {} l 0 10 '.format(offset+10, offset + 2*(thickness+1) + p_height))
-    assert(cmds[2] == 'M {} {} l -10 0 '.format(offset+10, offset + 2*(thickness+1) + 2*p_height))
-    assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset, offset + 2*(thickness+1) + 2*p_height))
+    assert(cmds[0] == 'M {} {} l 10 0 '.format(offset + sidelen + 2*(thickness+1), offset))
+    assert(cmds[1] == 'M {} {} l 0 10 '.format(offset + sidelen * 2 + 2*(thickness+1), offset))
+    assert(cmds[2] == 'M {} {} l -10 0 '.format(offset + sidelen*2 + 2*(thickness+1), offset + sidelen))
+    assert(cmds[3] == 'M {} {} l 0 -10 '.format(offset + sidelen + 2*(thickness+1), offset + sidelen))
 
 
 def test_top_and_half():
