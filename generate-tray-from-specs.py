@@ -1,10 +1,11 @@
 import json
 from llist import dllist
+import sys
+
 
 def compute_minimum_dimensions(item):
     single_item = item_types[item['item']]
     return {
-        'type': 'slot',
         'min-width': single_item['width'],
         'min-depth': single_item['height'],
         'min-height': single_item['thickness'] * item['amount']
@@ -33,30 +34,52 @@ def validate_fit(col_items, max_height):
 
 
 def position_spacers(left_col, right_col, spacer_width):
-    lnode1 = left_col.first
-    rnode1 = right_col.first
-
     fit_range = 1.0 + spacer_width
 
-    def position_nodes(lnode1, rnode1, lheight, rheight):
-        lnode2 = lnode1
-        rnode2 = rnode1
+    def extend_node_height(node, extension):
+        node.value['height'] = extension + get_height(node.value)
+
+
+    def position_nodes(lnode, rnode, lheight, rheight):
+        print("left height {}, right height: {}".format(lheight, rheight))
+        if (not lnode) or (not rnode):
+            print("End of either node list reached.")
+            return 0
+
+        lheight += get_height(lnode.value)
+        rheight += get_height(rnode.value)
 
         if abs(lheight-rheight) < 0.001:
             print("Matching spacers, moving on")
-            lnode1 = lnode1.next
-            rnode1 = rnode1.next
-            if (not lnode1) or (not rnode1):
-                print("End of either node list reached.")
-                return 0
+            return position_nodes(lnode.next, rnode.next, 0, 0)
 
-            return position_nodes(lnode1, rnode1, 0, 0)
-
-        if abs(lheight-rheight) < fit_range:
+        height_diff = abs(lheight-rheight)
+        if height_diff < fit_range:
             print("Difference between spacers: {}".format(abs(lheight-rheight)))
-            return 0
+            if lheight < rheight:
+                lnext = lnode.next
+                if lnext:
+                    lnext_height = get_height(lnext.value) + spacer_width
+                    r_diff_to_lnext = lheight + lnext_height - rheight
+                    if r_diff_to_lnext < fit_range:
+                        extend_node_height(rnode, r_diff_to_lnext)
+                        return position_nodes(lnext.next, rnode.next, 0, 0)
+                r_extension = fit_range - height_diff
+                extend_node_height(rnode, r_extension)
+                return position_nodes(lnode.next, rnode.next, 0, fit_range)
+            else:
+                print("Extending right node by {}, previously {}".format(height_diff, get_height(rnode.value)))
+                extend_node_height(rnode, height_diff)
+                return position_nodes(lnode.next, rnode.next, 0, 0)
 
-    position_nodes(lnode1, rnode1, get_height(lnode1.value), get_height(rnode1.value))
+        if lheight < rheight:
+            return position_nodes(lnode.next, rnode, spacer_width + height_diff, 0)
+        else:
+            return position_nodes(lnode, rnode.next, 0, spacer_width + height_diff)
+
+    lnode = left_col.first
+    rnode = right_col.first
+    position_nodes(lnode, rnode, 0, 0)
 
 
 def stretch_to_fill(col_items, max_height):
@@ -65,9 +88,10 @@ def stretch_to_fill(col_items, max_height):
     height_edges = 2 * edge_width
     total_height = height_contents + height_spacers + height_edges
 
+    print("Total height: {} , Max_height: {}".format(total_height, max_height))
     unused_space = max_height - total_height
-    if height_contents * 0.3 < unused_space:
-        fraction = unused_space / height_contents
+    if unused_space / total_height > 0.3:
+        fraction = unused_space / total_height
         raise Exception("There is more than 30% extra space available for contents [{}]. Add more stuff?".format(fraction))
 
     add_height = unused_space / len(col_items)
@@ -79,7 +103,9 @@ def stretch_to_fill(col_items, max_height):
 
 if __name__ == '__main__':
     specs = {}
-    with open('gloomhaven/tray_specs.json') as specsfile:
+
+    specsfile = sys.argv[1] #gloomhaven/tray_specs.json
+    with open(specsfile) as specsfile:
         specs = json.load(specsfile)
         specsfile.close
 
@@ -101,8 +127,11 @@ if __name__ == '__main__':
         print("Column number: {}".format(colnum))
         validate_fit(col_items, tray_height)
         colnum += 1
-        stretch_to_fill(col_items, tray_height)
+#        stretch_to_fill(col_items, tray_height)
         columns.append(col_items) 
 
     position_spacers(columns[0], columns[1], spacer_width)    
+
+    print(columns[0])
+    print(columns[1])
 
