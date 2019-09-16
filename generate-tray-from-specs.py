@@ -1,33 +1,62 @@
 import json
-
+from llist import dllist
 
 def compute_minimum_dimensions(item):
     single_item = item_types[item['item']]
     return {
+        'type': 'slot',
         'min-width': single_item['width'],
         'min-depth': single_item['height'],
         'min-height': single_item['thickness'] * item['amount']
             }
 
 
-def sum_of_heights(col_items):
-    def map_heights(item):
-        if 'height' in item:
-            return item['height']
-        return item['min-height']
+def get_height(item):
+    if 'height' in item:
+        return item['height']
+    return item['min-height']
 
-    return reduce(lambda add,aggr: add+aggr, map(map_heights, col_items))
+
+def sum_of_heights(col_items):
+    return reduce(lambda add,aggr: add+aggr, map(get_height, col_items))
 
 
 def validate_fit(col_items, max_height):
     height_sum = sum_of_heights(col_items)
-    height_spacers = (len(col_items)-1)*spacer_width
+    height_spacers = (col_items.size-1)*spacer_width
     height_edges = 2 * edge_width
     total_content = height_sum+height_spacers+height_edges
 
     #print("Items: {}, Spacers: {}, Edges: {}, Total: {}".format( height_sum, height_spacers, height_edges, total_content))
     if total_content > max_height:
         raise Exception("Total content height [{}] is larger than tray height [{}]".format(total_content, max_height))
+
+
+def position_spacers(left_col, right_col, spacer_width):
+    lnode1 = left_col.first
+    rnode1 = right_col.first
+
+    fit_range = 1.0 + spacer_width
+
+    def position_nodes(lnode1, rnode1, lheight, rheight):
+        lnode2 = lnode1
+        rnode2 = rnode1
+
+        if abs(lheight-rheight) < 0.001:
+            print("Matching spacers, moving on")
+            lnode1 = lnode1.next
+            rnode1 = rnode1.next
+            if (not lnode1) or (not rnode1):
+                print("End of either node list reached.")
+                return 0
+
+            return position_nodes(lnode1, rnode1, 0, 0)
+
+        if abs(lheight-rheight) < fit_range:
+            print("Difference between spacers: {}".format(abs(lheight-rheight)))
+            return 0
+
+    position_nodes(lnode1, rnode1, get_height(lnode1.value), get_height(rnode1.value))
 
 
 def stretch_to_fill(col_items, max_height):
@@ -47,14 +76,6 @@ def stretch_to_fill(col_items, max_height):
     return(col_items)
 
 
-def compute_spacer_placement(columns):
-    placement_lists = []
-    for left_col_index in range(0,len(columns)-1):
-        placement_lists.append({
-            "left": columns[left_col_index],
-            "right": columns[left_col_index + 1]
-            })
-    print(placement_lists)
 
 if __name__ == '__main__':
     specs = {}
@@ -74,13 +95,14 @@ if __name__ == '__main__':
 
     columns = []
 
+
     for col in specs['columns']:
-        col_items = map(compute_minimum_dimensions, col)
+        col_items = dllist(map(compute_minimum_dimensions, col))
         print("Column number: {}".format(colnum))
         validate_fit(col_items, tray_height)
         colnum += 1
         stretch_to_fill(col_items, tray_height)
         columns.append(col_items) 
 
-    compute_spacer_placement(columns)
+    position_spacers(columns[0], columns[1], spacer_width)    
 
