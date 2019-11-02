@@ -3,7 +3,7 @@ from llist import dllist
 import sys
 
 
-def compute_minimum_dimensions(item):
+def compute_minimum_dimensions(item_types, item):
     single_item = item_types[item['item']]
     return {
         'min-width': single_item['width'],
@@ -100,38 +100,37 @@ def stretch_to_fill(col_items, max_height):
     return(col_items)
 
 
+def process_column_contents(specs, tray_height):
+    item_types = specs['item-types']
+
+    columns = []
+
+    for col in specs['columns']:
+        col_items = dllist(map(lambda c_item: compute_minimum_dimensions(item_types, c_item), col))
+        validate_fit(col_items, tray_height)
+        columns.append(col_items) 
+
+    for colidx in range(0, len(columns)-1):
+        position_spacers(columns[colidx], columns[colidx+1], spacer_width)    
+
+    return columns
+
 
 if __name__ == '__main__':
     specs = {}
+
+    spacer_width = 2
+    edge_width = 3.5
 
     specsfile = sys.argv[1] #gloomhaven/tray_specs.json
     with open(specsfile) as specsfile:
         specs = json.load(specsfile)
         specsfile.close
 
-    item_types = specs['item-types']
-
     tray_width = specs['dimensions']['width']
     tray_height = specs['dimensions']['height']
 
-    spacer_width = 2
-    edge_width = 3.5
-
-    colnum = 1
-
-    columns = []
-
-
-    for col in specs['columns']:
-        col_items = dllist(map(compute_minimum_dimensions, col))
-        print("Column number: {}".format(colnum))
-        validate_fit(col_items, tray_height)
-        colnum += 1
-#        stretch_to_fill(col_items, tray_height)
-        columns.append(col_items) 
-
-    position_spacers(columns[0], columns[1], spacer_width)    
-
-    print(columns[0])
-    print(columns[1])
+    columns = process_column_contents(specs, tray_height)
+    
+    print(columns)
 
