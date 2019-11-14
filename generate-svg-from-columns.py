@@ -3,6 +3,8 @@ import svgwrite
 
 exec(open('generate-tray-from-specs.py').read())
 
+STROKE = 0.1
+
 
 def get_drawing(result_file_name, width='400mm', height='300mm'):
     return svgwrite.Drawing(result_file_name, height=height, width=width, viewBox=(0, 0, 400, 300))
@@ -14,7 +16,7 @@ def generate_edges(dwg, trayspec):
     depth = trayspec['tray_depth']
     #top edge
     INDENT_DEPTH=10
-    path = svgwrite.path.Path(stroke='black', stroke_width=0.01, fill="none")
+    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
     path.push('M 0 0')
     width_left = trayspec['tray_width']
     path.push('h {}'.format(edge_w))
@@ -27,14 +29,23 @@ def generate_edges(dwg, trayspec):
             path.push('v {}'.format(INDENT_DEPTH))
             path.push('h {}'.format(spacer_w))
             path.push('v -{}'.format(INDENT_DEPTH))
+    path.push('h {}'.format(edge_w))
     #Right edge
-    path.push('v {}'.format(depth))
+    path.push('v {}'.format(depth/3))
+    path.push('h -{}'.format(edge_w))
+    path.push('v {}'.format(depth/3))
+    path.push('h {}'.format(edge_w))
+    path.push('v {}'.format(depth/3))
     path.push('v {}'.format(edge_w))
     #Bottom edge
     path.push('h -{}'.format(trayspec['tray_width']))
     #Left edge
     path.push('v -{}'.format(edge_w))
-    path.push('v -{}'.format(depth))
+    path.push('v -{}'.format(depth/3))
+    path.push('h {}'.format(edge_w))
+    path.push('v -{}'.format(depth/3))
+    path.push('h -{}'.format(edge_w))
+    path.push('v -{}'.format(depth/3))
     path.push('z')
 
     return [path]

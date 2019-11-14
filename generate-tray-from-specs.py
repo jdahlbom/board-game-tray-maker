@@ -132,7 +132,7 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
     columns = process_column_contents(specs, tray_height, spacer_width, edge_width)
     depth = max(list(map(lambda column: max(list(map(lambda slot: slot['min-depth'], column['slots']))), columns)))
 
-    return {
+    tray_spec = {
             'tray_width': tray_width,
             'tray_height': tray_height,
             'tray_depth': depth,
@@ -141,4 +141,13 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
             'edge_width': edge_width
             }
 
+    total_used_width = 2 * edge_width + spacer_width * (len(tray_spec['columns'])-1) + sum(map(lambda c: c['width'], tray_spec['columns']))
+    if total_used_width < tray_spec['tray_width'] - 0.01:
+        print("Content is {}mm less than available {}mm".format(tray_spec['tray_width']-total_used_width, tray_spec['tray_width']))
+        sys.exit(1)
+    elif total_used_width > tray_spec['tray_width'] + 0.01 :
+        print("Content is {}mm more than available {}mm".format(total_used_width-tray_spec['tray_width'], tray_spec['tray_width']))
+        sys.exit(1)
+    else:
+        return tray_spec
 

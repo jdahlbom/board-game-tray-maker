@@ -9,7 +9,7 @@
 	},
 	"name":"monster-cards",
 	"dimensions": {
-		"width": 269,
+		"width": 245,
 		"height": 25
 	},
 	"columns":
@@ -37,6 +37,37 @@
 				"item": "mayday-minieuro-side",
 				"amount": 8
 			}
+		],
+		[
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 16
+			},
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 8
+			}
+		],
+		[
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 16
+			},
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 8
+			}
+		],
+		[
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 16
+			},
+			{
+				"item": "mayday-minieuro-side",
+				"amount": 8
+			}
 		]
+
 	]
 }
