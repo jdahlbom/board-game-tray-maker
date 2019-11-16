@@ -10,7 +10,7 @@
 	"name":"monster-cards",
 	"dimensions": {
 		"width": 245,
-		"height": 25
+		"height": 50
 	},
 	"columns":
 	[
