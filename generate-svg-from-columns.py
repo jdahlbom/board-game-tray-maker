@@ -169,8 +169,50 @@ def generate_edges(dwg, trayspec):
     return paths
 
 
+def generate_floor(dwg, trayspec, v_offset):
+    edge_w = trayspec['edge_width']
+    spacer_w = trayspec['spacer_width']
+    width = trayspec['tray_width'] - edge_w*2
+    height = trayspec['tray_height'] - edge_w*2
+
+    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+    path.push('M {} {}'.format(edge_w, v_offset + edge_w))
+    generate_toothing(0, path, True, width, edge_w)
+    generate_toothing(1, path, True, height, edge_w)
+    generate_toothing(2, path, True, width, edge_w)
+    generate_toothing(3, path, True, height, edge_w)
+
+    def generate_internal_holes(path, origin_h_offset, origin_v_offset):
+        col_widths = list(map(lambda col: col['width'], trayspec['columns']))
+        hole_width = MIN_TOOTH_WIDTH
+        if height/hole_width < 3:
+            return
+
+        num_tooth = 1
+        if height/hole_width > 5:
+            num_tooth = 2
+
+        tooth_spacing = (height - num_tooth * hole_width) / (num_tooth + 1)
+
+        for idx, col_w in enumerate(col_widths[0:-1]):
+            h_offset = sum(col_widths[0:idx+1]) + idx * spacer_w + origin_h_offset
+            for tooth_idx in range(0, num_tooth):
+                v_offset = (tooth_idx + 1) * tooth_spacing + tooth_idx * hole_width + origin_v_offset
+                path.push('M {} {}'.format(h_offset, v_offset))
+                path.push('h {}'.format(spacer_w))
+                path.push('v {}'.format(hole_width))
+                path.push('h -{}'.format(spacer_w))
+                path.push('v -{}'.format(hole_width))
+
+    generate_internal_holes(path, edge_w, v_offset+edge_w)
+
+    return path
+        
+
+
 def draw(dwg, trayspec):
     paths = generate_edges(dwg, trayspec)
+    paths.append(generate_floor(dwg, trayspec, (trayspec['tray_depth']+5)*4))
 
     for path in paths:
         dwg.add(path)
