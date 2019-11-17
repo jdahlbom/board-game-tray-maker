@@ -58,78 +58,115 @@ def generate_edges(dwg, trayspec):
     spacer_w = trayspec['spacer_width']
     edge_w = trayspec['edge_width']
     depth = trayspec['tray_depth']
-
-    #Top piece
-    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-    
-   #top edge
     INDENT_DEPTH=10
-    path.push('M 0 0')
-    width_left = trayspec['tray_width']
-    path.push('h {}'.format(edge_w))
-    width_left -= edge_w
-    for idx, column in enumerate(trayspec['columns']):
-        width_left -= column['width']
-        path.push('h {}'.format(column['width']))
-        if idx < len(trayspec['columns'])-1:
-            width_left -= spacer_w
-            path.push('v {}'.format(INDENT_DEPTH))
-            path.push('h {}'.format(spacer_w))
-            path.push('v -{}'.format(INDENT_DEPTH))
-    path.push('h {}'.format(edge_w))
-    #Right edge
-    generate_toothing(1, path, False, depth, edge_w)
-    path.push('v {}'.format(edge_w))
-    #Bottom edge
-    content_width = trayspec['tray_width'] - edge_w*2
-    path.push('h -{}'.format(edge_w))
-    generate_toothing(2, path, False, content_width, edge_w)
-    path.push('h -{}'.format(edge_w))
-    #Left edge
-    path.push('v -{}'.format(edge_w))
-    generate_toothing(3, path, False, depth, edge_w)
-    path.push('z')
+ 
+    def generate_edge(slot_widths, spacer_width, content_width, corner_toothing, edge_width, v_offset):
+        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+        if corner_toothing:
+            path.push('M 0 {}'.format(v_offset))
+            path.push('h {}'.format(edge_width))
+        else:
+            path.push('M {} {}'.format(edge_width, v_offset))
 
-    #Right piece
-    path_r = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+        width_left = content_width
+        for idx, slot in enumerate(slot_widths):
+            width_left -= slot
+            path.push('h {}'.format(slot))
+            if idx < len(slot_widths)-1 or width_left > spacer_width:
+                width_left -= spacer_width
+                path.push('v {}'.format(INDENT_DEPTH))
+                path.push('h {}'.format(spacer_width))
+                path.push('v -{}'.format(INDENT_DEPTH))
+
+        if width_left > 0:
+            print("[WARN] Edge width unused for slots: {} , extending by that much!".format(width_left))
+            path.push('h {}'.format(width_left))
+
+        if corner_toothing:
+            path.push('h {}'.format(edge_width))
+            #Right edge
+            generate_toothing(1, path, False, depth, edge_width)
+        else:
+            generate_toothing(1, path, True, depth, edge_width)
+        path.push('v {}'.format(edge_width))
+        #Bottom edge
+        
+        if corner_toothing:
+            path.push('h -{}'.format(edge_w))
+        generate_toothing(2, path, False, content_width, edge_width)
+
+        if corner_toothing:
+            path.push('h -{}'.format(edge_w))
+        #Left edge
+        path.push('v -{}'.format(edge_w))
+
+        if corner_toothing:
+            generate_toothing(3, path, False, depth, edge_width)
+        else:
+            generate_toothing(3, path, True, depth, edge_width)
+        path.push('z')
+        return path
+
+
+    content_width = trayspec['tray_width']-edge_w*2
+    content_height = trayspec['tray_height']-edge_w*2
+    #Top edge
+    horiz_slot_widths = list(map(lambda column: column['width'], trayspec['columns']))
+    paths = []
+    paths.append( generate_edge(
+        horiz_slot_widths, 
+        spacer_w, 
+        content_width, 
+        True, 
+        edge_w, 
+        0) )
+
+    #Right edge
+    def slots_from_column(column_slots):
+        def get_height(slot):
+            if 'height' in slot:
+                return slot['height']
+            return slot['min-height']
+
+        return list(map(get_height, column_slots))
+
+    slot_widths = slots_from_column(trayspec['columns'][-1]['slots'])
+    paths.append( generate_edge(
+        slot_widths, 
+        spacer_w, 
+        content_height, 
+        False, 
+        edge_w, 
+        (depth + 5)*1) )
     
-   #top edge
-    INDENT_DEPTH=10
-    path_r.push('M {} {}'.format(edge_w, trayspec['tray_depth']+10))
-    content_width = trayspec['tray_height'] - 2*edge_w
-    slots = trayspec['columns'][len(trayspec['columns'])-1]['slots']
-    print(slots)
-
-    width_left = content_width
-    for idx, slot in enumerate(slots):
-        height = slot['min-height']
-        if 'height' in slot:
-            height = slot['height']
-        print(slot)
-        path_r.push('h {}'.format(height))
-        width_left -= height
-        if idx < len(slots)-1 or width_left > spacer_w:
-            path_r.push('v {}'.format(INDENT_DEPTH))
-            path_r.push('h {}'.format(spacer_w))
-            path_r.push('v -{}'.format(INDENT_DEPTH))
-            width_left -= spacer_w
-    if width_left != 0:
-        print("Not enough slots content to match whole column")
-        path_r.push('h {}'.format(width_left))
-
-    #Right edge
-    generate_toothing(1, path_r, True, depth, edge_w)
-    path_r.push('v {}'.format(edge_w))
     #Bottom edge
-    generate_toothing(2, path_r, False, content_width, edge_w)
+    if sum(horiz_slot_widths) + spacer_w * (len(horiz_slot_widths)-1) < content_width:
+        print("Too little column content, appending empty")
+        horiz_slot_widths.append(content_width - sum(horiz_slot_widths) - spacer_w*len(horiz_slot_widths))
+
+    paths.append (generate_edge(
+        horiz_slot_widths[::-1],
+        spacer_w,
+        content_width,
+        True,
+        edge_w,
+        (depth + 5)*2) )
+
     #Left edge
-    path_r.push('v -{}'.format(edge_w))
-    generate_toothing(3, path_r, True, depth, edge_w)
-    path_r.push('z')
+    slot_widths = slots_from_column(trayspec['columns'][0]['slots'])
+    if sum(slot_widths) + spacer_w*(len(slot_widths)-1) < content_height:
+        print("Too little column content, appending empty")
+        slot_widths.append(content_height - sum(slot_widths) - spacer_w*(len(slot_widths)))
+    
+    paths.append(generate_edge(
+        slot_widths[::-1],
+        spacer_w,
+        content_height,
+        False,
+        edge_w,
+        (depth + 5)*3) )
 
-
-
-    return [path, path_r]
+    return paths
 
 
 def draw(dwg, trayspec):

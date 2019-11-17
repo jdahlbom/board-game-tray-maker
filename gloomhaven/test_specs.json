@@ -5,6 +5,11 @@
 			"width": 46,
 			"height": 36,
 			"thickness": 0.34
+		},
+		"theoretical-card-side": {
+			"width": 94,
+			"height": 36,
+			"thickness": 0.34
 		}
 	},
 	"name":"monster-cards",
@@ -50,21 +55,11 @@
 		],
 		[
 			{
-				"item": "mayday-minieuro-side",
+				"item": "theoretical-card-side",
 				"amount": 16
 			},
 			{
-				"item": "mayday-minieuro-side",
-				"amount": 8
-			}
-		],
-		[
-			{
-				"item": "mayday-minieuro-side",
-				"amount": 16
-			},
-			{
-				"item": "mayday-minieuro-side",
+				"item": "theoretical-card-side",
 				"amount": 8
 			}
 		]
