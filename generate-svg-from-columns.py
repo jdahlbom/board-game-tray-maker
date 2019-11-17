@@ -210,10 +210,7 @@ def generate_floor(dwg, trayspec, v_offset):
     return path
 
 
-def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer_width, v_offset):
-    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-        
-    path.push('M 0 {}'.format(v_offset))
+def generate_vert_spacer(path, indent_spaces, content_width, depth, edge_width, spacer_width):
     generate_slotted_top_edge(path, indent_spaces, spacer_width, content_width, True, edge_width) 
 
     path.push('v {}'.format(INDENT_DEPTH))
@@ -246,6 +243,30 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
     return path
 
 
+def generate_horiz_spacer(path, bottom_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
+    path.push('h {}'.format(l_edge_width))
+    path.push('h {}'.format(content_width))
+    path.push('h {}'.format(r_edge_width))
+
+    path.push('v {}'.format(INDENT_DEPTH))
+    path.push('h -{}'.format(r_edge_width))
+    path.push('v {}'.format(depth - INDENT_DEPTH))
+
+    #Bottom with indent slots
+    for idx, slot in enumerate(bottom_indents[::-1]):
+        path.push('h -{}'.format(slot))
+        if idx != len(bottom_indents)-1:
+            path.push('v -{}'.format(depth-INDENT_DEPTH))
+            path.push('h -{}'.format(spacer_width))
+            path.push('v {}'.format(depth-INDENT_DEPTH))
+
+    path.push('v -{}'.format(depth-INDENT_DEPTH))
+    path.push('h -{}'.format(l_edge_width))
+    path.push('v -{}'.format(INDENT_DEPTH))
+    path.push('z')
+    return path
+
+
 def draw_spacers(dwg, trayspec):
     columns = trayspec['columns']
     spacer_w = trayspec['spacer_width']
@@ -254,19 +275,16 @@ def draw_spacers(dwg, trayspec):
     content_width = trayspec['tray_height'] - 2 * edge_w
 
     paths = []
-    print("Spacer width: {}".format(spacer_w))
+    voffset_index = 0
     for idx, column in enumerate(columns[0:-1]):
         indent_gaps = []
         lslot = column['slots'].first
         rslot = columns[idx+1]['slots'].first
         ldist = 0
         rdist = 0
-        print("Columns {} and {}".format(idx, idx+1))
         while lslot is not column['slots'].last or rslot is not columns[idx+1]['slots'].last:
             lheight = lslot()['height']
             rheight = rslot()['height']
-
-            print("lheight: {}, rheight: {}, ldist: {}, rdist: {}".format(lheight, rheight, ldist, rdist))
 
             if ldist + lheight < rdist + rheight:
                 if ldist + lheight - rdist > 0.001:
@@ -278,8 +296,48 @@ def draw_spacers(dwg, trayspec):
                     indent_gaps.append(rdist + rheight - ldist)
                 rdist += rheight + spacer_w
                 rslot = rslot.next
-        print(indent_gaps)
-        paths.append( generate_vert_spacer(indent_gaps, content_width, depth, edge_w, spacer_w, (depth+5) * idx))
+        voffset_index = idx
+        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")  
+        path.push('M 0 {}'.format( (depth+5) * voffset_index))    
+        paths.append(generate_vert_spacer(path, indent_gaps, content_width, depth, edge_w, spacer_w))
+
+    # Horizontal spacer generation, they may span multiple columns.
+    # Spans should be identified by slots having 'column_span_id' field.
+    for idx, column in enumerate(columns):
+        slots = column['slots']
+        
+        l_edge_width = edge_w
+        if idx > 0:
+            l_edge_width = spacer_w
+        r_edge_width = spacer_w
+
+        for slot_index, slot in enumerate(slots):
+            if 'skip_this' in slot:
+                continue
+            voffset_index += 1
+            col_slots = [column['width']]
+            if 'column_span_id' in slot:
+                csid = slot['column_span_id']
+                for rcolumn in columns[idx+1:-1]:
+                    rs = list(filter(lambda rslot: 'column_span_id' in rslot 
+                        and rslot['column_span_id'] == csid, rcolumn['slots']))
+                    if len(rs):
+                        col_slots.append(rcolumn['width'])
+                        rs[0]['skip_this'] = True
+                        if rcolumn == columns[-1]:
+                            r_edge_width = edge_w  #H-spacer ends up connecting to tray edge.
+
+            path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none") 
+            path.push('M 0 {}'.format( (depth+5) * voffset_index))
+            paths.append(generate_horiz_spacer(
+                path, 
+                col_slots, 
+                sum(col_slots) + spacer_w * (len(col_slots)-1), 
+                spacer_w, 
+                l_edge_width, 
+                r_edge_width, 
+                depth))
+
     for path in paths:
         dwg.add(path)
 

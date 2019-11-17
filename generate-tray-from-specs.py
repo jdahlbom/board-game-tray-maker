@@ -2,6 +2,9 @@ import json
 from llist import dllist
 import sys
 from functools import reduce
+from random import choice
+from string import ascii_lowercase
+
 
 def compute_minimum_dimensions(item_types, item):
     single_item = item_types[item['item']]
@@ -32,6 +35,11 @@ def validate_fit(col_items, max_height, spacer_width, edge_width):
         raise Exception("Total content height [{}] is larger than tray height [{}]".format(total_content, max_height))
 
 
+def random_string(stringLength=10):
+    letters = ascii_lowercase
+    return ''.join(choice(letters) for i in range(stringLength))
+
+
 def position_spacers(left_col, right_col, spacer_width):
     fit_range = 1.0 + spacer_width
 
@@ -58,12 +66,19 @@ def position_spacers(left_col, right_col, spacer_width):
                     r_diff_to_lnext = lheight + lnext_height - rheight
                     if r_diff_to_lnext < fit_range:
                         extend_node_height(rnode, r_diff_to_lnext)
+                        # Annotate both nodes with shared ID
+                        if 'column_span_id' not in lnext():
+                            lnext()['column_span_id'] = random_string() 
+                        rnode()['column_span_id'] = lnext()['column_span_id']
                         return position_nodes(lnext.next, rnode.next, 0, 0)
                 r_extension = fit_range - height_diff
                 extend_node_height(rnode, r_extension)
                 return position_nodes(lnode.next, rnode.next, 0, fit_range)
             else:
                 extend_node_height(rnode, height_diff)
+                if 'column_span_id' not in lnode():
+                    lnode()['column_span_id'] = random_string() 
+                rnode()['column_span_id'] = lnode()['column_span_id']
                 return position_nodes(lnode.next, rnode.next, 0, 0)
 
         if lheight < rheight:
