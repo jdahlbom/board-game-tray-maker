@@ -8,11 +8,13 @@ from string import ascii_lowercase
 
 def compute_minimum_dimensions(item_types, item):
     single_item = item_types[item['item']]
+    elastic = False if 'elastic' not in item else True
     return {
         'min-width': single_item['width'],
         'min-depth': single_item['height'],
-        'min-height': single_item['thickness'] * item['amount']
-            }
+        'min-height': single_item['thickness'] * item['amount'],
+        'elastic': elastic
+        }
 
 
 def get_height(item):
@@ -121,11 +123,18 @@ def process_column_contents(specs, tray_height, spacer_width, edge_width):
     columns = []
 
     for col in specs['columns']:
-        col_items = dllist(list(map(lambda c_item: compute_minimum_dimensions(item_types, c_item), col)))
+        col_items = dllist(list(map(lambda c_item: compute_minimum_dimensions(item_types, c_item), col['slots'])))
         validate_fit(col_items, tray_height, spacer_width, edge_width)
+        unused_slot_space = tray_height - 2*edge_width - sum(map(lambda item: item['min-height'], col_items)) + spacer_width*(len(col_items)-1)
+        elastic_slots = list(filter(lambda item: item['elastic'], col_items))
+        if elastic_slots:
+            for eslot in elastic_slots:
+                eslot["height"] = eslot['min-height'] + unused_slot_space / len(elastic_slots)
+            
         columns.append({
             'slots': col_items,
-            'width': dllist_min_width(col_items)
+            'width': dllist_min_width(col_items),
+            'elastic': col['elastic']
             }) 
 
     for colidx in range(0, len(columns)-1):
@@ -148,6 +157,7 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
     depth = max(list(map(lambda column: max(list(map(lambda slot: slot['min-depth'], column['slots']))), columns)))
 
     tray_spec = {
+            'name': specs['name'],
             'tray_width': tray_width,
             'tray_height': tray_height,
             'tray_depth': depth,
@@ -158,8 +168,12 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
 
     total_used_width = 2 * edge_width + spacer_width * (len(tray_spec['columns'])-1) + sum(map(lambda c: c['width'], tray_spec['columns']))
     if total_used_width < tray_spec['tray_width'] - 0.01:
-        print("Content is {}mm less than available {}mm".format(tray_spec['tray_width']-total_used_width, tray_spec['tray_width']))
-        sys.exit(1)
+        missing_width = tray_spec['tray_width'] - total_used_width
+        print("Content is {}mm less than available {}mm".format(missing_width, tray_spec['tray_width']))
+        elastic_columns = list(filter(lambda col: col['elastic'], columns))
+        for ecolumn in elastic_columns:
+            ecolumn['width'] += missing_width / len(elastic_columns)
+        return tray_spec
     elif total_used_width > tray_spec['tray_width'] + 0.01 :
         print("Content is {}mm more than available {}mm".format(total_used_width-tray_spec['tray_width'], tray_spec['tray_width']))
         sys.exit(1)

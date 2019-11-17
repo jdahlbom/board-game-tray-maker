@@ -156,7 +156,7 @@ def generate_edges(dwg, trayspec):
     #Left edge
     slot_widths = slots_from_column(trayspec['columns'][0]['slots'])
     if sum(slot_widths) + spacer_w*(len(slot_widths)-1) < content_height:
-        print("Too little column content, appending empty")
+        print("Too little column content in column 0, appending empty")
         slot_widths.append(content_height - sum(slot_widths) - spacer_w*(len(slot_widths)))
     
     paths.append(generate_edge(
@@ -276,13 +276,15 @@ def draw_spacers(dwg, trayspec):
 
     paths = []
     voffset_index = 0
+    # Generate spacer indent slots for vertical dividing spacers: Need to observe both columns
     for idx, column in enumerate(columns[0:-1]):
         indent_gaps = []
         lslot = column['slots'].first
-        rslot = columns[idx+1]['slots'].first
+        rcolumn = columns[idx+1]
+        rslot = rcolumn['slots'].first
         ldist = 0
         rdist = 0
-        while lslot is not column['slots'].last or rslot is not columns[idx+1]['slots'].last:
+        while lslot is not column['slots'].last or rslot is not rcolumn['slots'].last:
             lheight = lslot()['height']
             rheight = rslot()['height']
 
@@ -310,6 +312,9 @@ def draw_spacers(dwg, trayspec):
         if idx > 0:
             l_edge_width = spacer_w
         r_edge_width = spacer_w
+        
+        if len(slots) == 1:
+            continue
 
         for slot_index, slot in enumerate(slots):
             if 'skip_this' in slot:
@@ -359,7 +364,7 @@ if __name__ == '__main__':
         print("Pass the specs file as the parameter")
         sys.exit(1)
 
-    tray_defs = generate_columns_from_spec(spacer_width=2, edge_width=3.5, specsfile=sys.argv[1])
+    tray_defs = generate_columns_from_spec(spacer_width=2.5, edge_width=3.5, specsfile=sys.argv[1])
     for column in tray_defs['columns']:
         for slot in column['slots']:
             if 'height' not in slot:
@@ -367,11 +372,12 @@ if __name__ == '__main__':
 
     edge_width = tray_defs['edge_width']
     spacer_width = tray_defs['spacer_width']
-    dwg = get_drawing('test-drawing-{}.svg'.format(edge_width))
+    tray_name = tray_defs['name']
+    dwg = get_drawing('{}-{}.svg'.format(tray_name, edge_width))
     draw_edges(dwg, tray_defs)
     finish(dwg)
 
-    dwg = get_drawing('test-drawing-{}.svg'.format(spacer_width))
+    dwg = get_drawing('{}-{}.svg'.format(tray_name, spacer_width))
     draw_spacers(dwg, tray_defs)
     finish(dwg)
 
