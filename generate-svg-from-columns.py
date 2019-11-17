@@ -5,6 +5,7 @@ exec(open('generate-tray-from-specs.py').read())
 
 STROKE = 0.1
 MIN_TOOTH_WIDTH = 10
+INDENT_DEPTH = 10
 
 def get_drawing(result_file_name, width='400mm', height='300mm'):
     return svgwrite.Drawing(result_file_name, height=height, width=width, viewBox=(0, 0, 400, 300))
@@ -54,40 +55,44 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
             path.push('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
 
 
+def generate_slotted_top_edge(path, slot_widths, spacer_width, content_width, corner_toothing, edge_width):
+    if corner_toothing:
+        path.push('h {}'.format(edge_width))
+
+    width_left = content_width
+    for idx, slot in enumerate(slot_widths):
+        width_left -= slot
+        path.push('h {}'.format(slot))
+        if idx < len(slot_widths)-1 or width_left > spacer_width:
+            width_left -= spacer_width
+            path.push('v {}'.format(INDENT_DEPTH))
+            path.push('h {}'.format(spacer_width))
+            path.push('v -{}'.format(INDENT_DEPTH))
+
+    if width_left > 0:
+        print("[WARN] Edge width unused for slots: {} , extending by that much!".format(width_left))
+        path.push('h {}'.format(width_left))
+
+    if corner_toothing:
+        path.push('h {}'.format(edge_width))
+ 
+
+
 def generate_edges(dwg, trayspec):
     spacer_w = trayspec['spacer_width']
     edge_w = trayspec['edge_width']
     depth = trayspec['tray_depth']
-    INDENT_DEPTH=10
  
     def generate_edge(slot_widths, spacer_width, content_width, corner_toothing, edge_width, v_offset):
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         if corner_toothing:
             path.push('M 0 {}'.format(v_offset))
-            path.push('h {}'.format(edge_width))
         else:
             path.push('M {} {}'.format(edge_width, v_offset))
 
-        width_left = content_width
-        for idx, slot in enumerate(slot_widths):
-            width_left -= slot
-            path.push('h {}'.format(slot))
-            if idx < len(slot_widths)-1 or width_left > spacer_width:
-                width_left -= spacer_width
-                path.push('v {}'.format(INDENT_DEPTH))
-                path.push('h {}'.format(spacer_width))
-                path.push('v -{}'.format(INDENT_DEPTH))
-
-        if width_left > 0:
-            print("[WARN] Edge width unused for slots: {} , extending by that much!".format(width_left))
-            path.push('h {}'.format(width_left))
-
-        if corner_toothing:
-            path.push('h {}'.format(edge_width))
-            #Right edge
-            generate_toothing(1, path, False, depth, edge_width)
-        else:
-            generate_toothing(1, path, True, depth, edge_width)
+        generate_slotted_top_edge(path, slot_widths, spacer_width, content_width, corner_toothing, edge_width)
+        #Right edge
+        generate_toothing(1, path, not corner_toothing, depth, edge_width)
         path.push('v {}'.format(edge_width))
         #Bottom edge
         
@@ -99,11 +104,7 @@ def generate_edges(dwg, trayspec):
             path.push('h -{}'.format(edge_w))
         #Left edge
         path.push('v -{}'.format(edge_w))
-
-        if corner_toothing:
-            generate_toothing(3, path, False, depth, edge_width)
-        else:
-            generate_toothing(3, path, True, depth, edge_width)
+        generate_toothing(3, path, not corner_toothing, depth, edge_width)
         path.push('z')
         return path
 
@@ -207,10 +208,83 @@ def generate_floor(dwg, trayspec, v_offset):
     generate_internal_holes(path, edge_w, v_offset+edge_w)
 
     return path
+
+
+def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer_width, v_offset):
+    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         
+    path.push('M 0 {}'.format(v_offset))
+    generate_slotted_top_edge(path, indent_spaces, spacer_width, content_width, True, edge_width) 
+
+    path.push('v {}'.format(INDENT_DEPTH))
+    path.push('h -{}'.format(edge_width))
+    path.push('v {}'.format(depth - INDENT_DEPTH))
+
+    def generate_floor_teeth(path, width):
+        hole_width = MIN_TOOTH_WIDTH
+        if width/hole_width < 3:
+            return
+
+        num_tooth = 1
+        if width/hole_width > 5:
+            num_tooth = 2
+
+        tooth_spacing = (width - num_tooth * hole_width) / (num_tooth + 1)
+
+        for tooth_idx in range(0, num_tooth):
+            path.push('h -{}'.format(tooth_spacing))
+            path.push('v {}'.format(edge_width))
+            path.push('h -{}'.format(hole_width))
+            path.push('v -{}'.format(edge_width))
+        path.push('h -{}'.format(tooth_spacing))
+
+    generate_floor_teeth(path, content_width)
+    path.push('v -{}'.format(depth - INDENT_DEPTH))
+    path.push('h -{}'.format(edge_width))
+    path.push('v -{}'.format(INDENT_DEPTH))
+    path.push('z')
+    return path
 
 
-def draw(dwg, trayspec):
+def draw_spacers(dwg, trayspec):
+    columns = trayspec['columns']
+    spacer_w = trayspec['spacer_width']
+    edge_w = trayspec['edge_width']
+    depth = trayspec['tray_depth']
+    content_width = trayspec['tray_height'] - 2 * edge_w
+
+    paths = []
+    print("Spacer width: {}".format(spacer_w))
+    for idx, column in enumerate(columns[0:-1]):
+        indent_gaps = []
+        lslot = column['slots'].first
+        rslot = columns[idx+1]['slots'].first
+        ldist = 0
+        rdist = 0
+        print("Columns {} and {}".format(idx, idx+1))
+        while lslot is not column['slots'].last or rslot is not columns[idx+1]['slots'].last:
+            lheight = lslot()['height']
+            rheight = rslot()['height']
+
+            print("lheight: {}, rheight: {}, ldist: {}, rdist: {}".format(lheight, rheight, ldist, rdist))
+
+            if ldist + lheight < rdist + rheight:
+                if ldist + lheight - rdist > 0.001:
+                    indent_gaps.append(ldist + lheight - rdist)
+                ldist += lheight + spacer_w
+                lslot = lslot.next
+            else:
+                if rdist + rheight - ldist > 0.001:
+                    indent_gaps.append(rdist + rheight - ldist)
+                rdist += rheight + spacer_w
+                rslot = rslot.next
+        print(indent_gaps)
+        paths.append( generate_vert_spacer(indent_gaps, content_width, depth, edge_w, spacer_w, (depth+5) * idx))
+    for path in paths:
+        dwg.add(path)
+
+
+def draw_edges(dwg, trayspec):
     paths = generate_edges(dwg, trayspec)
     paths.append(generate_floor(dwg, trayspec, (trayspec['tray_depth']+5)*4))
 
@@ -228,9 +302,19 @@ if __name__ == '__main__':
         sys.exit(1)
 
     tray_defs = generate_columns_from_spec(spacer_width=2, edge_width=3.5, specsfile=sys.argv[1])
+    for column in tray_defs['columns']:
+        for slot in column['slots']:
+            if 'height' not in slot:
+                slot['height'] = slot['min-height']
 
-    dwg = get_drawing('test-drawing.svg')
-    draw(dwg, tray_defs)
+    edge_width = tray_defs['edge_width']
+    spacer_width = tray_defs['spacer_width']
+    dwg = get_drawing('test-drawing-{}.svg'.format(edge_width))
+    draw_edges(dwg, tray_defs)
+    finish(dwg)
+
+    dwg = get_drawing('test-drawing-{}.svg'.format(spacer_width))
+    draw_spacers(dwg, tray_defs)
     finish(dwg)
 
 
