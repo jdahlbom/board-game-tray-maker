@@ -288,16 +288,30 @@ def draw_spacers(dwg, trayspec):
             lheight = lslot()['height']
             rheight = rslot()['height']
 
-            if ldist + lheight < rdist + rheight:
-                if ldist + lheight - rdist > 0.001:
-                    indent_gaps.append(ldist + lheight - rdist)
-                ldist += lheight + spacer_w
+            if ('col_span_id' in lslot() and 
+                'col_span_id' in rslot() and 
+                lslot()['col_span_id']==rslot()['col_span_id']):
+                ldist = 0
+                rdist = 0
+                indent_gaps.append(lheight)
                 lslot = lslot.next
-            else:
-                if rdist + rheight - ldist > 0.001:
-                    indent_gaps.append(rdist + rheight - ldist)
-                rdist += rheight + spacer_w
                 rslot = rslot.next
+            else:
+                if ldist + lheight < rdist + rheight:
+                    next_gap = lheight
+                    if ldist < rdist:
+                        next_gap = ldist + lheight - rdist
+                    indent_gaps.append(next_gap)
+                    ldist += lheight + spacer_w
+                    lslot = lslot.next
+                else:
+                    next_gap = rheight
+                    if rdist < ldist:
+                        next_gap = rdist + rheight - ldist
+                    indent_gaps.append(next_gap)
+                    rdist += rheight + spacer_w
+                    rslot = rslot.next
+
         voffset_index = idx
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")  
         path.push('M 0 {}'.format( (depth+5) * voffset_index))    

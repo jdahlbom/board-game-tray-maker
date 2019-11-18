@@ -49,44 +49,41 @@ def position_spacers(left_col, right_col, spacer_width):
         node.value['height'] = extension + get_height(node.value)
 
 
-    def position_nodes(lnode, rnode, lheight, rheight):
+    def position_nodes(lnode, rnode, left_height, right_height):
         if (not lnode) or (not rnode):
-            return 0
+            return
 
-        lheight += get_height(lnode.value)
-        rheight += get_height(rnode.value)
+        def set_col_span_id(lnode, rnode):
+            if 'column_span_id' not in lnode():
+                lnode()['column_span_id'] = random_string() 
+            rnode()['column_span_id'] = lnode()['column_span_id']
+ 
 
+        lheight = left_height + get_height(lnode.value)
+        rheight = right_height + get_height(rnode.value)
+
+        #Columns matching, link them and carry on
         if abs(lheight-rheight) < 0.001:
+            set_col_span_id(lnode, rnode) 
             return position_nodes(lnode.next, rnode.next, 0, 0)
 
         height_diff = abs(lheight-rheight)
+        #Slot endings are close to each other
         if height_diff < fit_range:
             if lheight < rheight:
-                lnext = lnode.next
-                if lnext:
-                    lnext_height = get_height(lnext.value) + spacer_width
-                    r_diff_to_lnext = lheight + lnext_height - rheight
-                    if r_diff_to_lnext < fit_range:
-                        extend_node_height(rnode, r_diff_to_lnext)
-                        # Annotate both nodes with shared ID
-                        if 'column_span_id' not in lnext():
-                            lnext()['column_span_id'] = random_string() 
-                        rnode()['column_span_id'] = lnext()['column_span_id']
-                        return position_nodes(lnext.next, rnode.next, 0, 0)
-                r_extension = fit_range - height_diff
-                extend_node_height(rnode, r_extension)
-                return position_nodes(lnode.next, rnode.next, 0, fit_range)
+                # Left node cannot be moved, because it might conflict with the next left column
+                # Extend right node to avoid partially overlapping spacers.
+                rnode()['min-height'] += height_diff - fit_range
+                return position_nodes(lnode.next, rnode, lheight + spacer_width, right_height)
             else:
                 extend_node_height(rnode, height_diff)
-                if 'column_span_id' not in lnode():
-                    lnode()['column_span_id'] = random_string() 
-                rnode()['column_span_id'] = lnode()['column_span_id']
+                set_col_span_id(lnode, rnode)
                 return position_nodes(lnode.next, rnode.next, 0, 0)
 
         if lheight < rheight:
-            return position_nodes(lnode.next, rnode, spacer_width + height_diff, 0)
+            return position_nodes(lnode.next, rnode, lheight + spacer_width, right_height)
         else:
-            return position_nodes(lnode, rnode.next, 0, spacer_width + height_diff)
+            return position_nodes(lnode, rnode.next, left_height, spacer_width + right_height)
 
     lnode = left_col.first
     rnode = right_col.first
