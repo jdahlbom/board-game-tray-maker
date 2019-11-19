@@ -243,9 +243,20 @@ def generate_vert_spacer(path, indent_spaces, content_width, depth, edge_width, 
     return path
 
 
-def generate_horiz_spacer(path, bottom_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
+def generate_horiz_spacer(path, bottom_indents, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
     path.push('h {}'.format(l_edge_width))
-    path.push('h {}'.format(content_width))
+    if len(list(filter(lambda spacer: spacer, spacer_indents))) > 0:
+        for idx, slot_width in enumerate(bottom_indents):
+            if spacer_indents[idx] > 0:
+                path.push('h {}'.format(bottom_indents[idx]/4))
+                cubic_sloped_indent(path, bottom_indents[idx]/2, bottom_indents[idx]/4.0, spacer_indents[idx]*depth)
+                path.push('h {}'.format(bottom_indents[idx]/4))
+            else:
+                path.push('h {}'.format(bottom_indents[idx]))
+            if idx < len(bottom_indents)-1:
+                path.push('h {}'.format(spacer_width))
+    else:
+        path.push('h {}'.format(content_width))
     path.push('h {}'.format(r_edge_width))
 
     path.push('v {}'.format(INDENT_DEPTH))
@@ -265,6 +276,30 @@ def generate_horiz_spacer(path, bottom_indents, content_width, spacer_width, l_e
     path.push('v -{}'.format(INDENT_DEPTH))
     path.push('z')
     return path
+
+
+def cubic_sloped_indent(path, top_width, bottom_width, depth):
+    def cubic_bezier_curve(corner1, corner2, end_point):
+        return "c {},{} {},{} {},{} ".format(
+                corner1[0], corner1[1], 
+                corner2[0], corner2[1],
+                end_point[0], end_point[1])
+    
+    # relative arc
+    slope_width = (top_width - bottom_width) / 2.0
+    slope_corner_offsetx = slope_width / 2.0
+    corner1 = ( slope_corner_offsetx, 0 )
+    corner2 = ( slope_width - slope_corner_offsetx, depth )
+    end_point = ( slope_width, depth )
+    down_slope_cmd = cubic_bezier_curve(corner1, corner2, end_point)
+    path.push(down_slope_cmd)
+    base_cmd = "h {} ".format(bottom_width)
+    path.push(base_cmd)
+    corner1 = ( slope_corner_offsetx, 0 )
+    corner2 = ( slope_width - slope_corner_offsetx, -depth )
+    end_point = ( slope_width, -depth )
+    up_slope_cmd = cubic_bezier_curve(corner1, corner2, end_point)
+    path.push(up_slope_cmd)
 
 
 def draw_spacers(dwg, trayspec):
@@ -335,6 +370,7 @@ def draw_spacers(dwg, trayspec):
                 continue
             voffset_index += 1
             col_slots = [column['width']]
+            spacer_indents = [slot['spacer-indent']]
             if 'column_span_id' in slot:
                 csid = slot['column_span_id']
                 for rcolumn in columns[idx+1:-1]:
@@ -342,6 +378,11 @@ def draw_spacers(dwg, trayspec):
                         and rslot['column_span_id'] == csid, rcolumn['slots']))
                     if len(rs):
                         col_slots.append(rcolumn['width'])
+                        if rs[0]['spacer-indent']:
+                            spacer_indents.append(rs[0]['spacer-indent'])
+                        else:
+                            spacer_indents.append(False)
+
                         rs[0]['skip_this'] = True
                         if rcolumn == columns[-1]:
                             r_edge_width = edge_w  #H-spacer ends up connecting to tray edge.
@@ -350,7 +391,8 @@ def draw_spacers(dwg, trayspec):
             path.push('M 0 {}'.format( (depth+5) * voffset_index))
             paths.append(generate_horiz_spacer(
                 path, 
-                col_slots, 
+                col_slots,
+                spacer_indents,
                 sum(col_slots) + spacer_w * (len(col_slots)-1), 
                 spacer_w, 
                 l_edge_width, 

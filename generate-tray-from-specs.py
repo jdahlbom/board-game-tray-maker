@@ -9,11 +9,13 @@ from string import ascii_lowercase
 def compute_minimum_dimensions(item_types, item):
     single_item = item_types[item['item']]
     elastic = False if 'elastic' not in item else True
+    spacer_indent = None if 'spacer-indent' not in item else item['spacer-indent']
     return {
         'min-width': single_item['width'],
         'min-depth': single_item['height'],
         'min-height': single_item['thickness'] * item['amount'],
-        'elastic': elastic
+        'elastic': elastic,
+        'spacer-indent': spacer_indent
         }
 
 
