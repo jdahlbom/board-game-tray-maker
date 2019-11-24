@@ -1,4 +1,3 @@
-from svgwrite import cm, mm
 import svgwrite
 
 exec(open('generate-tray-from-specs.py').read())
@@ -7,8 +6,14 @@ STROKE = 0.1
 MIN_TOOTH_WIDTH = 10
 INDENT_DEPTH = 10
 
-def get_drawing(result_file_name, width='400mm', height='300mm'):
-    return svgwrite.Drawing(result_file_name, height=height, width=width, viewBox=(0, 0, 400, 300))
+def mm(value):
+    return '{}mm'.format(value)
+
+def get_drawing(result_file_name, width='400', height='300'):
+    return svgwrite.Drawing(
+            filename=result_file_name, 
+            size=('{}mm'.format(width), '{}mm'.format(height)),
+            viewBox=(0, 0, width, height))
 
 def generate_toothing(direction, path, invert, length, tooth_depth):
     #Directions:
