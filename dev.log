@@ -5,3 +5,9 @@ to pixel scale. mm to pixel scale is 0.26458
 In inkscape 0.92 this can be corrected by setting File > Document Properties > Viewbox : Set the width
 and height to the specified Custom Size. Paths should have the right scale then.
 
+
+2018-08-21
+Did first cuts with 3.5mm, the accumulating nature of hole
+cutting broke when switched from 3 -> 3.5mm. Need to implement absolute
+positioning of holes.
+
