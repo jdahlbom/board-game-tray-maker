@@ -1,3 +1,13 @@
+2021-08-20
+Gloomhaven monster card tray worked out fine with the dynamic generation.
+There was a minor measurement error - probably kerf correction expanding the tab holes rather than making them smaller -
+which cause the tray parts to connect too loosely so that glue was required.
+
+Next up: Caverna trays, which need tray covers to prevent components getting loose in the boxes.
+First part is to implement a lid with corner tabs, next part is to use same/similar corner tabs to
+enable stackable trays which will function as "lids" for the lower trays.
+
+
 2019-11-24
 Turns out Inkscape viewer does not in fact us the specified viewBox but rather changes to viewbox
 to pixel scale. mm to pixel scale is 0.26458

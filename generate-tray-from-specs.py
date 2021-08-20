@@ -50,7 +50,6 @@ def position_spacers(left_col, right_col, spacer_width):
     def extend_node_height(node, extension):
         node.value['height'] = extension + get_height(node.value)
 
-
     def position_nodes(lnode, rnode, left_height, right_height):
         if (not lnode) or (not rnode):
             return
@@ -64,13 +63,13 @@ def position_spacers(left_col, right_col, spacer_width):
         lheight = left_height + get_height(lnode.value)
         rheight = right_height + get_height(rnode.value)
 
-        #Columns matching, link them and carry on
+        # Columns matching, link them and carry on
         if abs(lheight-rheight) < 0.001:
             set_col_span_id(lnode, rnode) 
             return position_nodes(lnode.next, rnode.next, 0, 0)
 
         height_diff = abs(lheight-rheight)
-        #Slot endings are close to each other
+        # Slot endings are close to each other
         if height_diff < fit_range:
             if lheight < rheight:
                 # Left node cannot be moved, because it might conflict with the next left column
