@@ -172,8 +172,12 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
         for ecolumn in elastic_columns:
             ecolumn['width'] += missing_width / len(elastic_columns)
         return tray_spec
-    elif total_used_width > tray_spec['tray_width'] + 0.01 :
+    elif total_used_width > tray_spec['tray_width'] + 0.01:
         print("Content is {}mm more than available {}mm".format(total_used_width-tray_spec['tray_width'], tray_spec['tray_width']))
+        print("")
+        print("--- How to fix it? ---")
+        print("Until this tool supports multi-tray generation, you need to split the content into")
+        print("several trays that fit in the outer box dmensions")
         sys.exit(1)
     else:
         return tray_spec
