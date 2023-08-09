@@ -1,7 +1,6 @@
 import json
 from llist import dllist
 import sys
-from functools import reduce
 from random import choice
 from string import ascii_lowercase
 
@@ -26,7 +25,7 @@ def get_height(item):
 
 
 def sum_of_heights(col_items):
-    return reduce(lambda add,aggr: add+aggr, map(get_height, col_items))
+    return sum(list([get_height(item) for item in col_items]))
 
 
 def validate_fit(col_items, max_height, spacer_width, edge_width):
@@ -50,7 +49,6 @@ def position_spacers(left_col, right_col, spacer_width):
     def extend_node_height(node, extension):
         node.value['height'] = extension + get_height(node.value)
 
-
     def position_nodes(lnode, rnode, left_height, right_height):
         if (not lnode) or (not rnode):
             return
@@ -64,13 +62,13 @@ def position_spacers(left_col, right_col, spacer_width):
         lheight = left_height + get_height(lnode.value)
         rheight = right_height + get_height(rnode.value)
 
-        #Columns matching, link them and carry on
+        # Columns matching, link them and carry on
         if abs(lheight-rheight) < 0.001:
             set_col_span_id(lnode, rnode) 
             return position_nodes(lnode.next, rnode.next, 0, 0)
 
         height_diff = abs(lheight-rheight)
-        #Slot endings are close to each other
+        # Slot endings are close to each other
         if height_diff < fit_range:
             if lheight < rheight:
                 # Left node cannot be moved, because it might conflict with the next left column
@@ -173,8 +171,12 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
         for ecolumn in elastic_columns:
             ecolumn['width'] += missing_width / len(elastic_columns)
         return tray_spec
-    elif total_used_width > tray_spec['tray_width'] + 0.01 :
+    elif total_used_width > tray_spec['tray_width'] + 0.01:
         print("Content is {}mm more than available {}mm".format(total_used_width-tray_spec['tray_width'], tray_spec['tray_width']))
+        print("")
+        print("--- How to fix it? ---")
+        print("Until this tool supports multi-tray generation, you need to split the content into")
+        print("several trays that fit in the outer box dmensions")
         sys.exit(1)
     else:
         return tray_spec

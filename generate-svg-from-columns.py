@@ -8,8 +8,10 @@ INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
 
+
 def mm(value):
     return '{}mm'.format(value)
+
 
 def get_drawing(result_file_name, width='400', height='300'):
     return svgwrite.Drawing(
@@ -56,7 +58,6 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
             value = 0-value
         return value
 
-
     if length / MIN_TOOTH_WIDTH < 3:
         raise Exception("Edge too short for toothing: {}".format(length))
 
@@ -98,7 +99,6 @@ def generate_slotted_top_edge(path, slot_widths, spacer_width, content_width, co
 
     if corner_toothing:
         path.push('h {}'.format(edge_width))
- 
 
 
 def generate_edges(dwg, trayspec):
