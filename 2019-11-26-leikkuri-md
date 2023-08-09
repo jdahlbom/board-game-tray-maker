@@ -1,0 +1,17 @@
+Epilog Fusion M2 laser cutter notes.
+
+- Illustrator imports plain SVG, but doesn't follow the millimeter scale,
+  seems to me it converts the units to 96 dpi pixels instead.
+
+- 1 inch = 25.4 mm
+- 96 dpi = 96 pixels / 1 inch = 96 pixels / 25.4 mm
+- Try correcting with scale 96/25.4 = 3.78
+
+- Width of full spacer item after 378% scaling: 172.288 mm
+- Expected value from tray height specification + kerf correction: 129.2 mm
+
+- Width of misscaled piece: 45.58 "mm"
+- Expected 129.2 mm
+- Corrective scale: 2.8345
+- Illustrator defaulted back to 72 DPI, for which the correction scale is 2.8345
+

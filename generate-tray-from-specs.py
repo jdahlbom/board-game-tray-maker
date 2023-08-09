@@ -1,7 +1,6 @@
 import json
 from llist import dllist
 import sys
-from functools import reduce
 from random import choice
 from string import ascii_lowercase
 
@@ -26,7 +25,7 @@ def get_height(item):
 
 
 def sum_of_heights(col_items):
-    return reduce(lambda add,aggr: add+aggr, map(get_height, col_items))
+    return sum(list([get_height(item) for item in col_items]))
 
 
 def validate_fit(col_items, max_height, spacer_width, edge_width):

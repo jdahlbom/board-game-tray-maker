@@ -4,6 +4,12 @@ Board game tray generator
 SVG generator script for generating board game trays from high level description
 of component sizes.
 
+Measurement dimensions
+======================
+In code I use dimensions *width*, *height* and *depth*. These are used as if I were looking
+at a game box / component tray from above: Depth dimension is the one depicting the up/down 
+measurement while width and height are horizontal directions.
+
 
 ACKNOWLEDGEMENTS
 ----------------

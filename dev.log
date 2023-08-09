@@ -1,3 +1,14 @@
+2023-08-09
+I have very little idea what I was doing last time I touched this - 2 years ago after the vacation,
+before last years huge personal mess.
+Right now I have Caverna pieces spread on the table and will try to create enough features
+to generate simple trays for Caverna, leaving most fancy ideas for later.
+
+I will want to have multi-tray configuration files to fill the material sheets without manual work.
+At the moment the generator works and while I don't remember precisely how, it 
+is still something I can build incrementally on.
+
+
 2021-08-20
 Gloomhaven monster card tray worked out fine with the dynamic generation.
 There was a minor measurement error - probably kerf correction expanding the tab holes rather than making them smaller -

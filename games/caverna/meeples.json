@@ -1,0 +1,54 @@
+{
+
+	"item-types": {
+		"three-meeples-two-high": {
+			"width": 45,
+			"height": 30,
+			"thickness": 15
+		},
+		"small-resources": {
+			"width": 40,
+			"height": 30,
+			"thickness": 50
+		},
+		"furnishing-tile": {
+			"width": 35,
+			"height": 35,
+			"thickness": 3
+		},
+		"two-wide-tile": {
+			"width": 70,
+			"height": 35,
+			"thickness": 3
+		}
+	},
+	"name":"caverna-meeples",
+	"description": "5 animal meeples, 4 resource meeples, 3 small resources",
+	"dimensions": {
+		"width": 79,
+		"height": 217
+	},
+	"columns":
+	[
+		{
+			"elastic": true,
+			"slots": [
+				{
+					"item": "two-wide-tile",
+					"amount": 30,
+					"label": "MINES"
+				},
+				{
+					"item": "two-wide-tile",
+					"amount": 30,
+					"label": "FENCES"
+				},
+				{
+					"item": "two-wide-tile",
+					"amount": 5,
+					"label": "RUBY MINES"
+				}
+			]
+		}
+	]
+}
