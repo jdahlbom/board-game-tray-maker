@@ -1,4 +1,5 @@
 import svgwrite
+import sys
 
 exec(open('generate-tray-from-specs.py').read())
 
@@ -13,7 +14,7 @@ def mm(value):
     return '{}mm'.format(value)
 
 
-def get_drawing(result_file_name, width='400', height='300'):
+def get_drawing(result_file_name, width, height):
     return svgwrite.Drawing(
             filename=result_file_name, 
             size=('{}mm'.format(width), '{}mm'.format(height)),
@@ -463,21 +464,33 @@ if __name__ == '__main__':
         print("Pass the specs file as the parameter")
         sys.exit(1)
 
-    tray_defs = generate_columns_from_spec(spacer_width=2.5, edge_width=3.5, specsfile=sys.argv[1])
-    for column in tray_defs['columns']:
-        for slot in column['slots']:
-            if 'height' not in slot:
-                slot['height'] = slot['min-height']
+    # TODO: Bring the material specifications from some external source at some point.
+    spacer_width=2.5
+    edge_width=3.5
+    spacer_material_width=400
+    spacer_material_height=300
+    edge_material_width=400
+    edge_material_height=300
 
-    edge_width = tray_defs['edge_width']
-    spacer_width = tray_defs['spacer_width']
-    tray_name = tray_defs['name']
-    dwg = get_drawing('{}-{}.svg'.format(tray_name, edge_width))
-    draw_edges(dwg, tray_defs)
-    finish(dwg)
+    specs = get_specification(sys.argv[1])
 
-    dwg = get_drawing('{}-{}.svg'.format(tray_name, spacer_width))
-    draw_spacers(dwg, tray_defs)
-    finish(dwg)
+    trays = generate_trays_from_spec(spacer_width, edge_width, specs)
+
+    for tray in trays:
+        for column in tray['columns']:
+            for slot in column['slots']:
+                if 'height' not in slot:
+                    slot['height'] = slot['min-height']
+
+        edge_width = tray['edge_width']
+        spacer_width = tray['spacer_width']
+        tray_name = tray['name']
+        dwg = get_drawing('{}-{}.svg'.format(tray_name, edge_width), edge_material_width, edge_material_height)
+        draw_edges(dwg, tray)
+        finish(dwg)
+
+        dwg = get_drawing('{}-{}.svg'.format(tray_name, spacer_width), spacer_material_width, spacer_material_height)
+        draw_spacers(dwg, tray)
+        finish(dwg)
 
 

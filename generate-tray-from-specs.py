@@ -14,7 +14,8 @@ def compute_minimum_dimensions(item_types, item):
         'min-depth': single_item['height'],
         'min-height': single_item['thickness'] * item['amount'],
         'elastic': elastic,
-        'spacer-indent': spacer_indent
+        'spacer-indent': spacer_indent,
+        'vertical_indent': single_item['needs_indent']
         }
 
 
@@ -43,6 +44,10 @@ def random_string(stringLength=10):
     return ''.join(choice(letters) for i in range(stringLength))
 
 
+# For multi-column trays the colums may have spacers in exact same spots - or close enough
+# to be moved to exact match. Then we can use multicolumn-spacers.
+# Or there might be just enough difference between spacers that they cannot coexist and
+# cannot be moved either. This should report an error.
 def position_spacers(left_col, right_col, spacer_width):
     fit_range = 1.0 + spacer_width
 
@@ -114,9 +119,7 @@ def dllist_min_width(slot_dllist):
     return min(widths)
 
 
-def process_column_contents(specs, tray_height, spacer_width, edge_width):
-    item_types = specs['item-types']
-
+def process_column_contents(specs, item_types, tray_height, spacer_width, edge_width):
     columns = []
 
     for col in specs['columns']:
@@ -140,17 +143,20 @@ def process_column_contents(specs, tray_height, spacer_width, edge_width):
     return columns
 
 
-def generate_columns_from_spec(spacer_width, edge_width, specsfile):
-    specs = {}
+def generate_trays_from_spec(spacer_width, edge_width, specs):
+    trays = specs['trays']
+    item_types = specs['item-types']
+    processed_trays = list([generate_columns_from_spec(spacer_width, edge_width, tray, item_types) for tray in trays])
+    return processed_trays
 
-    with open(specsfile) as specsfile:
-        specs = json.load(specsfile)
-        specsfile.close
+
+def generate_columns_from_spec(spacer_width, edge_width, tray_specs, item_types):
+    specs = tray_specs
 
     tray_width = specs['dimensions']['width']
     tray_height = specs['dimensions']['height']
 
-    columns = process_column_contents(specs, tray_height, spacer_width, edge_width)
+    columns = process_column_contents(specs, item_types, tray_height, spacer_width, edge_width)
     depth = max(list(map(lambda column: max(list(map(lambda slot: slot['min-depth'], column['slots']))), columns)))
 
     tray_spec = {
@@ -168,6 +174,9 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
         missing_width = tray_spec['tray_width'] - total_used_width
         print("Content is {}mm less than available {}mm".format(missing_width, tray_spec['tray_width']))
         elastic_columns = list(filter(lambda col: col['elastic'], columns))
+        if elastic_columns:
+            print("Expanding *elastic* columns' width")
+
         for ecolumn in elastic_columns:
             ecolumn['width'] += missing_width / len(elastic_columns)
         return tray_spec
@@ -181,3 +190,23 @@ def generate_columns_from_spec(spacer_width, edge_width, specsfile):
     else:
         return tray_spec
 
+
+def get_specification(specsfile):
+    specs = {}
+    with open(specsfile) as specsfile:
+        specs = json.load(specsfile)
+    specsfile.close
+
+    trays = specs['trays']
+    for tray in trays:
+        if not tray['dimensions']['width'] or not tray['dimensions']['height']:
+            print('Each tray has to have "dimensions" entry with "width" and "height"')
+            sys.exit(1)
+
+    tray_names = [tray['name'] for tray in trays]
+    for name in set(tray_names):
+        if tray_names.count(name) > 1:
+            print("Duplicate tray name: {}. Names are used as part of filenames, so no duplicates are allowed".format(name))
+            sys.exit(1)
+
+    return specs

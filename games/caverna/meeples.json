@@ -1,5 +1,4 @@
 {
-
 	"item-types": {
 		"three-meeples-two-high": {
 			"width": 45,
@@ -14,39 +13,45 @@
 		"furnishing-tile": {
 			"width": 35,
 			"height": 35,
-			"thickness": 3
+			"thickness": 3,
+			"needs_indent": true
 		},
 		"two-wide-tile": {
 			"width": 70,
 			"height": 35,
-			"thickness": 3
+			"thickness": 3,
+			"needs_indent": true
 		}
 	},
-	"name":"caverna-meeples",
-	"description": "5 animal meeples, 4 resource meeples, 3 small resources",
-	"dimensions": {
-		"width": 79,
-		"height": 217
-	},
-	"columns":
-	[
+	"trays": [
 		{
-			"elastic": true,
-			"slots": [
+			"name":"caverna-meeples",
+			"description": "2 sets of large tiles, 1 small set of small tiles set double wide",
+			"dimensions": {
+				"width": 79,
+				"height": 217
+			},
+			"columns":
+			[
 				{
-					"item": "two-wide-tile",
-					"amount": 30,
-					"label": "MINES"
-				},
-				{
-					"item": "two-wide-tile",
-					"amount": 30,
-					"label": "FENCES"
-				},
-				{
-					"item": "two-wide-tile",
-					"amount": 5,
-					"label": "RUBY MINES"
+					"elastic": true,
+					"slots": [
+						{
+							"item": "two-wide-tile",
+							"amount": 30,
+							"label": "MINES"
+						},
+						{
+							"item": "two-wide-tile",
+							"amount": 30,
+							"label": "FENCES"
+						},
+						{
+							"item": "two-wide-tile",
+							"amount": 5,
+							"label": "RUBY MINES"
+						}
+					]
 				}
 			]
 		}
