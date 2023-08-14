@@ -78,15 +78,18 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
             path.push('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
 
 
-def generate_slotted_top_edge(path, slot_widths, spacer_width, content_width, corner_toothing, edge_width):
+def generate_slotted_top_edge(path, slots, spacer_width, content_width, corner_toothing, edge_width):
     if corner_toothing:
         path.push('h {}'.format(edge_width))
 
     width_left = content_width
-    for idx, slot in enumerate(slot_widths):
-        width_left -= slot
-        path.push('h {}'.format(slot))
-        if idx < len(slot_widths)-1 or width_left > spacer_width:
+    for idx, slot in enumerate(slots):
+        width_left -= slot['width']
+        if slot['slot_properties']['needs_indent']:
+            path.push('h {}'.format(slot['width']))
+        else:
+            path.push('h {}'.format(slot['width']))
+        if idx < len(slots)-1 or width_left > spacer_width:
             width_left -= spacer_width
             path.push('h {}'.format(K_CORR))
             path.push('v {}'.format(INDENT_DEPTH - K_CORR))
@@ -107,7 +110,7 @@ def generate_edges(dwg, trayspec):
     edge_w = trayspec['edge_width']
     depth = trayspec['tray_depth']
  
-    def generate_edge(slot_widths, spacer_width, content_width, corner_toothing, edge_width, v_offset):
+    def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset):
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         if corner_toothing:
             path.push('M 0 {}'.format(v_offset))
@@ -115,7 +118,7 @@ def generate_edges(dwg, trayspec):
             path.push('M {} {}'.format(edge_width, v_offset))
 
         kerf_correct_corner(path, 0)
-        generate_slotted_top_edge(path, slot_widths, spacer_width, content_width, corner_toothing, edge_width)
+        generate_slotted_top_edge(path, slots, spacer_width, content_width, corner_toothing, edge_width)
         #Right edge
         kerf_correct_corner(path, 1)
         generate_toothing(1, path, not corner_toothing, depth, edge_width)
@@ -143,7 +146,7 @@ def generate_edges(dwg, trayspec):
     content_width = trayspec['tray_width']-edge_w*2
     content_height = trayspec['tray_height']-edge_w*2
     #Top edge
-    horiz_slot_widths = list(map(lambda column: column['width'], trayspec['columns']))
+    horiz_slot_widths = list(map(lambda column: {'width': column['width'], 'slot_properties': columns['slots'][0]}, trayspec['columns']))
     paths = []
     paths.append( generate_edge(
         horiz_slot_widths, 
@@ -160,7 +163,7 @@ def generate_edges(dwg, trayspec):
                 return slot['height']
             return slot['min-height']
 
-        return list(map(get_height, column_slots))
+        return list(map(lambda slot: {'width': get_height(slot), 'slot_properties': slot}, column_slots))
 
     slot_widths = slots_from_column(trayspec['columns'][-1]['slots'])
     paths.append( generate_edge(
