@@ -79,14 +79,22 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
 
 
 def generate_slotted_top_edge(path, slots, spacer_width, content_width, corner_toothing, edge_width):
+    def should_create_sloped_indent(slot, margin):
+        return 'needs_indent' in slot['slot_properties'] and \
+               slot['slot_properties']['needs_indent'] and \
+               slot['width'] > (30.0 + 2 * margin)
+
     if corner_toothing:
         path.push('h {}'.format(edge_width))
 
     width_left = content_width
     for idx, slot in enumerate(slots):
         width_left -= slot['width']
-        if slot['slot_properties']['needs_indent']:
-            path.push('h {}'.format(slot['width']))
+        margin = 10.0
+        if should_create_sloped_indent(slot, margin):
+            path.push('h {}'.format(margin))
+            cubic_sloped_indent(path, slot['width']-2*margin, slot['width']-20.0-2*margin, 10.0)
+            path.push('h {}'.format(margin))
         else:
             path.push('h {}'.format(slot['width']))
         if idx < len(slots)-1 or width_left > spacer_width:
@@ -146,10 +154,10 @@ def generate_edges(dwg, trayspec):
     content_width = trayspec['tray_width']-edge_w*2
     content_height = trayspec['tray_height']-edge_w*2
     #Top edge
-    horiz_slot_widths = list(map(lambda column: {'width': column['width'], 'slot_properties': columns['slots'][0]}, trayspec['columns']))
+    horiz_slots_and_widths = list(map(lambda column: {'width': column['width'], 'slot_properties': column['slots'][0]}, trayspec['columns']))
     paths = []
     paths.append( generate_edge(
-        horiz_slot_widths, 
+        horiz_slots_and_widths,
         spacer_w, 
         content_width, 
         True, 
@@ -175,12 +183,14 @@ def generate_edges(dwg, trayspec):
         (depth + 5)*1) )
     
     #Bottom edge
-    if sum(horiz_slot_widths) + spacer_w * (len(horiz_slot_widths)-1) < content_width:
+    horiz_slot_width_sum = sum([slot['width'] for slot in horiz_slots_and_widths])
+    if horiz_slot_width_sum + spacer_w * (len(horiz_slots_and_widths)-1) < content_width:
         print("Too little column content, appending empty")
-        horiz_slot_widths.append(content_width - sum(horiz_slot_widths) - spacer_w*len(horiz_slot_widths))
+        empty_space = content_width - sum(horiz_slot_width_sum) - spacer_w*len(horiz_slots_and_widths)
+        horiz_slots_and_widths.append({'width': empty_space, 'slot_properties': {}})
 
     paths.append (generate_edge(
-        horiz_slot_widths[::-1],
+        horiz_slots_and_widths[::-1],
         spacer_w,
         content_width,
         True,
@@ -188,13 +198,15 @@ def generate_edges(dwg, trayspec):
         (depth + 5)*2) )
 
     #Left edge
-    slot_widths = slots_from_column(trayspec['columns'][0]['slots'])
-    if sum(slot_widths) + spacer_w*(len(slot_widths)-1) < content_height:
+    slots = slots_from_column(trayspec['columns'][0]['slots'])
+    slot_width_sum = sum([slot['width'] for slot in slots])
+    if slot_width_sum + spacer_w*(len(slots)-1) < content_height:
         print("Too little column content in column 0, appending empty")
-        slot_widths.append(content_height - sum(slot_widths) - spacer_w*(len(slot_widths)))
+        empty_space = content_height - slot_width_sum - spacer_w*(len(slots))
+        slots.append( {'width': empty_space, 'slot_properties': {}})
     
     paths.append(generate_edge(
-        slot_widths[::-1],
+        slots[::-1],
         spacer_w,
         content_height,
         False,
