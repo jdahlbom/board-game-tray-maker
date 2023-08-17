@@ -3,12 +3,14 @@
 		"three-meeples-two-high": {
 			"width": 45,
 			"height": 30,
-			"thickness": 15
+			"thickness": 15,
+			"forbid_indent": true
 		},
 		"small-resources": {
 			"width": 40,
 			"height": 30,
-			"thickness": 50
+			"thickness": 50,
+			"forbid_indent": true
 		},
 		"furnishing-tile": {
 			"width": 35,
