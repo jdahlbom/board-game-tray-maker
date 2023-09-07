@@ -425,6 +425,22 @@ def draw_spacers(dwg, trayspec):
     # Returns:
     # spacer_paths : Array of paths to draw
     def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
+        def determine_if_should_indent(slot_index, slots):
+            if len(slots) <= slot_index:
+                print("Should not run determine_if_should_indent for the last slot in column")
+                return False
+
+            slot_above = slots[slot_index]
+            slot_below = slots[slot_index+1]
+
+            needs_indent_a = 'needs_indent' in slot_above and slot_above['needs_indent']
+            needs_indent_b = 'needs_indent' in slot_below and slot_below['needs_indent']
+            forbid_indent_a = 'forbid_indent' in slot_above and slot_above['forbid_indent']
+            forbid_indent_b = 'forbid_indent' in slot_below and slot_below['forbid_indent']
+
+            return (needs_indent_a or needs_indent_b) and not (forbid_indent_a or forbid_indent_b)
+
+
         spacer_paths = []
         for idx, column in enumerate(columns):
             slots = column['slots']
@@ -442,7 +458,7 @@ def draw_spacers(dwg, trayspec):
                     continue
                 voffset_index += 1
                 col_slots = [column['width']]
-                spacer_indents = [slot['spacer-indent']]
+                spacer_indents = [determine_if_should_indent(slot_index, slots)]
                 if 'column_span_id' in slot:
                     csid = slot['column_span_id']
                     for rcolumn in columns[idx+1:-1]:
@@ -450,12 +466,9 @@ def draw_spacers(dwg, trayspec):
                             and rslot['column_span_id'] == csid, rcolumn['slots']))
                         if len(right_slots) > 0:
                             r_slot = right_slots[0]
-                            slot_index = right_slots.index(right_slots[0])
+                            rslot_index = rcolumn['slots'].index(r_slot)
                             col_slots.append(rcolumn['width'])
-                            if r_slot['spacer-indent']:
-                                spacer_indents.append(r_slot['spacer-indent'])
-                            else:
-                                spacer_indents.append(False)
+                            spacer_indents.append(determine_if_should_indent(rslot_index, rcolumn['slots']))
 
                             r_slot['skip_this'] = True
                             if rcolumn == columns[-1]:
