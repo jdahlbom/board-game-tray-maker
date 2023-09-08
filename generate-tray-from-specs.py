@@ -15,8 +15,8 @@ def compute_minimum_dimensions(item_types, item):
         'min-height': single_item['thickness'] * item['amount'],
         'elastic': elastic,
         'spacer-indent': spacer_indent,
-        'needs_indent': single_item['needs_indent'],
-        'forbid_intent': single_item['forbid_indent']
+        'needs_indent': 'needs_indent' in single_item and single_item['needs_indent'],
+        'forbid_intent': 'forbid_indent' in single_item and single_item['forbid_indent']
         }
 
 

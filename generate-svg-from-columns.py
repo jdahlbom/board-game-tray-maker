@@ -78,39 +78,42 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
             path.push('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
 
 
-def generate_slotted_top_edge(path, slots, spacer_width, content_width, corner_toothing, edge_width):
+def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width):
     def should_create_sloped_indent(slot, margin):
         return 'needs_indent' in slot['slot_properties'] and \
                slot['slot_properties']['needs_indent'] and \
                slot['width'] > (30.0 + 2 * margin)
 
+    path_parts = []
     if corner_toothing:
-        path.push('h {}'.format(edge_width))
+        path_parts.append('h {}'.format(edge_width))
 
     width_left = content_width
     for idx, slot in enumerate(slots):
         width_left -= slot['width']
         margin = 10.0
         if should_create_sloped_indent(slot, margin):
-            path.push('h {}'.format(margin))
-            cubic_sloped_indent(path, slot['width']-2*margin, slot['width']-20.0-2*margin, 10.0)
-            path.push('h {}'.format(margin))
+            path_parts.append('h {}'.format(margin))
+            path_parts = path_parts + cubic_sloped_indent(slot['width']-2*margin, slot['width']-20.0-2*margin, 10.0)
+            path_parts.append('h {}'.format(margin))
         else:
-            path.push('h {}'.format(slot['width']))
+            path_parts.append('h {}'.format(slot['width']))
         if idx < len(slots)-1 or width_left > spacer_width:
             width_left -= spacer_width
-            path.push('h {}'.format(K_CORR))
-            path.push('v {}'.format(INDENT_DEPTH - K_CORR))
-            path.push('h {}'.format(spacer_width - K_CORR*2))
-            path.push('v -{}'.format(INDENT_DEPTH - K_CORR))
-            path.push('h {}'.format(K_CORR))
+            path_parts.append('h {}'.format(K_CORR))
+            path_parts.append('v {}'.format(INDENT_DEPTH - K_CORR))
+            path_parts.append('h {}'.format(spacer_width - K_CORR*2))
+            path_parts.append('v -{}'.format(INDENT_DEPTH - K_CORR))
+            path_parts.append('h {}'.format(K_CORR))
 
     if width_left > 0:
         print("[WARN] Edge width unused for slots: {} , extending by that much!".format(width_left))
-        path.push('h {}'.format(width_left))
+        path_parts.append('h {}'.format(width_left))
 
     if corner_toothing:
-        path.push('h {}'.format(edge_width))
+        path_parts.append('h {}'.format(edge_width))
+
+    return path_parts
 
 
 def generate_edges(dwg, trayspec):
@@ -126,7 +129,9 @@ def generate_edges(dwg, trayspec):
             path.push('M {} {}'.format(edge_width, v_offset))
 
         kerf_correct_corner(path, 0)
-        generate_slotted_top_edge(path, slots, spacer_width, content_width, corner_toothing, edge_width)
+        path_parts = generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width)
+        for part in path_parts:
+            path.push(part)
         #Right edge
         kerf_correct_corner(path, 1)
         generate_toothing(1, path, not corner_toothing, depth, edge_width)
@@ -189,13 +194,13 @@ def generate_edges(dwg, trayspec):
         empty_space = content_width - sum(horiz_slot_width_sum) - spacer_w*len(horiz_slots_and_widths)
         horiz_slots_and_widths.append({'width': empty_space, 'slot_properties': {}})
 
-    paths.append (generate_edge(
+    paths.append(generate_edge(
         horiz_slots_and_widths[::-1],
         spacer_w,
         content_width,
         True,
         edge_w,
-        (depth + 5)*2) )
+        (depth + 5)*2))
 
     #Left edge
     slots = slots_from_column(trayspec['columns'][0]['slots'])
@@ -261,17 +266,19 @@ def generate_floor(dwg, trayspec, v_offset):
     return path
 
 
-def generate_vert_spacer(path, indent_spaces, content_width, depth, edge_width, spacer_width):
-    kerf_correct_corner(path, 0)
-    generate_slotted_top_edge(path, indent_spaces, spacer_width, content_width, True, edge_width) 
-    kerf_correct_corner(path, 1) 
+def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer_width):
+    path_parts = []
+    kerf_correct_corner(path_parts, 0)
+    generate_slotted_top_edge(path_parts, indent_spaces, spacer_width, content_width, True, edge_width)
+    kerf_correct_corner(path_parts, 1)
 
-    path.push('v {}'.format(INDENT_DEPTH))
-    kerf_correct_corner(path, 2)
-    path.push('h -{}'.format(edge_width))
-    path.push('v {}'.format(depth - INDENT_DEPTH))
+    path_parts.append('v {}'.format(INDENT_DEPTH))
+    kerf_correct_corner(path_parts, 2)
+    path_parts.append('h -{}'.format(edge_width))
+    path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
-    def generate_floor_teeth(path, width):
+    def generate_floor_teeth(width):
+        path_elems = []
         hole_width = MIN_TOOTH_WIDTH
         if width/hole_width < 3:
             return
@@ -284,66 +291,74 @@ def generate_vert_spacer(path, indent_spaces, content_width, depth, edge_width, 
 
         for tooth_idx in range(0, num_tooth):
             if tooth_idx == 0:
-                path.push('h -{}'.format(tooth_spacing - K_CORR))
+                path_elems.push('h -{}'.format(tooth_spacing - K_CORR))
             else:
-                path.push('h -{}'.format(tooth_spacing - 2*K_CORR))
-            path.push('v {}'.format(edge_width + K_CORR))
-            path.push('h -{}'.format(hole_width + K_CORR*2))
-            path.push('v -{}'.format(edge_width + K_CORR))
-        path.push('h -{}'.format(tooth_spacing - K_CORR))
+                path_elems.push('h -{}'.format(tooth_spacing - 2*K_CORR))
+            path_elems.push('v {}'.format(edge_width + K_CORR))
+            path_elems.push('h -{}'.format(hole_width + K_CORR*2))
+            path_elems.push('v -{}'.format(edge_width + K_CORR))
+        path_elems.push('h -{}'.format(tooth_spacing - K_CORR))
+        return path_elems
 
-    generate_floor_teeth(path, content_width)
-    kerf_correct_corner(path, 3)
-    path.push('v -{}'.format(depth - INDENT_DEPTH))
-    path.push('h -{}'.format(edge_width))
-    path.push('v -{}'.format(INDENT_DEPTH + K_CORR))
-    kerf_correct_corner(path, 4)
-    path.push('z')
-    return path
+    path_parts = path_parts + generate_floor_teeth(content_width)
+    kerf_correct_corner(path_parts, 3)
+    path_parts.append('v -{}'.format(depth - INDENT_DEPTH))
+    path_parts.append('h -{}'.format(edge_width))
+    path_parts.append('v -{}'.format(INDENT_DEPTH + K_CORR))
+    kerf_correct_corner(path_parts, 4)
+    path_parts.append('z')
+    return path_parts
 
 
-def generate_horiz_spacer(path, bottom_indents, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
-    path.push('h {}'.format(l_edge_width + K_CORR))
+# Generates SVG string path parts to draw a single horizontal spacer.
+# Horizontal spacer may span multiple columns.
+# This function is not aware of the column specifications, merely the drawing element inputs
+# Returns: Array of SVG path strings.
+def generate_horiz_spacer(bottom_indents, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
+    path_parts = []
+    path_parts.append('h {}'.format(l_edge_width + K_CORR))
     if len(list(filter(lambda spacer: spacer, spacer_indents))) > 0:
         for idx, slot_width in enumerate(bottom_indents):
             if spacer_indents[idx] > 0:
-                path.push('h {}'.format(bottom_indents[idx]/4))
-                cubic_sloped_indent(path, bottom_indents[idx]/2, bottom_indents[idx]/4.0, spacer_indents[idx]*depth)
-                path.push('h {}'.format(bottom_indents[idx]/4))
+                path_parts.append('h {}'.format(bottom_indents[idx]/4))
+                path_parts = path_parts + cubic_sloped_indent(bottom_indents[idx]/2, bottom_indents[idx]/4.0, spacer_indents[idx]*depth)
+                path_parts.append('h {}'.format(bottom_indents[idx]/4))
             else:
-                path.push('h {}'.format(bottom_indents[idx]))
+                path_parts.append('h {}'.format(bottom_indents[idx]))
             if idx < len(bottom_indents)-1:
-                path.push('h {}'.format(spacer_width))
+                path_parts.append('h {}'.format(spacer_width))
     else:
-        path.push('h {}'.format(content_width))
-    path.push('h {}'.format(r_edge_width + K_CORR))
+        path_parts.append('h {}'.format(content_width))
+    path_parts.append('h {}'.format(r_edge_width + K_CORR))
 
-    path.push('v {}'.format(INDENT_DEPTH + K_CORR*2))
-    path.push('h -{}'.format(r_edge_width))
-    path.push('v {}'.format(depth - INDENT_DEPTH))
+    path_parts.append('v {}'.format(INDENT_DEPTH + K_CORR*2))
+    path_parts.append('h -{}'.format(r_edge_width))
+    path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
     #Bottom with indent slots
     for idx, slot in enumerate(bottom_indents[::-1]):
-        path.push('h -{}'.format(slot + K_CORR*2))
+        path_parts.append('h -{}'.format(slot + K_CORR*2))
         if idx != len(bottom_indents)-1:
-            path.push('v -{}'.format(depth-INDENT_DEPTH - K_CORR))
-            path.push('h -{}'.format(spacer_width - K_CORR*2))
-            path.push('v {}'.format(depth-INDENT_DEPTH - K_CORR))
+            path_parts.append('v -{}'.format(depth-INDENT_DEPTH - K_CORR))
+            path_parts.append('h -{}'.format(spacer_width - K_CORR*2))
+            path_parts.append('v {}'.format(depth-INDENT_DEPTH - K_CORR))
 
-    path.push('v -{}'.format(depth-INDENT_DEPTH))
-    path.push('h -{}'.format(l_edge_width))
-    path.push('v -{}'.format(INDENT_DEPTH + K_CORR*2))
-    path.push('z')
-    return path
+    path_parts.append('v -{}'.format(depth-INDENT_DEPTH))
+    path_parts.append('h -{}'.format(l_edge_width))
+    path_parts.append('v -{}'.format(INDENT_DEPTH + K_CORR*2))
+    path_parts.append('z')
+    return path_parts
 
 
-def cubic_sloped_indent(path, top_width, bottom_width, depth):
+def cubic_sloped_indent(top_width, bottom_width, depth):
     def cubic_bezier_curve(corner1, corner2, end_point):
         return "c {},{} {},{} {},{} ".format(
                 corner1[0], corner1[1], 
                 corner2[0], corner2[1],
                 end_point[0], end_point[1])
-    
+
+    path_parts = []
+
     # relative arc
     slope_width = (top_width - bottom_width) / 2.0
     slope_corner_offsetx = slope_width / 2.0
@@ -351,14 +366,15 @@ def cubic_sloped_indent(path, top_width, bottom_width, depth):
     corner2 = ( slope_width - slope_corner_offsetx, depth )
     end_point = ( slope_width, depth )
     down_slope_cmd = cubic_bezier_curve(corner1, corner2, end_point)
-    path.push(down_slope_cmd)
+    path_parts.append(down_slope_cmd)
     base_cmd = "h {} ".format(bottom_width)
-    path.push(base_cmd)
+    path_parts.append(base_cmd)
     corner1 = ( slope_corner_offsetx, 0 )
     corner2 = ( slope_width - slope_corner_offsetx, -depth )
     end_point = ( slope_width, -depth )
     up_slope_cmd = cubic_bezier_curve(corner1, corner2, end_point)
-    path.push(up_slope_cmd)
+    path_parts.append(up_slope_cmd)
+    return path_parts
 
 
 def draw_spacers(dwg, trayspec):
@@ -369,7 +385,6 @@ def draw_spacers(dwg, trayspec):
     content_width = trayspec['tray_height'] - 2 * edge_w
 
     paths = []
-    voffset_index = 0
 
     # Generate spacer indent slots for vertical dividing spacers: Need to observe both columns
     for idx, column in enumerate(columns[0:-1]):
@@ -407,9 +422,6 @@ def draw_spacers(dwg, trayspec):
                     rdist += rheight + spacer_w
                     rslot = rslot.next
 
-        voffset_index = idx
-        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")  
-        path.push('M 0 {}'.format( (depth+5) * voffset_index))    
         paths.append(generate_vert_spacer(path, indent_gaps, content_width, depth, edge_w, spacer_w))
 
     # Horizontal spacer generation, they may span multiple columns.
@@ -426,7 +438,7 @@ def draw_spacers(dwg, trayspec):
     # spacer_paths : Array of paths to draw
     def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
         def determine_if_should_indent(slot_index, slots):
-            if len(slots) <= slot_index:
+            if len(slots)-1 <= slot_index:
                 print("Should not run determine_if_should_indent for the last slot in column")
                 return False
 
@@ -456,7 +468,6 @@ def draw_spacers(dwg, trayspec):
             for slot_index, slot in enumerate(slots):
                 if 'skip_this' in slot:
                     continue
-                voffset_index += 1
                 col_slots = [column['width']]
                 spacer_indents = [determine_if_should_indent(slot_index, slots)]
                 if 'column_span_id' in slot:
@@ -474,10 +485,7 @@ def draw_spacers(dwg, trayspec):
                             if rcolumn == columns[-1]:
                                 r_edge_width = edge_w  #H-spacer ends up connecting to tray edge.
 
-                path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-                path.push('M 0 {}'.format( (depth+5) * voffset_index))
                 spacer_paths.append(generate_horiz_spacer(
-                    path,
                     col_slots,
                     spacer_indents,
                     sum(col_slots) + spacer_w * (len(col_slots)-1),
@@ -489,8 +497,14 @@ def draw_spacers(dwg, trayspec):
 
     horiz_paths = generate_horizontal_spacers(columns, edge_w, spacer_w, depth)
 
-    for path in (paths + horiz_paths):
-        dwg.add(path)
+    # Loops through an array of arrays of string type svg path parts, composes SVG paths out of them
+    # This enables late absolute positioning of elements.
+    for path_index, path_parts in enumerate(paths + horiz_paths):
+        parts = ['M 0 {}'.format( (depth+5) * path_index)] + path_parts
+        element_path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+        for part in parts:
+            element_path.push(part)
+        dwg.add(element_path)
 
 
 def draw_edges(dwg, trayspec):

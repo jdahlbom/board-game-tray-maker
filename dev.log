@@ -1,3 +1,15 @@
+2023-09-08
+I refactored the most of ht epath generation to use string arrays rather than creating the SVG objects
+directly.
+This allows better debugging and positioning of elements after first creating all of them, possibly also
+using rotation and better packing algorithms. It also makes the path part computing functions more functional
+when they do not mutate the inputs.
+
+LESSON LEARNED: Paths must always have a absolute starting position set by "M x y"
+- Spacers now support indents, but the last slot index handling is not quite clear.
+- Empty column height handling is yet to be done.
+
+
 2023-08-17
 The tray outline indentations seem to work no - visual validation and laser cutting should be
 done to check that measurements are correct.
