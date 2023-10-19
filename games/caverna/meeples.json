@@ -1,9 +1,16 @@
 {
+	"comment": "Caverna game box has approximately 216 mm x 305 mm x 70 mm of usable internal space",
 	"item-types": {
-		"three-meeples-two-high": {
-			"width": 45,
-			"height": 30,
-			"thickness": 15,
+		"two-high-cow-meeples": {
+			"width": 100,
+			"height": 25,
+			"thickness": 63,
+			"forbid_indent": true
+		},
+		"two-high-non-cow-meeples": {
+			"width": 100,
+			"height": 25,
+			"thickness": 46,
 			"forbid_indent": true
 		},
 		"small-resources": {
@@ -13,25 +20,25 @@
 			"forbid_indent": true
 		},
 		"furnishing-tile": {
-			"width": 35,
-			"height": 35,
-			"thickness": 3,
+			"width": 38,
+			"height": 38,
+			"thickness": 2.5,
 			"needs_indent": true
 		},
 		"two-wide-tile": {
 			"width": 70,
-			"height": 35,
-			"thickness": 3,
+			"height": 38,
+			"thickness": 2.5,
 			"needs_indent": true
 		}
 	},
 	"trays": [
 		{
-			"name":"caverna-meeples",
+			"name":"mines-and-something-else",
 			"description": "2 sets of large tiles, 1 small set of small tiles set double wide",
 			"dimensions": {
 				"width": 79,
-				"height": 217
+				"height": 216
 			},
 			"columns":
 			[
@@ -41,17 +48,111 @@
 						{
 							"item": "two-wide-tile",
 							"amount": 30,
-							"label": "MINES"
+							"label": "MINES",
+							"elastic": true
 						},
 						{
 							"item": "two-wide-tile",
-							"amount": 30,
-							"label": "FENCES"
+							"amount": 8,
+							"label": "SMALL FENCES",
+							"elastic": true
 						},
 						{
 							"item": "two-wide-tile",
-							"amount": 5,
-							"label": "RUBY MINES"
+							"amount": 40,
+							"label": "FIELDS_AND_PASTURES",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name":"farm-animals",
+			"description": "small resource tiles, lot of container trays, needs a slope at bottomt to get stuff out",
+			"dimensions": {
+				"width": 107,
+				"height": 216
+			},
+			"columns":
+			[
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "two-high-cow-meeples",
+							"amount": 1,
+							"label": "COW"
+						},
+						{
+							"item": "two-high-non-cow-meeples",
+							"amount": 1,
+							"label": "BOAR"
+						},
+						{
+							"item": "two-high-non-cow-meeples",
+							"amount": 1,
+							"label": "SHEEP"
+						},
+						{
+							"item": "two-high-non-cow-meeples",
+							"amount": 1,
+							"label": "DONKEY",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name":"vegetables-and-materials",
+			"description": "small resource tiles, lot of container trays",
+			"dimensions": {
+				"width": 107,
+				"height": 216
+			},
+			"columns":
+			[
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "two-high-cow-meeples",
+							"amount": 1,
+							"label": "WOOD"
+						},
+						{
+							"item": "two-high-cow-meeples",
+							"amount": 1,
+							"label": "GRAIN"
+						},
+						{
+							"item": "two-high-non-cow-meeples",
+							"amount": 1,
+							"label": "PUMPKIN",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name":"stone-and-precious",
+			"description": "small resource tiles, lot of container trays",
+			"dimensions": {
+				"width": 107,
+				"height": 216
+			},
+			"columns":
+			[
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "two-high-non-cow-meeples",
+							"amount": 1,
+							"label": "STONE",
+							"elastic": true
 						}
 					]
 				}

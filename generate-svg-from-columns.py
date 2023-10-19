@@ -4,7 +4,7 @@ import sys
 exec(open('generate-tray-from-specs.py').read())
 
 STROKE = 0.1
-MIN_TOOTH_WIDTH = 10
+MIN_TOOTH_WIDTH = 8
 INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
@@ -67,6 +67,8 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
         divisions -= 1
     if divisions > 9:
         divisions = 9
+    if divisions == 1:
+        divisions = 3
     tooth_width = length / divisions
 
     for idx in range(0, divisions):
@@ -124,9 +126,9 @@ def generate_edges(dwg, trayspec):
     def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset):
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         if corner_toothing:
-            path.push('M 0 {}'.format(v_offset))
+            path.push('M 1 {}'.format(v_offset))
         else:
-            path.push('M {} {}'.format(edge_width, v_offset))
+            path.push('M {} {}'.format(edge_width+1, v_offset))
 
         kerf_correct_corner(path, 0)
         path_parts = generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width)
@@ -158,6 +160,7 @@ def generate_edges(dwg, trayspec):
 
     content_width = trayspec['tray_width']-edge_w*2
     content_height = trayspec['tray_height']-edge_w*2
+
     #Top edge
     horiz_slots_and_widths = list(map(lambda column: {'width': column['width'], 'slot_properties': column['slots'][0]}, trayspec['columns']))
     paths = []
@@ -204,12 +207,7 @@ def generate_edges(dwg, trayspec):
 
     #Left edge
     slots = slots_from_column(trayspec['columns'][0]['slots'])
-    slot_width_sum = sum([slot['width'] for slot in slots])
-    if slot_width_sum + spacer_w*(len(slots)-1) < content_height:
-        print("Too little column content in column 0, appending empty")
-        empty_space = content_height - slot_width_sum - spacer_w*(len(slots))
-        slots.append( {'width': empty_space, 'slot_properties': {}})
-    
+
     paths.append(generate_edge(
         slots[::-1],
         spacer_w,
@@ -313,19 +311,20 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
 # Generates SVG string path parts to draw a single horizontal spacer.
 # Horizontal spacer may span multiple columns.
 # This function is not aware of the column specifications, merely the drawing element inputs
+
 # Returns: Array of SVG path strings.
-def generate_horiz_spacer(bottom_indents, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
+def generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
     path_parts = []
     path_parts.append('h {}'.format(l_edge_width + K_CORR))
     if len(list(filter(lambda spacer: spacer, spacer_indents))) > 0:
-        for idx, slot_width in enumerate(bottom_indents):
-            if spacer_indents[idx] > 0:
-                path_parts.append('h {}'.format(bottom_indents[idx]/4))
-                path_parts = path_parts + cubic_sloped_indent(bottom_indents[idx]/2, bottom_indents[idx]/4.0, spacer_indents[idx]*depth)
-                path_parts.append('h {}'.format(bottom_indents[idx]/4))
+        for idx, slot_width in enumerate(col_widths):
+            if spacer_indents[idx]:
+                path_parts.append('h {}'.format(slot_width/4))
+                path_parts = path_parts + cubic_sloped_indent(slot_width/2, slot_width/4.0, 10)
+                path_parts.append('h {}'.format(col_widths[idx]/4))
             else:
-                path_parts.append('h {}'.format(bottom_indents[idx]))
-            if idx < len(bottom_indents)-1:
+                path_parts.append('h {}'.format(col_widths[idx]))
+            if idx < len(col_widths)-1:
                 path_parts.append('h {}'.format(spacer_width))
     else:
         path_parts.append('h {}'.format(content_width))
@@ -336,9 +335,9 @@ def generate_horiz_spacer(bottom_indents, spacer_indents, content_width, spacer_
     path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
     #Bottom with indent slots
-    for idx, slot in enumerate(bottom_indents[::-1]):
-        path_parts.append('h -{}'.format(slot + K_CORR*2))
-        if idx != len(bottom_indents)-1:
+    for idx, slot_width in enumerate(col_widths[::-1]):
+        path_parts.append('h -{}'.format(slot_width + K_CORR*2))
+        if idx != len(col_widths)-1:
             path_parts.append('v -{}'.format(depth-INDENT_DEPTH - K_CORR))
             path_parts.append('h -{}'.format(spacer_width - K_CORR*2))
             path_parts.append('v {}'.format(depth-INDENT_DEPTH - K_CORR))
@@ -547,11 +546,11 @@ if __name__ == '__main__':
         edge_width = tray['edge_width']
         spacer_width = tray['spacer_width']
         tray_name = tray['name']
-        dwg = get_drawing('{}-{}.svg'.format(tray_name, edge_width), cfg['edge_material_width'], cfg['edge_material_height'])
+        dwg = get_drawing('output/{}-{}.svg'.format(tray_name, edge_width), cfg['edge_material_width'], cfg['edge_material_height'])
         draw_edges(dwg, tray)
         finish(dwg)
 
-        dwg = get_drawing('{}-{}.svg'.format(tray_name, spacer_width), cfg['spacer_material_width'], cfg['spacer_material_height'])
+        dwg = get_drawing('output/{}-{}.svg'.format(tray_name, spacer_width), cfg['spacer_material_width'], cfg['spacer_material_height'])
         draw_spacers(dwg, tray)
         finish(dwg)
 

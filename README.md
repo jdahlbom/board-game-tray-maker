@@ -23,3 +23,8 @@ I have since rewritten the whole codebase to use different abstraction, and usin
 Python 3 while at it. Inkscape no longer has any part in the SVG generation, although
 I primarily use Inkscape to view what I have generated.
 
+
+Usage
+-----
+`python3 generate-svg-from-columns.py games/<game>/<trayspec.json>`
+

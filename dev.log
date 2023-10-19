@@ -1,3 +1,20 @@
+2023-09-18
+Did a paper proto to get some sane starting values for Caverna animal meeple slots.
+Measuring & calculating the outer bounding boxes is useful for starting, actually
+building the physical slot with the components is much more assuring.
+
+I had used a minimum height of 30 mm per tray, but the meeples work better with shallower trays.
+Seems that the side toothing gets broken by that at the moment. Reduced tooth sizing to minimum of 8mm.
+
+There is still a problem with additional slot getting created even with elastic slot sizing.
+
+
+2023-09-10
+Handling the unused column height is a non-trivial problem when spacers can span columns.
+One solution might be to precompute available extra space for each slot, and then
+use that available extra space to first adjust the almost matching spacers to combine them.
+
+
 2023-09-08
 I refactored the most of ht epath generation to use string arrays rather than creating the SVG objects
 directly.
@@ -7,7 +24,7 @@ when they do not mutate the inputs.
 
 LESSON LEARNED: Paths must always have a absolute starting position set by "M x y"
 - Spacers now support indents, but the last slot index handling is not quite clear.
-- Empty column height handling is yet to be done.
+- Unused column height handling is yet to be done.
 
 
 2023-08-17
