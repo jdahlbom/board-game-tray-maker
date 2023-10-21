@@ -1,10 +1,10 @@
 import svgwrite
 import sys
 
-exec(open('generate-tray-from-specs.py').read())
+import generate_tray_from_specs as gtray
 
 STROKE = 0.1
-MIN_TOOTH_WIDTH = 8
+MIN_TOOTH_WIDTH = 8.0
 INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
@@ -59,10 +59,10 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
             value = 0-value
         return value
 
-    if length / MIN_TOOTH_WIDTH < 3:
+    if length / MIN_TOOTH_WIDTH < 3.0:
         raise Exception("Edge too short for toothing: {}".format(length))
 
-    divisions = int(length / 10)
+    divisions = int(length / 10.0)
     if divisions % 2 == 0:
         divisions -= 1
     if divisions > 9:
@@ -84,7 +84,7 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
     def should_create_sloped_indent(slot, margin):
         return 'needs_indent' in slot['slot_properties'] and \
                slot['slot_properties']['needs_indent'] and \
-               slot['width'] > (30.0 + 2 * margin)
+               slot['length'] > (30.0 + 2 * margin)
 
     path_parts = []
     if corner_toothing:
@@ -92,14 +92,15 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
 
     width_left = content_width
     for idx, slot in enumerate(slots):
-        width_left -= slot['width']
+        slot_length = slot['length']
+        width_left -= slot_length
         margin = 10.0
         if should_create_sloped_indent(slot, margin):
             path_parts.append('h {}'.format(margin))
-            path_parts = path_parts + cubic_sloped_indent(slot['width']-2*margin, slot['width']-20.0-2*margin, 10.0)
+            path_parts = path_parts + cubic_sloped_indent(slot_length-2*margin, slot_length-20.0-2*margin, 10.0)
             path_parts.append('h {}'.format(margin))
         else:
-            path_parts.append('h {}'.format(slot['width']))
+            path_parts.append('h {}'.format(slot_length))
         if idx < len(slots)-1 or width_left > spacer_width:
             width_left -= spacer_width
             path_parts.append('h {}'.format(K_CORR))
@@ -130,6 +131,7 @@ def generate_edges(dwg, trayspec):
         else:
             path.push('M {} {}'.format(edge_width+1, v_offset))
 
+        #Top edge
         kerf_correct_corner(path, 0)
         path_parts = generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width)
         for part in path_parts:
@@ -162,7 +164,7 @@ def generate_edges(dwg, trayspec):
     content_height = trayspec['tray_height']-edge_w*2
 
     #Top edge
-    horiz_slots_and_widths = list(map(lambda column: {'width': column['width'], 'slot_properties': column['slots'][0]}, trayspec['columns']))
+    horiz_slots_and_widths = list(map(lambda column: {'length': column['width'], 'slot_properties': column['slots'][0]}, trayspec['columns']))
     paths = []
     paths.append( generate_edge(
         horiz_slots_and_widths,
@@ -179,7 +181,7 @@ def generate_edges(dwg, trayspec):
                 return slot['height']
             return slot['min-height']
 
-        return list(map(lambda slot: {'width': get_height(slot), 'slot_properties': slot}, column_slots))
+        return list(map(lambda slot: {'length': get_height(slot), 'slot_properties': slot}, column_slots))
 
     slot_widths = slots_from_column(trayspec['columns'][-1]['slots'])
     paths.append( generate_edge(
@@ -191,11 +193,11 @@ def generate_edges(dwg, trayspec):
         (depth + 5)*1) )
     
     #Bottom edge
-    horiz_slot_width_sum = sum([slot['width'] for slot in horiz_slots_and_widths])
+    horiz_slot_width_sum = sum([slot['length'] for slot in horiz_slots_and_widths])
     if horiz_slot_width_sum + spacer_w * (len(horiz_slots_and_widths)-1) < content_width:
         print("Too little column content, appending empty")
         empty_space = content_width - sum(horiz_slot_width_sum) - spacer_w*len(horiz_slots_and_widths)
-        horiz_slots_and_widths.append({'width': empty_space, 'slot_properties': {}})
+        horiz_slots_and_widths.append({'length': empty_space, 'slot_properties': {}})
 
     paths.append(generate_edge(
         horiz_slots_and_widths[::-1],
@@ -533,9 +535,9 @@ if __name__ == '__main__':
         'edge_material_height': 300
     }
 
-    specs = get_specification(sys.argv[1])
+    specs = gtray.get_specification(sys.argv[1])
 
-    trays = generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs)
+    trays = gtray.generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs)
 
     for tray in trays:
         for column in tray['columns']:

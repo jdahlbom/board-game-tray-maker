@@ -145,15 +145,12 @@ def process_column_contents(specs, item_types, tray_height, spacer_width, edge_w
             'width': dllist_min_width(col_items),
             'elastic': col['elastic']
             }) 
-        print(col_items)
 
     for col_index, column in enumerate(columns):
         if col_index+1 is len(columns):
             break
         position_spacers(columns[col_index]['slots'], columns[col_index+1]['slots'], spacer_width)
 
-    print("First column")
-    print(columns[0])
     return columns
 
 
