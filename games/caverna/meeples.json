@@ -13,22 +13,16 @@
 			"thickness": 46,
 			"forbid_indent": true
 		},
-		"small-resources": {
-			"width": 40,
-			"height": 30,
-			"thickness": 50,
-			"forbid_indent": true
-		},
 		"furnishing-tile": {
 			"width": 38,
 			"height": 38,
-			"thickness": 2.5,
+			"thickness": 2.3,
 			"needs_indent": true
 		},
 		"two-wide-tile": {
-			"width": 70,
+			"width": 77,
 			"height": 38,
-			"thickness": 2.5,
+			"thickness": 2.3,
 			"needs_indent": true
 		}
 	},
@@ -37,7 +31,7 @@
 			"name":"mines-and-something-else",
 			"description": "2 sets of large tiles, 1 small set of small tiles set double wide",
 			"dimensions": {
-				"width": 79,
+				"width": 84,
 				"height": 216
 			},
 			"columns":
@@ -60,7 +54,93 @@
 						{
 							"item": "two-wide-tile",
 							"amount": 40,
-							"label": "FIELDS_AND_PASTURES",
+							"label": "FIELDS AND PASTURES",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ore-mines",
+			"description": "One block of large tiles",
+			"dimensions": {
+				"width": 86,
+				"height": 63
+			},
+			"columns":[
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "two-wide-tile",
+							"amount": 24,
+							"label": "ORE MINES",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "furnishing-tiles",
+			"description": "small tiles",
+			"dimensions": {
+				"width": 86,
+				"height": 146
+			},
+			"columns":[
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "furnishing-tile",
+							"amount": 41,
+							"label": "Basic game rooms",
+							"elastic": true
+						}
+					]
+				},
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "furnishing-tile",
+							"amount": 8,
+							"label": "Single caves",
+							"elastic": true
+						},
+						{
+							"item": "furnishing-tile",
+							"amount": 21,
+							"label": "Advanced game rooms",
+							"elastic": true
+						},
+						{
+							"item": "furnishing-tile",
+							"amount": 16,
+							"label": "Single fields & Ruby mines",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "space-filler-38mm",
+			"description": "Filler tray to fill the empty area slot of 38mm high level",
+			"dimensions": {
+				"width": 132,
+				"height": 210
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "furnishing-tile",
+							"amount": 1,
+							"label": "Single slot that should expand to fill all space",
 							"elastic": true
 						}
 					]
