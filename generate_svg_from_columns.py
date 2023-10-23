@@ -21,25 +21,26 @@ def get_drawing(result_file_name, width, height):
             viewBox=(0, 0, width, height))
 
 
-def kerf_correct_corner(path, corner_index):
+def kerf_correct_corner(corner_index):
     if corner_index == 0:
-        path.push('h {}'.format(K_CORR))
+        return 'h {}'.format(K_CORR)
     elif corner_index == 1:
-        path.push('h {} v {}'.format(K_CORR, K_CORR))
+        return 'h {} v {}'.format(K_CORR, K_CORR)
     elif corner_index == 2:
-        path.push('v {} h -{}'.format(K_CORR, K_CORR))
+        return 'v {} h -{}'.format(K_CORR, K_CORR)
     elif corner_index == 3:
-        path.push('h -{} v -{}'.format(K_CORR, K_CORR))
+        return 'h -{} v -{}'.format(K_CORR, K_CORR)
     elif corner_index == 4:
-        path.push('v {}'.format(K_CORR))
+        return 'v {}'.format(K_CORR)
 
 
-def generate_toothing(direction, path, invert, length, tooth_depth):
+def generate_toothing(direction, invert, length, tooth_depth):
     #Directions:
     #0 - right
     #1 - down
     #2 - left
     #3 - up
+    # Returns a list of string svg commands
 
     def axis(clockwise_rot):
         move_dir = (clockwise_rot + direction) % 4
@@ -71,18 +72,21 @@ def generate_toothing(direction, path, invert, length, tooth_depth):
         divisions = 3
     tooth_width = length / divisions
 
+    p = []
     for idx in range(0, divisions):
         if idx % 2 == 0:
-            path.push('{} {}'.format(axis(0), dir_value(0, tooth_width)))
+            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width)))
         else:
-            path.push('{} {}'.format(axis(1), dir_value(1, tooth_depth)))
-            path.push('{} {}'.format(axis(0), dir_value(0, tooth_width)))
-            path.push('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
+            p.append('{} {}'.format(axis(1), dir_value(1, tooth_depth)))
+            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width)))
+            p.append('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
+    return p
 
 
 def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width):
     def should_create_sloped_indent(slot, margin):
-        return 'needs_indent' in slot['slot_properties'] and \
+        return 'slot_properties' in slot and \
+               'needs_indent' in slot['slot_properties'] and \
                slot['slot_properties']['needs_indent'] and \
                slot['length'] > (30.0 + 2 * margin)
 
@@ -125,37 +129,41 @@ def generate_edges(dwg, trayspec):
     depth = trayspec['tray_depth']
  
     def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset):
+        path_parts = []
+        #Top edge
+        path_parts.append(kerf_correct_corner(0))
+        path_parts.extend(generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width))
+
+        #Right edge
+        path_parts.append(kerf_correct_corner(1))
+        path_parts.extend(generate_toothing(1, not corner_toothing, depth, edge_width))
+        path_parts.append('v {}'.format(edge_width))
+        #Bottom edge
+       
+        path_parts.append(kerf_correct_corner(2))
+        if corner_toothing:
+            path_parts.append('h -{}'.format(edge_w))
+
+        path_parts.extend(generate_toothing(2, False, content_width, edge_width))
+
+        if corner_toothing:
+            path_parts.append('h -{}'.format(edge_w))
+
+        path_parts.append(kerf_correct_corner(3))
+        #Left edge
+        path_parts.append('v -{}'.format(edge_w))
+        path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
+
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         if corner_toothing:
             path.push('M 1 {}'.format(v_offset))
         else:
             path.push('M {} {}'.format(edge_width+1, v_offset))
 
-        #Top edge
-        kerf_correct_corner(path, 0)
-        path_parts = generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width)
+        path_parts.append(kerf_correct_corner(4))
         for part in path_parts:
             path.push(part)
-        #Right edge
-        kerf_correct_corner(path, 1)
-        generate_toothing(1, path, not corner_toothing, depth, edge_width)
-        path.push('v {}'.format(edge_width))
-        #Bottom edge
-       
-        kerf_correct_corner(path, 2)
-        if corner_toothing:
-            path.push('h -{}'.format(edge_w))
 
-        generate_toothing(2, path, False, content_width, edge_width)
-
-        if corner_toothing:
-            path.push('h -{}'.format(edge_w))
-
-        kerf_correct_corner(path, 3)
-        #Left edge
-        path.push('v -{}'.format(edge_w))
-        generate_toothing(3, path, not corner_toothing, depth, edge_width)
-        kerf_correct_corner(path, 4)
         path.push('z')
         return path
 
@@ -227,18 +235,17 @@ def generate_floor(dwg, trayspec, v_offset):
     width = trayspec['tray_width'] - edge_w*2
     height = trayspec['tray_height'] - edge_w*2
 
-    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-    path.push('M {} {}'.format(edge_w, v_offset + edge_w))
-    kerf_correct_corner(path, 0)
-    generate_toothing(0, path, True, width, edge_w)
-    kerf_correct_corner(path, 1)
-    generate_toothing(1, path, True, height, edge_w)
-    kerf_correct_corner(path, 2)
-    generate_toothing(2, path, True, width, edge_w)
-    kerf_correct_corner(path, 3)
-    generate_toothing(3, path, True, height, edge_w)
+    p = []
+    p.append(kerf_correct_corner(0))
+    p.extend(generate_toothing(0, True, width, edge_w))
+    p.append(kerf_correct_corner(1))
+    p.extend(generate_toothing(1, True, height, edge_w))
+    p.append(kerf_correct_corner(2))
+    p.extend(generate_toothing(2, True, width, edge_w))
+    p.append(kerf_correct_corner(3))
+    p.extend(generate_toothing(3, True, height, edge_w))
 
-    def generate_internal_holes(path, origin_h_offset, origin_v_offset):
+    def generate_internal_holes(origin_h_offset, origin_v_offset):
         col_widths = list(map(lambda col: col['width'], trayspec['columns']))
         hole_width = MIN_TOOTH_WIDTH
         if height/hole_width < 3:
@@ -250,35 +257,40 @@ def generate_floor(dwg, trayspec, v_offset):
 
         tooth_spacing = (height - num_tooth * hole_width) / (num_tooth + 1)
 
+        parts = []
         for idx, col_w in enumerate(col_widths[0:-1]):
             h_offset = sum(col_widths[0:idx+1]) + idx * spacer_w + origin_h_offset
             for tooth_idx in range(0, num_tooth):
                 v_offset = (tooth_idx + 1) * tooth_spacing + tooth_idx * hole_width + origin_v_offset
-                path.push('M {} {}'.format(h_offset, v_offset))
-                path.push('m {} {}'.format(K_CORR, K_CORR))
-                path.push('h {}'.format(spacer_w - K_CORR*2))
-                path.push('v {}'.format(hole_width - K_CORR*2))
-                path.push('h -{}'.format(spacer_w - K_CORR*2))
-                path.push('v -{}'.format(hole_width - K_CORR*2))
+                parts.append('M {} {}'.format(h_offset, v_offset))
+                parts.append('m {} {}'.format(K_CORR, K_CORR))
+                parts.append('h {}'.format(spacer_w - K_CORR*2))
+                parts.append('v {}'.format(hole_width - K_CORR*2))
+                parts.append('h -{}'.format(spacer_w - K_CORR*2))
+                parts.append('v -{}'.format(hole_width - K_CORR*2))
+        return parts
 
-    generate_internal_holes(path, edge_w, v_offset+edge_w)
+    p.extend(generate_internal_holes(edge_w, v_offset+edge_w))
 
+    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+    path.push('M {} {}'.format(edge_w, v_offset + edge_w))
+    for part in p:
+        path.push(part)
     return path
 
 
 def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer_width):
-    path_parts = []
-    kerf_correct_corner(path_parts, 0)
-    generate_slotted_top_edge(path_parts, indent_spaces, spacer_width, content_width, True, edge_width)
-    kerf_correct_corner(path_parts, 1)
+    path_parts = [ kerf_correct_corner(0)]
+    path_parts.extend(generate_slotted_top_edge(indent_spaces, spacer_width, content_width, True, edge_width))
+    path_parts.append(kerf_correct_corner(1))
 
     path_parts.append('v {}'.format(INDENT_DEPTH))
-    kerf_correct_corner(path_parts, 2)
+    path_parts.append(kerf_correct_corner(2))
     path_parts.append('h -{}'.format(edge_width))
     path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
     def generate_floor_teeth(width):
-        path_elems = []
+        p = []
         hole_width = MIN_TOOTH_WIDTH
         if width/hole_width < 3:
             return
@@ -291,21 +303,21 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
 
         for tooth_idx in range(0, num_tooth):
             if tooth_idx == 0:
-                path_elems.push('h -{}'.format(tooth_spacing - K_CORR))
+                p.append('h -{}'.format(tooth_spacing - K_CORR))
             else:
-                path_elems.push('h -{}'.format(tooth_spacing - 2*K_CORR))
-            path_elems.push('v {}'.format(edge_width + K_CORR))
-            path_elems.push('h -{}'.format(hole_width + K_CORR*2))
-            path_elems.push('v -{}'.format(edge_width + K_CORR))
-        path_elems.push('h -{}'.format(tooth_spacing - K_CORR))
-        return path_elems
+                p.append('h -{}'.format(tooth_spacing - 2*K_CORR))
+            p.append('v {}'.format(edge_width + K_CORR))
+            p.append('h -{}'.format(hole_width + K_CORR*2))
+            p.append('v -{}'.format(edge_width + K_CORR))
+        p.append('h -{}'.format(tooth_spacing - K_CORR))
+        return p
 
     path_parts = path_parts + generate_floor_teeth(content_width)
-    kerf_correct_corner(path_parts, 3)
+    path_parts.append(kerf_correct_corner(3))
     path_parts.append('v -{}'.format(depth - INDENT_DEPTH))
     path_parts.append('h -{}'.format(edge_width))
     path_parts.append('v -{}'.format(INDENT_DEPTH + K_CORR))
-    kerf_correct_corner(path_parts, 4)
+    path_parts.append(kerf_correct_corner(4))
     path_parts.append('z')
     return path_parts
 
@@ -404,7 +416,7 @@ def draw_spacers(dwg, trayspec):
                 lslot()['col_span_id']==rslot()['col_span_id']):
                 ldist = 0
                 rdist = 0
-                indent_gaps.append(lheight)
+                indent_gaps.append({'length': lheight})
                 lslot = lslot.next
                 rslot = rslot.next
             else:
@@ -412,18 +424,18 @@ def draw_spacers(dwg, trayspec):
                     next_gap = lheight
                     if ldist < rdist:
                         next_gap = ldist + lheight - rdist
-                    indent_gaps.append(next_gap)
+                    indent_gaps.append({'length': next_gap})
                     ldist += lheight + spacer_w
                     lslot = lslot.next
                 else:
                     next_gap = rheight
                     if rdist < ldist:
                         next_gap = rdist + rheight - ldist
-                    indent_gaps.append(next_gap)
+                    indent_gaps.append({'length': next_gap})
                     rdist += rheight + spacer_w
                     rslot = rslot.next
 
-        paths.append(generate_vert_spacer(path, indent_gaps, content_width, depth, edge_w, spacer_w))
+        paths.append(generate_vert_spacer(indent_gaps, content_width, depth, edge_w, spacer_w))
 
     # Horizontal spacer generation, they may span multiple columns.
     # Spans should be identified by slots having 'column_span_id' field.
