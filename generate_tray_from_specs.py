@@ -103,23 +103,6 @@ def position_spacers(left_col, right_col, spacer_width):
     position_nodes(lnode, rnode, 0, 0)
 
 
-#def stretch_to_fill(col_items, max_height):
-#    height_contents = sum_of_heights(col_items)
-#    height_spacers = (len(col_items)-1)*spacer_width
-#    height_edges = 2 * edge_width
-#    total_height = height_contents + height_spacers + height_edges
-#
-#    unused_space = max_height - total_height
-#    if unused_space / total_height > 0.3:
-#        fraction = unused_space / total_height
-#        raise Exception("There is more than 30% extra space available for contents [{}]. Add more stuff?".format(fraction))
-#
-#    add_height = unused_space / len(col_items)
-#    for item in col_items:
-#        item['height'] = round(item['min-height'] + add_height,2)
-#    return(col_items)
-
-
 def dllist_min_width(slot_dllist):
     widths = []
     for node in slot_dllist:

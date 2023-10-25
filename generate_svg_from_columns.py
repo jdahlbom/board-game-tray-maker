@@ -74,11 +74,16 @@ def generate_toothing(direction, invert, length, tooth_depth):
 
     p = []
     for idx in range(0, divisions):
+        kerf_correction = 2 * K_CORR
+        if idx == 0 or idx == divisions-1:
+            kerf_correction = K_CORR
+        if invert:
+            kerf_correction = -kerf_correction
         if idx % 2 == 0:
-            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width)))
+            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width+kerf_correction)))
         else:
             p.append('{} {}'.format(axis(1), dir_value(1, tooth_depth)))
-            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width)))
+            p.append('{} {}'.format(axis(0), dir_value(0, tooth_width-kerf_correction)))
             p.append('{} {}'.format(axis(3), dir_value(3, tooth_depth)))
     return p
 
@@ -98,14 +103,14 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
     for idx, slot in enumerate(slots):
         slot_length = slot['length']
         width_left -= slot_length
-        margin = 10.0
+        margin = 8.0
         if should_create_sloped_indent(slot, margin):
             path_parts.append('h {}'.format(margin))
             path_parts = path_parts + cubic_sloped_indent(slot_length-2*margin, slot_length-20.0-2*margin, 10.0)
             path_parts.append('h {}'.format(margin))
         else:
             path_parts.append('h {}'.format(slot_length))
-        if idx < len(slots)-1 or width_left > spacer_width:
+        if idx < len(slots)-1:
             width_left -= spacer_width
             path_parts.append('h {}'.format(K_CORR))
             path_parts.append('v {}'.format(INDENT_DEPTH - K_CORR))
@@ -123,7 +128,7 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
     return path_parts
 
 
-def generate_edges(dwg, trayspec):
+def generate_edges(trayspec):
     spacer_w = trayspec['spacer_width']
     edge_w = trayspec['edge_width']
     depth = trayspec['tray_depth']
@@ -229,7 +234,7 @@ def generate_edges(dwg, trayspec):
     return paths
 
 
-def generate_floor(dwg, trayspec, v_offset):
+def generate_floor(trayspec, v_offset):
     edge_w = trayspec['edge_width']
     spacer_w = trayspec['spacer_width']
     width = trayspec['tray_width'] - edge_w*2
@@ -521,8 +526,8 @@ def draw_spacers(dwg, trayspec):
 
 
 def draw_edges(dwg, trayspec):
-    paths = generate_edges(dwg, trayspec)
-    paths.append(generate_floor(dwg, trayspec, (trayspec['tray_depth']+5)*4))
+    paths = generate_edges(trayspec)
+    paths.append(generate_floor(trayspec, (trayspec['tray_depth']+5)*4))
 
     for path in paths:
         dwg.add(path)
@@ -539,8 +544,8 @@ if __name__ == '__main__':
 
     # TODO: Bring the material specifications from some external source at some point.
     cfg = {
-        'spacer_width': 2.5,
-        'edge_width': 3.5,
+        'spacer_width': 3,
+        'edge_width': 3,
         'spacer_material_width': 400,
         'spacer_material_height': 300,
         'edge_material_width': 400,
@@ -560,11 +565,11 @@ if __name__ == '__main__':
         edge_width = tray['edge_width']
         spacer_width = tray['spacer_width']
         tray_name = tray['name']
-        dwg = get_drawing('output/{}-{}.svg'.format(tray_name, edge_width), cfg['edge_material_width'], cfg['edge_material_height'])
+        dwg = get_drawing('output/{}-{}-edges.svg'.format(tray_name, edge_width), cfg['edge_material_width'], cfg['edge_material_height'])
         draw_edges(dwg, tray)
         finish(dwg)
 
-        dwg = get_drawing('output/{}-{}.svg'.format(tray_name, spacer_width), cfg['spacer_material_width'], cfg['spacer_material_height'])
+        dwg = get_drawing('output/{}-{}-spacers.svg'.format(tray_name, spacer_width), cfg['spacer_material_width'], cfg['spacer_material_height'])
         draw_spacers(dwg, tray)
         finish(dwg)
 
