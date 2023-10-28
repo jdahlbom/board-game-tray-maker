@@ -422,6 +422,8 @@ def draw_spacers(dwg, trayspec):
                 lslot = lslot.next
                 rslot = rslot.next
             else:
+                # TODO: This here SHOULD be in the "TRAY" file instead of in "SVG", the tray sizes should
+                # not be adjusted once the tray is generated.
                 if ldist + lheight < rdist + rheight:
                     next_gap = lheight
                     if ldist < rdist:

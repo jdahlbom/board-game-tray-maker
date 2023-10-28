@@ -28,11 +28,6 @@ if __name__ == '__main__':
     trays = gtray.generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs)
 
     for tray in trays:
-        for column in tray['columns']:
-            for slot in column['slots']:
-                if 'height' not in slot:
-                    slot['height'] = slot['min-height']
-
         edge_width = tray['edge_width']
         spacer_width = tray['spacer_width']
         tray_name = tray['name']
