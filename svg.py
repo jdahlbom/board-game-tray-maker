@@ -186,12 +186,7 @@ def generate_edges(trayspec):
 
     #Right edge
     def slots_from_column(column_slots):
-        def get_height(slot):
-            if 'height' in slot:
-                return slot['height']
-            return slot['min-height']
-
-        return list(map(lambda slot: {'length': get_height(slot), 'slot_properties': slot}, column_slots))
+        return list([{'length': slot['height'], 'slot_properties': slot} for slot in column_slots])
 
     slot_widths = slots_from_column(trayspec['columns'][-1]['slots'])
     paths.append( generate_edge(
@@ -392,14 +387,8 @@ def cubic_sloped_indent(top_width, bottom_width, depth):
     return path_parts
 
 
-def draw_spacers(dwg, trayspec):
-    columns = trayspec['columns']
-    spacer_w = trayspec['spacer_width']
-    edge_w = trayspec['edge_width']
-    depth = trayspec['tray_depth']
-    content_width = trayspec['tray_height'] - 2 * edge_w
-
-    paths = []
+def create_vertical_spacer_indent_list(columns, spacer_w):
+    spacer_indent_lists = []
 
     # Generate spacer indent slots for vertical dividing spacers: Need to observe both columns
     for idx, column in enumerate(columns[0:-1]):
@@ -413,33 +402,48 @@ def draw_spacers(dwg, trayspec):
             lheight = lslot()['height']
             rheight = rslot()['height']
 
-            if ('col_span_id' in lslot() and 
-                'col_span_id' in rslot() and 
-                lslot()['col_span_id']==rslot()['col_span_id']):
+            if ('col_span_id' in lslot() and
+                    'col_span_id' in rslot() and
+                    lslot()['col_span_id'] == rslot()['col_span_id']):
                 ldist = 0
                 rdist = 0
                 indent_gaps.append({'length': lheight})
                 lslot = lslot.next
                 rslot = rslot.next
             else:
-                # TODO: This here SHOULD be in the "TRAY" file instead of in "SVG", the tray sizes should
-                # not be adjusted once the tray is generated.
                 if ldist + lheight < rdist + rheight:
-                    next_gap = lheight
                     if ldist < rdist:
                         next_gap = ldist + lheight - rdist
-                    indent_gaps.append({'length': next_gap})
+                        indent_gaps.append({'length': next_gap})
+                    else:
+                        indent_gaps.append({'length': lheight})
                     ldist += lheight + spacer_w
                     lslot = lslot.next
                 else:
-                    next_gap = rheight
                     if rdist < ldist:
                         next_gap = rdist + rheight - ldist
-                    indent_gaps.append({'length': next_gap})
+                        indent_gaps.append({'length': next_gap})
+                    else:
+                        indent_gaps.append({'length': rheight})
                     rdist += rheight + spacer_w
                     rslot = rslot.next
 
-        paths.append(generate_vert_spacer(indent_gaps, content_width, depth, edge_w, spacer_w))
+        spacer_indent_lists.append(indent_gaps)
+    return spacer_indent_lists
+
+
+def draw_spacers(dwg, trayspec):
+    columns = trayspec['columns']
+    spacer_w = trayspec['spacer_width']
+    edge_w = trayspec['edge_width']
+    depth = trayspec['tray_depth']
+    content_width = trayspec['tray_height'] - 2 * edge_w
+
+    spacer_indent_gaps = create_vertical_spacer_indent_list(columns, spacer_w)
+
+    paths = []  #List of lists of strings. Each list of strings contains the svg vector path for a object
+    for gaps in spacer_indent_gaps:
+        paths.append(generate_vert_spacer(gaps, content_width, depth, edge_w, spacer_w))
 
     # Horizontal spacer generation, they may span multiple columns.
     # Spans should be identified by slots having 'column_span_id' field.
