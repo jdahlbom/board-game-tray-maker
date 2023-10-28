@@ -1,3 +1,14 @@
+2023-10-28
+I renamed the source files to "tray" - anything that has to do with fiddling the slot layout and processing
+the tray specification - and "svg" - everything that has to do with creating SVG paths from the fixed slot layout.
+
+I went to cut first proto of the newly refactored svg generation code in Oodi on 2023-10-23 - see separate notes for
+lessons learned there.
+
+There is at least one issue remaining with the Caverna "Furnishing tiles" spacer generation: One slot indentation
+is missing from the vertical spacer.
+
+
 2023-09-18
 Did a paper proto to get some sane starting values for Caverna animal meeple slots.
 Measuring & calculating the outer bounding boxes is useful for starting, actually
