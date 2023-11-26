@@ -1,3 +1,13 @@
+2023-11-27
+Changed the spacer_indent_gaps function to just compute the vert spacer top edge including all spacer gaps
+and the spaces between spacers so that it can be fed to generate_top_edge general function like edge lists.
+
+It seems that the extra slot creation mentioned in 2023-09-18 may have been fixed in commit e213607040,
+but I have forgotten to mention the fixed issue in my 2023-10 log entry.
+
+Next up: Figure out and update the tray configuration for Caverna to have a proper slot for each resource.
+I may have to leave out the card slot special feature out to complete at least one Caverna tray specification first.
+
 2023-10-28
 I renamed the source files to "tray" - anything that has to do with fiddling the slot layout and processing
 the tray specification - and "svg" - everything that has to do with creating SVG paths from the fixed slot layout.
