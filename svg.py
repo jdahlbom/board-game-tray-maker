@@ -386,7 +386,7 @@ def cubic_sloped_indent(top_width, bottom_width, depth):
     path_parts.append(up_slope_cmd)
     return path_parts
 
-
+# TODO Change the name here: No longer a vertical spacer indent list, but a two-column list of space between indents and ends.
 def create_vertical_spacer_indent_list(columns, spacer_w):
     spacer_indent_lists = []
 
@@ -427,6 +427,13 @@ def create_vertical_spacer_indent_list(columns, spacer_w):
                         indent_gaps.append({'length': rheight})
                     rdist += rheight + spacer_w
                     rslot = rslot.next
+        # For last slots, use the smaller slot
+        lheight = lslot()['height']
+        rheight = rslot()['height']
+        if lheight <= rheight:
+            indent_gaps.append({'length': lheight})
+        else:
+            indent_gaps.append({'length': rheight})
 
         spacer_indent_lists.append(indent_gaps)
     return spacer_indent_lists
