@@ -386,8 +386,8 @@ def cubic_sloped_indent(top_width, bottom_width, depth):
     path_parts.append(up_slope_cmd)
     return path_parts
 
-# TODO Change the name here: No longer a vertical spacer indent list, but a two-column list of space between indents and ends.
-def create_vertical_spacer_indent_list(columns, spacer_w):
+
+def create_vertical_spacer_combined_slot_list(columns, spacer_w):
     spacer_indent_lists = []
 
     # Generate spacer indent slots for vertical dividing spacers: Need to observe both columns
@@ -446,9 +446,9 @@ def draw_spacers(dwg, trayspec):
     depth = trayspec['tray_depth']
     content_width = trayspec['tray_height'] - 2 * edge_w
 
-    spacer_indent_gaps = create_vertical_spacer_indent_list(columns, spacer_w)
+    spacer_indent_gaps = create_vertical_spacer_combined_slot_list(columns, spacer_w)
 
-    paths = []  #List of lists of strings. Each list of strings contains the svg vector path for a object
+    paths = []  # List of lists of strings. Each list of strings contains the svg vector path for a object
     for gaps in spacer_indent_gaps:
         paths.append(generate_vert_spacer(gaps, content_width, depth, edge_w, spacer_w))
 
