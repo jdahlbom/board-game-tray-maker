@@ -95,7 +95,7 @@
 					"slots": [
 						{
 							"item": "furnishing-tile",
-							"amount": 41,
+							"amount": 43,
 							"label": "Basic game rooms",
 							"elastic": true
 						}
