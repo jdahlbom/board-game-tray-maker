@@ -137,10 +137,11 @@ def process_column_contents(specs, item_types, tray_height, spacer_width, edge_w
     return columns
 
 
-def generate_trays_from_spec(spacer_width, edge_width, specs):
+def generate_trays_from_spec(spacer_width, edge_width, specs, trayname=None):
     trays = specs['trays']
     item_types = specs['item-types']
-    processed_trays = list([generate_columns_from_spec(spacer_width, edge_width, tray, item_types) for tray in trays])
+    processed_trays = list([generate_columns_from_spec(spacer_width, edge_width, tray, item_types) for tray in trays
+                            if (tray['name']==trayname or trayname is None)])
     return processed_trays
 
 

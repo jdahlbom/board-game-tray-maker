@@ -20,9 +20,13 @@ def finish(dwg):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Pass the specs file as the parameter")
+    if len(sys.argv) < 2:
+        print("Usage: main.py <specsfile.json> [ 'Single tray name']")
         sys.exit(1)
+
+    trayname_arg = None
+    if len(sys.argv) == 3:
+        trayname_arg = sys.argv[2]
 
     # TODO: Bring the material specifications from some external source at some point.
     cfg = {
@@ -36,7 +40,7 @@ if __name__ == '__main__':
 
     specs = gtray.get_specification(sys.argv[1])
 
-    trays = gtray.generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs)
+    trays = gtray.generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs, trayname_arg)
 
     for tray in trays:
         svg_tray = convert_tray_format(tray)
