@@ -24,8 +24,14 @@
 			"height": 38,
 			"thickness": 2.3,
 			"needs_indent": true
-		}
-	},
+		},
+      "two-high-tiny-resources": {
+        "width": 84,
+        "height": 25,
+        "thickness": 27,
+        "forbid_indent": true
+      }
+    },
 	"trays": [
 		{
 			"name":"mines-and-something-else",
@@ -162,8 +168,9 @@
 						{
 							"item": "two-high-cow-meeples",
 							"amount": 1,
-							"label": "COW"
-						},
+							"label": "COW",
+                            "elastic": true
+                        },
 						{
 							"item": "two-high-non-cow-meeples",
 							"amount": 1,
@@ -218,9 +225,9 @@
 		},
 		{
 			"name":"stone-and-precious",
-			"description": "small resource tiles, lot of container trays",
+			"description": "small resource tiles, lot of slots",
 			"dimensions": {
-				"width": 107,
+				"width": 90,
 				"height": 216
 			},
 			"columns":
@@ -228,12 +235,34 @@
 				{
 					"elastic": true,
 					"slots": [
-						{
-							"item": "two-high-non-cow-meeples",
-							"amount": 1,
-							"label": "STONE",
-							"elastic": true
-						}
+                      {
+                        "item": "two-high-tiny-resources",
+                        "amount": 2,
+                        "label": "STONE",
+                        "elastic": true
+                      },
+                      {
+                        "item": "two-high-tiny-resources",
+                        "amount": 2,
+                        "label": "FOOD"
+                      },
+                      {
+                        "item": "two-high-tiny-resources",
+                        "amount": 1,
+                        "label": "RUBY"
+                      },
+                      {
+                        "item": "two-high-tiny-resources",
+                        "amount": 1,
+                        "label": "ORE",
+                        "elastic": true
+                      },
+                      {
+                        "item": "two-high-tiny-resources",
+                        "amount": 1,
+                        "label": "DOG",
+                        "elastic": true
+                      }
 					]
 				}
 			]

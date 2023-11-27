@@ -1,4 +1,11 @@
 2023-11-27
+Added stone and small resources -tray to tray specification.
+There is still some top edge generation problems: It seems that in some cases - here stones-and-precious tray -
+the corner indentation depth is screwed up and gets sometimes either counted twice or possibly not at all -
+leading to faulty positioning offset of the opposite edge that is generated as a horizontally mirrored edge.
+Need to have a look at this next before continuing.
+
+2023-11-27
 Changed the spacer_indent_gaps function to just compute the vert spacer top edge including all spacer gaps
 and the spaces between spacers so that it can be fed to generate_top_edge general function like edge lists.
 
