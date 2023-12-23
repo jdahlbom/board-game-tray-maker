@@ -10,7 +10,8 @@ def convert_tray_format(tray):
             column['slots'][slot_index] = {
                 'height': slot['min-height'] + slot['extra-space'],
                 'needs_indent': 'needs_indent' in slot and slot['needs_indent'],
-                'forbid_intent': 'forbid-intent' in slot and slot['forbid_indent']
+                'forbid_intent': 'forbid-intent' in slot and slot['forbid_indent'],
+                'label': slot['label']
             }
     return tray
 
