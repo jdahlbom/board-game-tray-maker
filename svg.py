@@ -1,6 +1,7 @@
 import svgwrite
 
-STROKE = 0.1
+# Hairline stroke (Cutting) for Epilog printers is 0.001"
+STROKE = 0.001
 MIN_TOOTH_WIDTH = 8.0
 INDENT_DEPTH = 10
 KERF = 0.2
@@ -266,6 +267,16 @@ def generate_floor(trayspec, v_offset):
                 parts.append('h -{}'.format(spacer_w - K_CORR*2))
                 parts.append('v -{}'.format(hole_width - K_CORR*2))
         return parts
+
+    def generate_slot_texts(columns, origin_h_offset, origin_v_offset):
+        col_widths = list([col['width'] for col in trayspec['columns']])
+        for col_index, column in columns:
+            col_h_offset = sum(col_widths[0:col_index+1]) + col_index * spacer_w + origin_h_offset
+            c_width = column['width']
+            slot_heights = list([slot['height'] for slot in column['slots']])
+            for slot_index, slot in column['slots']:
+                slot_v_offset = sum(slot_heights[0:slot_index+1]) + slot_index * spacer_w + origin_v_offset
+
 
     p.extend(generate_internal_holes(edge_w, v_offset+edge_w))
 

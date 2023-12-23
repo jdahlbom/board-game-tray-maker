@@ -1,3 +1,23 @@
+2023-12-24
+Got finally back to this case: It looks like text elements are bit much work for now, so I intend
+to leave it for later.
+I found this guide for Epilog lasers cutting widths:
+https://www.epiloglaser.com/assets/img/knowledge-base/tl-line-weights.htm
+after reading Hutchisons commit with some amount of googling for svgwrite.
+TabbedBoxMaker uses Inkscape plugin configuration files and I want to generate plain SVG files without
+Inkscape dependency. Downside is that I only get to test if it works at the Laser Cutting machine.
+
+
+2023-12-03
+I am trying to add text elements to SVG, but I'm trying to keep away from the svgwrite API and stick
+to the older text based svg configuration I use for line drawings.
+I had a look at old logs and checked out the Paul Hutchisons https://github.com/paulh-rnd/TabbedBoxMaker/
+repo. It looks that some years ago he had done work on the line style attribute which would enable
+having etchable and cutting lines in the same file withot having to do manual work in setting line types.
+"v0.93 - 15/8/2016 by Paul Hutchison:
+ - Added Hairline option and fixed open box height bug"
+
+
 2023-11-27
 Added stone and small resources -tray to tray specification.
 There is still some top edge generation problems: It seems that in some cases - here stones-and-precious tray -
