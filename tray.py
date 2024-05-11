@@ -8,6 +8,7 @@ from string import ascii_lowercase
 def compute_minimum_dimensions(item_types, item):
     single_item = item_types[item['item']]
     elastic = False if 'elastic' not in item else True
+    label = None if 'label' not in item else item['label']
     spacer_indent = None if 'spacer-indent' not in item else item['spacer-indent']
     return {
         'min-width': single_item['width'],
@@ -17,7 +18,8 @@ def compute_minimum_dimensions(item_types, item):
         'extra-space': 0,
         'spacer-indent': spacer_indent,
         'needs_indent': 'needs_indent' in single_item and single_item['needs_indent'],
-        'forbid_intent': 'forbid_indent' in single_item and single_item['forbid_indent']
+        'forbid_intent': 'forbid_indent' in single_item and single_item['forbid_indent'],
+        'label': label
         }
 
 

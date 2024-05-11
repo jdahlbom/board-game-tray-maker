@@ -86,7 +86,7 @@ def generate_toothing(direction, invert, length, tooth_depth):
     return p
 
 
-def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width):
+def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth):
     def should_create_sloped_indent(slot, margin):
         return 'slot_properties' in slot and \
                'needs_indent' in slot['slot_properties'] and \
@@ -101,10 +101,10 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
     for idx, slot in enumerate(slots):
         slot_length = slot['length']
         width_left -= slot_length
-        margin = 8.0
+        margin = 5.0
         if should_create_sloped_indent(slot, margin):
             path_parts.append('h {}'.format(margin))
-            path_parts = path_parts + cubic_sloped_indent(slot_length-2*margin, slot_length-20.0-2*margin, 10.0)
+            path_parts = path_parts + cubic_sloped_indent(slot_length-2*margin, slot_length-20.0-2*margin, depth/2.0)
             path_parts.append('h {}'.format(margin))
         else:
             path_parts.append('h {}'.format(slot_length))
@@ -135,7 +135,7 @@ def generate_edges(trayspec):
         path_parts = []
         #Top edge
         path_parts.append(kerf_correct_corner(0))
-        path_parts.extend(generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width))
+        path_parts.extend(generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth))
 
         #Right edge
         path_parts.append(kerf_correct_corner(1))
@@ -342,7 +342,7 @@ def generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_widt
         for idx, slot_width in enumerate(col_widths):
             if spacer_indents[idx]:
                 path_parts.append('h {}'.format(slot_width/4))
-                path_parts = path_parts + cubic_sloped_indent(slot_width/2, slot_width/4.0, 10)
+                path_parts = path_parts + cubic_sloped_indent(slot_width/2.0, slot_width/4.0, depth/2)
                 path_parts.append('h {}'.format(col_widths[idx]/4))
             else:
                 path_parts.append('h {}'.format(col_widths[idx]))
@@ -505,6 +505,9 @@ def draw_spacers(dwg, trayspec):
                 continue
 
             for slot_index, slot in enumerate(slots):
+                # Don't generate end spacer for the last slot of column.
+                if slot_index == len(slots)-1:
+                    continue
                 if 'skip_this' in slot:
                     continue
                 col_slots = [column['width']]
