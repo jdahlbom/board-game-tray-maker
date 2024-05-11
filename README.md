@@ -4,6 +4,10 @@ Board game tray generator
 SVG generator script for generating board game trays from high level description
 of component sizes.
 
+The tray generator aims to one day generate board game trays from just
+the information about number, size and possible grouping of components
+and the dimensions of the containing game box.
+
 Measurement dimensions
 ======================
 In code I use dimensions *width*, *height* and *depth*. These are used as if I were looking
@@ -23,3 +27,10 @@ I have since rewritten the whole codebase to use different abstraction, and usin
 Python 3 while at it. Inkscape no longer has any part in the SVG generation, although
 I primarily use Inkscape to view what I have generated.
 
+I owe a debt of gratitude to Hutchison and White
+for giving a valuable starting point, and few improvements that they have added
+during the lifetime of this project.
+
+Usage
+-----
+`python3 main.py <specsfile.json> [ 'Single tray name']`
