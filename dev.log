@@ -1,3 +1,9 @@
+2024-05-11
+Removed the additional "last" spacer creation: The last slot ends with an Edge piece, not a spacer.
+Note that now the cutting Stroke Width is hairline, .001 px which Inkscape treats as invisible until
+you zoom really close. Quickest workaround for analysing the generated pieces is to Select All (Ctrl+A)
+and then change the stroke width to 1 (Ctrl+Shift+F + Stroke Style + Width).
+
 2023-12-24
 Got finally back to this case: It looks like text elements are bit much work for now, so I intend
 to leave it for later.
