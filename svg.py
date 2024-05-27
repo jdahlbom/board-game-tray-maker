@@ -116,7 +116,7 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
             path_parts.append('v -{}'.format(INDENT_DEPTH - K_CORR))
             path_parts.append('h {}'.format(K_CORR))
 
-    if width_left > 0:
+    if width_left > 0.1:
         print("[WARN] Edge width unused for slots: {} , extending by that much!".format(width_left))
         path_parts.append('h {}'.format(width_left))
 
