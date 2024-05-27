@@ -6,7 +6,7 @@ Spirit Island: tray design times
 
 +20 minutes: procrastinating about box measurements
 +15 minutes : measuring the small component lockers
-
++20 minutes: tokens and player markers tray sizing.
 
 
 
@@ -26,9 +26,9 @@ Blight 87 mm x 25 mm x 23 mm
 Dahan 87 mm  x 68 mm x 23 mm
 Fear 87 mm x 45 mm x 23 mm
 Energy 87 mm x 55mm x 23 mm (45 mm ALMOST fits all)
-Badlands ~ 45mm x 45 mm x 23 mm
-^ Sama tiheiköt, eläimet, diseaset, strifet
-Elementit 45 mm x 45 mm x 23 mm 
-Pelaajanappulat 45 mm x 45 mm x 15 mm x 6 kpl
--> Nappulat voisi olla 45 mm x 30 mm x 23 mm x 6 kpl sen sijaan.
-Lisäelementit 45 x 45 x 23 x 4 kpl (puolet pienempi saattaisi riittää)
+Badlands ~ 45mm x 45 mm x 23 mm  X
+^ Sama tiheiköt, eläimet, diseaset, strifet  X
+Elementit 45 mm x 45 mm x 23 mm
+Pelaajanappulat 45 mm x 45 mm x 15 mm x 6 kpl  (X)
+-> Nappulat voisi olla 45 mm x 30 mm x 23 mm x 6 kpl sen sijaan. X
+Lisäelementit 45 mm x 45 mm x 23 mm x 4 kpl (puolet pienempi saattaisi riittää)

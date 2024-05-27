@@ -26,6 +26,12 @@
 			"height": 24,
 			"thickness": 28,
 			"forbid_indent": true
+		},
+		"badlands-tokens": {
+			"width": 45,
+			"height": 24,
+			"thickness": 1.6,
+			"forbid_indent": true
 		}
 	},
 	"trays": [
@@ -156,6 +162,45 @@
 							"item": "player-markers",
 							"amount": 1,
 							"label": "Pink",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "beast-tokens",
+			"description": "Special effect tokens such as Beasts, Diseases, etc",
+			"dimensions": {
+				"width": 52,
+				"height": 185.5
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "badlands-tokens",
+							"amount": 35,
+							"label": "Beasts",
+							"elastic": true
+						},
+						{
+							"item": "badlands-tokens",
+							"amount": 22,
+							"label": "Strife",
+							"elastic": true
+						},
+						{
+							"item": "badlands-tokens",
+							"amount": 22,
+							"label": "Wilds",
+							"elastic": true
+						},
+						{
+							"item": "badlands-tokens",
+							"amount": 30,
+							"label": "Disease",
 							"elastic": true
 						}
 					]
