@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     # TODO: Bring the material specifications from some external source at some point.
     cfg = {
-        'spacer_width': 2,
+        'spacer_width': 1,
         'edge_width': 3,
     # Board sizes for materials
         'spacer_material_width': 400,
