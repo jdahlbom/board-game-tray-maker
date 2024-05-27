@@ -1,0 +1,34 @@
+Spirit Island: tray design times
+================================
+(̃~3 minutes: Measure the box and sleeve thickness)
+27 minutes: Google the card amounts for the game, input in layout json.
++30 minutes: Sort the cards into trays fitting the area, fix a bug
+
++20 minutes: procrastinating about box measurements
++15 minutes : measuring the small component lockers
+
+
+
+
+Measurements
+============
+
+card box free slot: 52 mm x 185 mm x 72 mm
+Invader box: 283 mm x 283 mm x 25 mm
+(Power card tray width 94.5 mm --> Free slot max dimension = 283-94.5-3 = 185.5)
+
+original invader tray:
+23mm height
+Cities 87 mm x 105 mm x 23mm
+Explorers 87 mm x 67 mm x 23mm
+Towns 87 mm x 45 mm x 23 mm
+Blight 87 mm x 25 mm x 23 mm
+Dahan 87 mm  x 68 mm x 23 mm
+Fear 87 mm x 45 mm x 23 mm
+Energy 87 mm x 55mm x 23 mm (45 mm ALMOST fits all)
+Badlands ~ 45mm x 45 mm x 23 mm
+^ Sama tiheiköt, eläimet, diseaset, strifet
+Elementit 45 mm x 45 mm x 23 mm 
+Pelaajanappulat 45 mm x 45 mm x 15 mm x 6 kpl
+-> Nappulat voisi olla 45 mm x 30 mm x 23 mm x 6 kpl sen sijaan.
+Lisäelementit 45 x 45 x 23 x 4 kpl (puolet pienempi saattaisi riittää)
