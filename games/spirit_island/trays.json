@@ -15,22 +15,28 @@
 			"needs_indent": true,
 			"comment": "23 cards total in game"
 		},
-		"invaders-7-wide": {
-			"width": 60,
+		"invaders-cities-half": {
+			"width": 87,
 			"height": 24,
-			"thickness": 10,
+			"thickness": 53,
+			"forbid_indent": true
+		},
+		"invaders-others-half": {
+			"width": 87,
+			"height": 24,
+			"thickness": 32,
 			"forbid_indent": true
 		},
 		"player-markers": {
 			"width": 45,
-			"height": 24,
+			"height": 21,
 			"thickness": 28,
 			"forbid_indent": true
 		},
-		"badlands-tokens": {
+		"fear-tokens": {
 			"width": 45,
-			"height": 24,
-			"thickness": 1.6,
+			"height": 21,
+			"thickness": 34,
 			"forbid_indent": true
 		}
 	},
@@ -112,6 +118,12 @@
 							"amount": 50,
 							"label": "Fear cards",
 							"elastic": true
+						},
+						{
+							"item": "cards-in-mayday-standard-sleeve",
+							"amount": 4,
+							"label": "Power progression",
+							"elastic": true
 						}
 					]
 				}
@@ -121,8 +133,8 @@
 			"name": "player-markers",
 			"description": "Colored player markers",
 			"dimensions": {
-				"width": 52,
-				"height": 185.5
+				"width": 51,
+				"height": 180
 			},
 			"columns": [
 				{
@@ -169,38 +181,254 @@
 			]
 		},
 		{
-			"name": "beast-tokens",
-			"description": "Special effect tokens such as Beasts, Diseases, etc",
+			"name": "spirit-special-tokens",
+			"description": "Spirit-specific markers: Incarnas, Vitality",
 			"dimensions": {
-				"width": 52,
-				"height": 185.5
+				"width": 51,
+				"height": 180
 			},
 			"columns": [
 				{
 					"elastic": true,
 					"slots": [
 						{
-							"item": "badlands-tokens",
-							"amount": 35,
+							"item": "player-markers",
+							"amount": 2,
+							"label": "Incarna",
+							"elastic": true
+						},
+						{
+							"item": "player-markers",
+							"amount": 1,
+							"label": "Deeps",
+							"elastic": true
+						},
+						{
+							"item": "player-markers",
+							"amount": 1,
+							"label": "Vitality",
+							"elastic": true
+						},
+						{
+							"item": "player-markers",
+							"amount": 1,
+							"label": "Quake",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "fear",
+			"description": "Shallow tray for Fear tokens",
+			"dimensions": {
+				"width": 51,
+				"height": 180
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "fear-tokens",
+							"amount": 3,
+							"label": "Fear",
+							"elastic": true
+						},
+						{
+							"item": "fear-tokens",
+							"amount": 2,
+							"label": "Miscallaneous tokens",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "invaders-1of2",
+			"description": "Invader-sized pieces: Split to half for convenience",
+			"dimensions": {
+				"width": 93,
+				"height": 141
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "invaders-cities-half",
+							"amount": 1,
+							"label": "Cities",
+							"elastic": false
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Explorers",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Towns",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "invaders-2of2",
+			"description": "Invader-sized pieces: Split to half for convenience",
+			"dimensions": {
+				"width": 93,
+				"height": 141
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "invaders-cities-half",
+							"amount": 1,
+							"label": "Cities",
+							"elastic": false
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Explorers",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Towns",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "board-pieces-1of2",
+			"description": "Dahans, blight etc",
+			"dimensions": {
+				"width": 93,
+				"height": 141
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Dahan",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Energy",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Blight",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Elements",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "board-pieces-2of2",
+			"description": "Dahans, blight etc",
+			"dimensions": {
+				"width": 93,
+				"height": 141
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Dahan",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Energy",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Blight",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Elements",
+							"elastic": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "beast",
+			"description": "Beasts, Diseases, etc",
+			"dimensions": {
+				"width": 93,
+				"height": 174
+			},
+			"columns": [
+				{
+					"elastic": true,
+					"slots": [
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
 							"label": "Beasts",
 							"elastic": true
 						},
 						{
-							"item": "badlands-tokens",
-							"amount": 22,
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Diseases",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Thicket",
+							"elastic": true
+						},
+						{
+							"item": "invaders-others-half",
+							"amount": 1,
 							"label": "Strife",
 							"elastic": true
 						},
 						{
-							"item": "badlands-tokens",
-							"amount": 22,
-							"label": "Wilds",
-							"elastic": true
-						},
-						{
-							"item": "badlands-tokens",
-							"amount": 30,
-							"label": "Disease",
+							"item": "invaders-others-half",
+							"amount": 1,
+							"label": "Badlands",
 							"elastic": true
 						}
 					]
@@ -208,65 +436,20 @@
 			]
 		},
 		{
-			"name": "invaders",
-			"description": "Invader-sized pieces",
+			"name": "miscallaneous",
+			"description": "Miscallaneous other components",
 			"dimensions": {
-				"width": 70.5,
-				"height": 200
+				"width": 93,
+				"height": 108
 			},
 			"columns": [
 				{
 					"elastic": true,
 					"slots": [
 						{
-							"item": "invaders-7-wide",
-							"amount": 7,
-							"label": "Explorers",
-							"elastic": true
-						},
-						{
-							"item": "invaders-7-wide",
-							"amount": 7,
-							"label": "Towns",
-							"elastic": true
-						},
-						{
-							"item": "invaders-7-wide",
-							"amount": 5,
-							"label": "Cities",
-							"elastic": true
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "board-pieces",
-			"description": "Dahans, blight etc",
-			"dimensions": {
-				"width": 70.5,
-				"height": 200
-			},
-			"columns": [
-				{
-					"elastic": true,
-					"slots": [
-						{
-							"item": "invaders-7-wide",
-							"amount": 7,
-							"label": "Explorers",
-							"elastic": true
-						},
-						{
-							"item": "invaders-7-wide",
-							"amount": 7,
-							"label": "Towns",
-							"elastic": true
-						},
-						{
-							"item": "invaders-7-wide",
-							"amount": 5,
-							"label": "Cities",
+							"item": "invaders-others-half",
+							"amount": 3,
+							"label": "Miscallaneous",
 							"elastic": true
 						}
 					]
