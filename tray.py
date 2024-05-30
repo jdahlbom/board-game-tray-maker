@@ -6,6 +6,9 @@ from string import ascii_lowercase
 
 
 def compute_minimum_dimensions(item_types, item):
+    item_type = item['item']
+    if item_type not in item_types:
+        raise Exception(f"Item type [ {item_type} ] not specified!")
     single_item = item_types[item['item']]
     elastic = False if 'elastic' not in item else True
     label = None if 'label' not in item else item['label']
