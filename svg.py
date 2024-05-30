@@ -2,7 +2,7 @@ import svgwrite
 
 # Hairline stroke (Cutting) for Epilog printers is 0.001"
 STROKE = 0.001
-MIN_TOOTH_WIDTH = 8.0
+MIN_TOOTH_WIDTH = 7.0
 INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
