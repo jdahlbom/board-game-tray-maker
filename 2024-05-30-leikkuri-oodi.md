@@ -1,3 +1,36 @@
+2024-05-30
+
+Epilog Fusion M2 laser cutter
+CorelDraw
+Inkscape
+
+Cutting Spirit Island tray
+
+- Inkscape shows different mm widths than specification file shows.
+- Card tray base is specified as 94.5 mm wide. Unscaled result in Inkscape is
+  25.321 mm. Let's assume everything needs to be scale up by 3.732.
+  - Previous log used 378% as the scaling multiplier. I assume this is the
+    same problem as back then.
+    
+- Let's print the power card trays first, as this was the primary goal.
+
+- The spacers have some off by few mm -error, this probably is due to changes
+  to the indentation feature. Will have to try and fit the pieces together.
+  
+- Didn't have time enough: 35 min went to organizing stuff in Inkscape and figuring
+out the scaling ratio. 15 min to cutting 3mm plywood and 5+5 minutes to troubleshooting
+and cutting 1mm plywood.
+
+- Card slots are too narrow by 3-5 mm. Will have to track the error down.
+  - Error was in the card dimensions: I took them directly from Mayday Standard Sleeve
+    package, but didn't realize that was the max size of a card, not the outer dimensions
+    of the sleeve.
+
+- Resizing the elements and manually laying out the separate objects is a nuisance
+  that takes too much precious laser cutter lab time. Will have to prioritize these
+  fixes soon.
+
+
 2023-10-23
 Fusion Epilog M2 ?
 

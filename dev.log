@@ -1,3 +1,10 @@
+2024-06-01
+I did a first prototype cutting of Spirit Island big cards.
+- There is still some sort of scaling issue: Inkscape assumes different scaling of svgs in millimeters.
+- I changed the material thickness which seemed to result in erroneous spacer measurements.
+- The layout part during lab time is annoying, and it might be worth my time to develop some sort
+of bin packing algorithm implementation for the items.
+
 2024-05-11
 Removed the additional "last" spacer creation: The last slot ends with an Edge piece, not a spacer.
 Note that now the cutting Stroke Width is hairline, .001 px which Inkscape treats as invisible until

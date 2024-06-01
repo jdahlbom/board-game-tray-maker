@@ -450,6 +450,82 @@ def create_vertical_spacer_combined_slot_list(columns, spacer_w):
     return spacer_indent_lists
 
 
+# Horizontal spacer generation, they may span multiple columns.
+# Spans should be identified by slots having 'column_span_id' field.
+# Inputs:
+# columns : Tray spec of columns with added information about column spanning slot spacers
+# edge_w : Edge material width, where edge refers to tray edges
+# spacer_w : Spacer material width, where spacer is any component within the tray but not on its edges.
+#
+# Alters:
+# columns[index]['slots'][slot_index]['skip_this'] values in case of column spanning horiz spacers.
+#
+# Returns:
+# spacer_paths : Array of paths to draw
+def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
+    def determine_if_should_indent(slot_index, slots):
+        if len(slots)-1 <= slot_index:
+            print("Should not run determine_if_should_indent for the last slot in column")
+            return False
+
+        slot_above = slots[slot_index]
+        slot_below = slots[slot_index+1]
+
+        needs_indent_a = 'needs_indent' in slot_above and slot_above['needs_indent']
+        needs_indent_b = 'needs_indent' in slot_below and slot_below['needs_indent']
+        forbid_indent_a = 'forbid_indent' in slot_above and slot_above['forbid_indent']
+        forbid_indent_b = 'forbid_indent' in slot_below and slot_below['forbid_indent']
+
+        return (needs_indent_a or needs_indent_b) and not (forbid_indent_a or forbid_indent_b)
+
+    spacer_paths = []
+    for idx, column in enumerate(columns):
+        slots = column['slots']
+
+        l_edge_width = edge_width
+        r_edge_width = edge_width
+        if idx > 0:
+            l_edge_width = spacer_width
+        if idx < len(columns)-1:
+            r_edge_width = spacer_width
+
+        if len(slots) == 1:
+            continue
+
+        for slot_index, slot in enumerate(slots):
+            # Don't generate end spacer for the last slot of column.
+            if slot_index == len(slots)-1:
+                continue
+            if 'skip_this' in slot:
+                continue
+            col_slots = [column['width']]
+            spacer_indents = [determine_if_should_indent(slot_index, slots)]
+            if 'column_span_id' in slot:
+                csid = slot['column_span_id']
+                for rcolumn in columns[idx+1:-1]:
+                    right_slots = list(filter(lambda rslot: 'column_span_id' in rslot
+                                                            and rslot['column_span_id'] == csid, rcolumn['slots']))
+                    if len(right_slots) > 0:
+                        r_slot = right_slots[0]
+                        rslot_index = rcolumn['slots'].index(r_slot)
+                        col_slots.append(rcolumn['width'])
+                        spacer_indents.append(determine_if_should_indent(rslot_index, rcolumn['slots']))
+
+                        r_slot['skip_this'] = True
+                        if rcolumn == columns[-1]:
+                            r_edge_width = edge_width  #H-spacer ends up connecting to tray edge.
+
+            spacer_paths.append(generate_horiz_spacer(
+                col_slots,
+                spacer_indents,
+                sum(col_slots) + spacer_width * (len(col_slots)-1),
+                spacer_width,
+                l_edge_width,
+                r_edge_width,
+                depth))
+    return spacer_paths
+
+
 def draw_spacers(dwg, trayspec):
     columns = trayspec['columns']
     spacer_w = trayspec['spacer_width']
@@ -462,80 +538,6 @@ def draw_spacers(dwg, trayspec):
     paths = []  # List of lists of strings. Each list of strings contains the svg vector path for a object
     for gaps in spacer_indent_gaps:
         paths.append(generate_vert_spacer(gaps, content_width, depth, edge_w, spacer_w))
-
-    # Horizontal spacer generation, they may span multiple columns.
-    # Spans should be identified by slots having 'column_span_id' field.
-    # Inputs:
-    # columns : Tray spec of columns with added information about column spanning slot spacers
-    # edge_w : Edge material width, where edge refers to tray edges
-    # spacer_w : Spacer material width, where spacer is any component within the tray but not on its edges.
-    #
-    # Alters:
-    # columns[index]['slots'][slot_index]['skip_this'] values in case of column spanning horiz spacers.
-    #
-    # Returns:
-    # spacer_paths : Array of paths to draw
-    def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
-        def determine_if_should_indent(slot_index, slots):
-            if len(slots)-1 <= slot_index:
-                print("Should not run determine_if_should_indent for the last slot in column")
-                return False
-
-            slot_above = slots[slot_index]
-            slot_below = slots[slot_index+1]
-
-            needs_indent_a = 'needs_indent' in slot_above and slot_above['needs_indent']
-            needs_indent_b = 'needs_indent' in slot_below and slot_below['needs_indent']
-            forbid_indent_a = 'forbid_indent' in slot_above and slot_above['forbid_indent']
-            forbid_indent_b = 'forbid_indent' in slot_below and slot_below['forbid_indent']
-
-            return (needs_indent_a or needs_indent_b) and not (forbid_indent_a or forbid_indent_b)
-
-
-        spacer_paths = []
-        for idx, column in enumerate(columns):
-            slots = column['slots']
-
-            l_edge_width = edge_width
-            if idx > 0:
-                l_edge_width = spacer_width
-            r_edge_width = spacer_width
-
-            if len(slots) == 1:
-                continue
-
-            for slot_index, slot in enumerate(slots):
-                # Don't generate end spacer for the last slot of column.
-                if slot_index == len(slots)-1:
-                    continue
-                if 'skip_this' in slot:
-                    continue
-                col_slots = [column['width']]
-                spacer_indents = [determine_if_should_indent(slot_index, slots)]
-                if 'column_span_id' in slot:
-                    csid = slot['column_span_id']
-                    for rcolumn in columns[idx+1:-1]:
-                        right_slots = list(filter(lambda rslot: 'column_span_id' in rslot
-                            and rslot['column_span_id'] == csid, rcolumn['slots']))
-                        if len(right_slots) > 0:
-                            r_slot = right_slots[0]
-                            rslot_index = rcolumn['slots'].index(r_slot)
-                            col_slots.append(rcolumn['width'])
-                            spacer_indents.append(determine_if_should_indent(rslot_index, rcolumn['slots']))
-
-                            r_slot['skip_this'] = True
-                            if rcolumn == columns[-1]:
-                                r_edge_width = edge_w  #H-spacer ends up connecting to tray edge.
-
-                spacer_paths.append(generate_horiz_spacer(
-                    col_slots,
-                    spacer_indents,
-                    sum(col_slots) + spacer_w * (len(col_slots)-1),
-                    spacer_w,
-                    l_edge_width,
-                    r_edge_width,
-                    depth))
-        return spacer_paths
 
     horiz_paths = generate_horizontal_spacers(columns, edge_w, spacer_w, depth)
 
