@@ -2,8 +2,8 @@
 	"comment": "Spirit Island box has 283mm x 283mm (x65mm?) of internal space",
 	"item-types": {
 		"cards-in-mayday-standard-sleeve": {
-			"width": 88.2,
-			"height": 63.7,
+			"width": 92,
+			"height": 67,
 			"thickness": 0.50,
 			"needs_indent": true,
 			"comment": "412 cards total in game"
@@ -45,7 +45,7 @@
 			"name": "power-cards",
 			"description": "power cards, needed during play",
 			"dimensions": {
-				"width": 94.5,
+				"width": 98,
 				"height": 92
 			},
 			"columns": [
@@ -72,7 +72,7 @@
 			"name": "events",
 			"description": "events, needed during play",
 			"dimensions": {
-				"width": 94.5,
+				"width": 98,
 				"height": 37
 			},
 			"columns": [
@@ -93,7 +93,7 @@
 			"name":"big-cards-2",
 			"description": "spirit cards and everything else needed in setup",
 			"dimensions": {
-				"width": 94.5,
+				"width": 98,
 				"height": 141
 			},
 			"columns":
