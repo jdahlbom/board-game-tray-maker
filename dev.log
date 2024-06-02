@@ -1,3 +1,13 @@
+2024-06-02
+- Fixed the horizontal spacer r_edge_width error - now last column r_edge_width = edge_width
+- Duplicated the edge slope width logic to spacers.
+- Changed viewBox size to simulate 96 DPI scale: Inkscape seems to have correct metric dimensions now.
+Next development idea: Change SVG outputs so that we can use https://github.com/secnot/rectpack 2D knapsack
+packing library on them, and generate SVG from already optimized area.
+DPI scale is hopeful effort at best, so I should generate area boundary markers that can be verified
+at printing time: Corner marks with some sort of known max dimension values.
+
+
 2024-06-01
 I did a first prototype cutting of Spirit Island big cards.
 - There is still some sort of scaling issue: Inkscape assumes different scaling of svgs in millimeters.
