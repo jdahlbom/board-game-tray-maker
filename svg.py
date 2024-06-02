@@ -7,6 +7,10 @@ INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
 
+DPI = 96 # Assumed DPI used by CorelDraw
+INCHES_PER_MM = 1.0 / 25.4
+DPI_CONVERSION = INCHES_PER_MM * DPI # Conversion rate is 3.77953
+
 
 def mm(value):
     return '{}mm'.format(value)
@@ -15,8 +19,8 @@ def mm(value):
 def get_drawing(result_file_name, width, height):
     return svgwrite.Drawing(
             filename=result_file_name, 
-            size=('{}mm'.format(width), '{}mm'.format(height)),
-            viewBox=(0, 0, width, height))
+            size=(f"{width}mm", f"{height}mm"),
+            viewBox=(0, 0, width * DPI_CONVERSION, height * DPI_CONVERSION))
 
 
 def kerf_correct_corner(corner_index):
