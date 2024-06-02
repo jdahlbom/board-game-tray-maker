@@ -343,11 +343,13 @@ def generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_widt
     path_parts = []
     path_parts.append('h {}'.format(l_edge_width + K_CORR))
     if len(list(filter(lambda spacer: spacer, spacer_indents))) > 0:
+        margin = 5.0
         for idx, slot_width in enumerate(col_widths):
             if spacer_indents[idx]:
-                path_parts.append('h {}'.format(slot_width/4))
-                path_parts = path_parts + cubic_sloped_indent(slot_width/2.0, slot_width/4.0, depth/2)
-                path_parts.append('h {}'.format(col_widths[idx]/4))
+                # TODO: Duplicate code, should refactor to single function call
+                path_parts.append('h {}'.format(margin))
+                path_parts = path_parts + cubic_sloped_indent(slot_width-2*margin, slot_width-20.0-2*margin, depth/2.0)
+                path_parts.append('h {}'.format(margin))
             else:
                 path_parts.append('h {}'.format(col_widths[idx]))
             if idx < len(col_widths)-1:
