@@ -67,4 +67,3 @@ def test_bin_packing():
     # Fourth object should be in bin 1
     assert(rect_list[3][0] == 1)
 
-    print(rect_list)

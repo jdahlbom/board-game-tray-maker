@@ -70,7 +70,6 @@ def position_spacers(left_col, right_col, spacer_width):
             if 'column_span_id' not in lnode():
                 lnode()['column_span_id'] = random_string() 
             rnode()['column_span_id'] = lnode()['column_span_id']
- 
 
         lheight = left_height + get_height(lnode.value)
         rheight = right_height + get_height(rnode.value)
@@ -198,7 +197,7 @@ def get_specification(specsfile):
     specs = {}
     with open(specsfile) as specsfile:
         specs = json.load(specsfile)
-    specsfile.close
+    specsfile.close()
 
     trays = specs['trays']
     for tray in trays:
