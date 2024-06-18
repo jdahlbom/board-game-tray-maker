@@ -135,7 +135,7 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
 
 
 # Generates single edge "wall" piece
-def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset, depth):
+def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth):
     path_parts = []
     # Top edge
     path_parts.append(kerf_correct_corner(0))
@@ -145,8 +145,8 @@ def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_widt
     path_parts.append(kerf_correct_corner(1))
     path_parts.extend(generate_toothing(1, not corner_toothing, depth, edge_width))
     path_parts.append('v {}'.format(edge_width))
-    # Bottom edge
 
+    # Bottom edge
     path_parts.append(kerf_correct_corner(2))
     if corner_toothing:
         path_parts.append('h -{}'.format(edge_width))
@@ -157,22 +157,15 @@ def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_widt
         path_parts.append('h -{}'.format(edge_width))
 
     path_parts.append(kerf_correct_corner(3))
+
     # Left edge
     path_parts.append('v -{}'.format(edge_width))
     path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
 
-    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-    if corner_toothing:
-        path.push('M 1 {}'.format(v_offset))
-    else:
-        path.push('M {} {}'.format(edge_width+1, v_offset))
-
     path_parts.append(kerf_correct_corner(4))
-    for part in path_parts:
-        path.push(part)
+    path_parts.append('z')
 
-    path.push('z')
-    return path
+    return path_parts
 
 
 def generate_edges(trayspec):
@@ -190,9 +183,8 @@ def generate_edges(trayspec):
         horiz_slots_and_widths,
         spacer_w, 
         content_width, 
-        True, 
-        edge_w, 
-        0,
+        True,
+        edge_w,
         depth) )
 
     #Right wall
@@ -204,9 +196,8 @@ def generate_edges(trayspec):
         slot_widths, 
         spacer_w, 
         content_height, 
-        False, 
-        edge_w, 
-        (depth + 5)*1,
+        False,
+        edge_w,
         depth) )
     
     #Bottom wall
@@ -222,7 +213,6 @@ def generate_edges(trayspec):
         content_width,
         True,
         edge_w,
-        (depth + 5)*2,
         depth))
 
     #Left wall
@@ -234,10 +224,27 @@ def generate_edges(trayspec):
         content_height,
         False,
         edge_w,
-        (depth + 5)*3,
         depth))
 
-    return paths
+    def old_write_svg(path_parts, v_offset, corner_toothing):
+        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+        if corner_toothing:
+            path.push('M 1 {}'.format(v_offset))
+        else:
+            path.push('M {} {}'.format(edge_w+1, v_offset))
+
+        for part in path_parts:
+            path.push(part)
+
+        return path
+
+    svg_paths = []
+    corner_toothings = [ True, False, True, False]
+    for idx, path_parts in enumerate(paths):
+        v_offset = (depth+5) * idx
+        svg_paths.append(old_write_svg(path_parts, v_offset, corner_toothings[idx]))
+
+    return svg_paths
 
 
 def generate_floor(trayspec, v_offset):
