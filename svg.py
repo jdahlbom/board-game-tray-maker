@@ -11,6 +11,10 @@ DPI = 96 # Assumed DPI used by CorelDraw
 INCHES_PER_MM = 1.0 / 25.4
 DPI_CONVERSION = INCHES_PER_MM * DPI # Conversion rate is 3.77953
 
+# When returning array of SVG draw instructions from a function, there
+# should also be following information included in the top level:
+# { "svg": [drawing instructions], "width": number, "height", number, "tray_id": alphanumeric, "thickness": number }
+
 
 def mm(value):
     return '{}mm'.format(value)
@@ -130,55 +134,56 @@ def generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothin
     return path_parts
 
 
+# Generates single edge "wall" piece
+def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset, depth):
+    path_parts = []
+    # Top edge
+    path_parts.append(kerf_correct_corner(0))
+    path_parts.extend(generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth))
+
+    # Right edge
+    path_parts.append(kerf_correct_corner(1))
+    path_parts.extend(generate_toothing(1, not corner_toothing, depth, edge_width))
+    path_parts.append('v {}'.format(edge_width))
+    # Bottom edge
+
+    path_parts.append(kerf_correct_corner(2))
+    if corner_toothing:
+        path_parts.append('h -{}'.format(edge_width))
+
+    path_parts.extend(generate_toothing(2, False, content_width, edge_width))
+
+    if corner_toothing:
+        path_parts.append('h -{}'.format(edge_width))
+
+    path_parts.append(kerf_correct_corner(3))
+    # Left edge
+    path_parts.append('v -{}'.format(edge_width))
+    path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
+
+    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+    if corner_toothing:
+        path.push('M 1 {}'.format(v_offset))
+    else:
+        path.push('M {} {}'.format(edge_width+1, v_offset))
+
+    path_parts.append(kerf_correct_corner(4))
+    for part in path_parts:
+        path.push(part)
+
+    path.push('z')
+    return path
+
+
 def generate_edges(trayspec):
     spacer_w = trayspec['spacer_width']
     edge_w = trayspec['edge_width']
     depth = trayspec['tray_depth']
- 
-    def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_width, v_offset):
-        path_parts = []
-        #Top edge
-        path_parts.append(kerf_correct_corner(0))
-        path_parts.extend(generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth))
-
-        #Right edge
-        path_parts.append(kerf_correct_corner(1))
-        path_parts.extend(generate_toothing(1, not corner_toothing, depth, edge_width))
-        path_parts.append('v {}'.format(edge_width))
-        #Bottom edge
-       
-        path_parts.append(kerf_correct_corner(2))
-        if corner_toothing:
-            path_parts.append('h -{}'.format(edge_w))
-
-        path_parts.extend(generate_toothing(2, False, content_width, edge_width))
-
-        if corner_toothing:
-            path_parts.append('h -{}'.format(edge_w))
-
-        path_parts.append(kerf_correct_corner(3))
-        #Left edge
-        path_parts.append('v -{}'.format(edge_w))
-        path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
-
-        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-        if corner_toothing:
-            path.push('M 1 {}'.format(v_offset))
-        else:
-            path.push('M {} {}'.format(edge_width+1, v_offset))
-
-        path_parts.append(kerf_correct_corner(4))
-        for part in path_parts:
-            path.push(part)
-
-        path.push('z')
-        return path
-
 
     content_width = trayspec['tray_width']-edge_w*2
     content_height = trayspec['tray_height']-edge_w*2
 
-    #Top edge
+    #Top wall
     horiz_slots_and_widths = list(map(lambda column: {'length': column['width'], 'slot_properties': column['slots'][0]}, trayspec['columns']))
     paths = []
     paths.append( generate_edge(
@@ -187,9 +192,10 @@ def generate_edges(trayspec):
         content_width, 
         True, 
         edge_w, 
-        0) )
+        0,
+        depth) )
 
-    #Right edge
+    #Right wall
     def slots_from_column(column_slots):
         return list([{'length': slot['height'], 'slot_properties': slot} for slot in column_slots])
 
@@ -200,9 +206,10 @@ def generate_edges(trayspec):
         content_height, 
         False, 
         edge_w, 
-        (depth + 5)*1) )
+        (depth + 5)*1,
+        depth) )
     
-    #Bottom edge
+    #Bottom wall
     horiz_slot_width_sum = sum([slot['length'] for slot in horiz_slots_and_widths])
     if horiz_slot_width_sum + spacer_w * (len(horiz_slots_and_widths)-1) < content_width:
         print("Too little column content, appending empty")
@@ -215,9 +222,10 @@ def generate_edges(trayspec):
         content_width,
         True,
         edge_w,
-        (depth + 5)*2))
+        (depth + 5)*2,
+        depth))
 
-    #Left edge
+    #Left wall
     slots = slots_from_column(trayspec['columns'][0]['slots'])
 
     paths.append(generate_edge(
@@ -226,7 +234,8 @@ def generate_edges(trayspec):
         content_height,
         False,
         edge_w,
-        (depth + 5)*3) )
+        (depth + 5)*3,
+        depth))
 
     return paths
 
