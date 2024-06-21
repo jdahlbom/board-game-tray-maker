@@ -147,6 +147,8 @@ def generate_trays_from_spec(spacer_width, edge_width, specs, trayname=None):
     item_types = specs['item-types']
     processed_trays = list([generate_columns_from_spec(spacer_width, edge_width, tray, item_types) for tray in trays
                             if (tray['name']==trayname or trayname is None)])
+    if not processed_trays:
+        print(f"No trays found in spec or matching given tray name {trayname}")
     return processed_trays
 
 
