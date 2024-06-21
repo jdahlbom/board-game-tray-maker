@@ -150,7 +150,6 @@ def test_single_column_two_slotted_edges():
     ]
 
     upper_left_corner_again = [
-        f"v {-edge_width}",
         f"v {-K_CORR}"
     ]
 

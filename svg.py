@@ -162,7 +162,6 @@ def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_widt
     path_parts.append('v -{}'.format(edge_width))
     path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
 
-    path_parts.append(f"v {-edge_width}")
     path_parts.append(kerf_correct_corner(4))
     path_parts.append('z')
 
