@@ -35,9 +35,9 @@ def kerf_correct_corner(corner_index):
     elif corner_index == 2:
         return 'v {} h -{}'.format(K_CORR, K_CORR)
     elif corner_index == 3:
-        return 'h -{} v -{}'.format(K_CORR, K_CORR)
+        return f"h -{K_CORR} v -{K_CORR}"
     elif corner_index == 4:
-        return 'v {}'.format(K_CORR)
+        return f"v {-K_CORR}"
 
 
 def generate_toothing(direction, invert, length, tooth_depth):
@@ -162,10 +162,21 @@ def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_widt
     path_parts.append('v -{}'.format(edge_width))
     path_parts.extend(generate_toothing(3, not corner_toothing, depth, edge_width))
 
+    path_parts.append(f"v {-edge_width}")
     path_parts.append(kerf_correct_corner(4))
     path_parts.append('z')
 
-    return path_parts
+    offset_x = 0
+    if corner_toothing:
+        offset_x = edge_width
+    return {
+        'svg': path_parts,
+        'width': content_width + 2 * edge_width,
+        'height': depth,
+        'offset_x': offset_x,
+        'offset_y': 0,
+        'thickness': edge_width
+    }
 
 
 def generate_edges(trayspec):
@@ -226,25 +237,10 @@ def generate_edges(trayspec):
         edge_w,
         depth))
 
-    def old_write_svg(path_parts, v_offset, corner_toothing):
-        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-        if corner_toothing:
-            path.push('M 1 {}'.format(v_offset))
-        else:
-            path.push('M {} {}'.format(edge_w+1, v_offset))
-
-        for part in path_parts:
-            path.push(part)
-
-        return path
-
-    svg_paths = []
-    corner_toothings = [ True, False, True, False]
-    for idx, path_parts in enumerate(paths):
-        v_offset = (depth+5) * idx
-        svg_paths.append(old_write_svg(path_parts, v_offset, corner_toothings[idx]))
-
-    return svg_paths
+    for idx, svg_path in enumerate(paths):
+        paths[idx]['tray'] = trayspec['name']
+    return paths
+    # svg_paths.append(old_write_svg(path_parts, v_offset, corner_toothings[idx]))
 
 
 def generate_floor(trayspec, v_offset):
@@ -574,9 +570,25 @@ def draw_spacers(dwg, trayspec):
 
 
 def draw_edges(dwg, trayspec):
-    paths = generate_edges(trayspec)
-    paths.append(generate_floor(trayspec, (trayspec['tray_depth']+5)*4))
+    object_padding = 1
+    # This old method of drawing objects without layout is kept here for visual debugging for now.
+    # Should be replaced with entirely separate layout package
 
+    def old_write_svg(path_object, v_offset):
+        path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+        path.push(f"M {path_object['offset_x'] + object_padding} {path_object['offset_y'] + object_padding}")
+        for part in path_object['svg']:
+            path.push(part)
+        return path
+
+    svg_objects = generate_edges(trayspec)
+    paths = []
+    cumulative_v_offset = 0
+    for svg_part in svg_objects:
+        paths.append(old_write_svg(svg_part, cumulative_v_offset))
+        cumulative_v_offset += svg_part['height'] + 2 * object_padding
+
+    paths.append(generate_floor(trayspec, (trayspec['tray_depth']+5)*4))
     for path in paths:
         dwg.add(path)
 

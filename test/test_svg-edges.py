@@ -53,6 +53,7 @@ def test_two_slot_slotted_top_edge():
     ]
     assert(expected == res)
 
+
 def test_single_column_two_slotted_edges():
     spacer_width = 2
     edge_width = 3
@@ -60,7 +61,8 @@ def test_single_column_two_slotted_edges():
     depth = 30
     max_tooth_size = 10.0
 
-    trayspec = {
+    tray_spec = {
+        'name': 'Test tray',
         'spacer_width': spacer_width,
         'edge_width': edge_width,
         'tray_depth': depth,
@@ -87,15 +89,9 @@ def test_single_column_two_slotted_edges():
         f"h {K_CORR}"
     ]
 
-    top_edge_svg = [
+    top_wall_top_edge_svg = [
         f"h {edge_width}",
-        f"h {trayspec['columns'][0]['slots'][0]['height']}",
-        f"h {K_CORR}",
-        f"v {INDENT_DEPTH - K_CORR}",
-        f"h {spacer_width - 2 * K_CORR}",
-        f"v -{INDENT_DEPTH - K_CORR}",
-        f"h {K_CORR}",
-        f"h {trayspec['columns'][0]['slots'][1]['height']}",
+        f"h {content_width}",
         f"h {edge_width}"
     ]
 
@@ -113,7 +109,9 @@ def test_single_column_two_slotted_edges():
     ]
 
     lower_right_corner = [
-        f"v {K_CORR} h {-K_CORR}"
+        f"v {edge_width}",
+        f"v {K_CORR} h {-K_CORR}",
+        f"h {-edge_width}"
     ]
 
     bottom_tooth_size = 100.0 / 9.0
@@ -134,36 +132,49 @@ def test_single_column_two_slotted_edges():
         f"v {-tooth_depth}",
         f"h {-(bottom_tooth_size - K_CORR*2)}",
         f"v {tooth_depth}",
-        f"h {-(bottom_tooth_size + K_CORR)}",
-        f"v {-tooth_depth}"
+        f"h {-(bottom_tooth_size + K_CORR)}"
     ]
 
     lower_left_corner = [
-        f"h {-K_CORR} v{-K_CORR}"
+        f"h {-edge_width}",
+        f"h {-K_CORR} v {-K_CORR}",
+        f"v {-edge_width}"
     ]
 
     left_edge_svg = [
         f"v {-(max_tooth_size + K_CORR)}",
         f"h {tooth_depth}",
         f"v {-(max_tooth_size - 2*K_CORR)}",
-        f"h {tooth_depth}",
+        f"h {-tooth_depth}",
         f"v {-(max_tooth_size + K_CORR)}"
     ]
 
     upper_left_corner_again = [
+        f"v {-edge_width}",
         f"v {-K_CORR}"
     ]
 
+    close_path = ['z']
+
     whole_piece_svg = upper_left_corner +\
-        top_edge_svg +\
+        top_wall_top_edge_svg +\
         upper_right_corner +\
         right_edge_svg +\
         lower_right_corner +\
         bottom_edge_svg +\
         lower_left_corner +\
         left_edge_svg +\
-        upper_left_corner_again
+        upper_left_corner_again +\
+        close_path
 
-    res = svg.generate_edges(trayspec)
-
-    # assert(res[0] == whole_piece_svg)
+    expected = {
+        'svg': whole_piece_svg,
+        'width': content_width + 2 * edge_width,
+        'height': depth,
+        'offset_x': edge_width,
+        'offset_y': 0,
+        'tray': 'Test tray',
+        'thickness': edge_width
+    }
+    res = svg.generate_edges(tray_spec)
+    assert(res[0] == expected)
