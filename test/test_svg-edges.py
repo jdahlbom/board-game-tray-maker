@@ -169,8 +169,8 @@ def test_single_column_two_slotted_edges():
     expected = {
         'svg': whole_piece_svg,
         'width': content_width + 2 * edge_width,
-        'height': depth,
-        'offset_x': edge_width,
+        'height': depth + edge_width,
+        'offset_x': 0,
         'offset_y': 0,
         'tray': 'Test tray',
         'thickness': edge_width

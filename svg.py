@@ -166,12 +166,12 @@ def generate_edge(slots, spacer_width, content_width, corner_toothing, edge_widt
     path_parts.append('z')
 
     offset_x = 0
-    if corner_toothing:
+    if not corner_toothing:
         offset_x = edge_width
     return {
         'svg': path_parts,
         'width': content_width + 2 * edge_width,
-        'height': depth,
+        'height': depth + edge_width,
         'offset_x': offset_x,
         'offset_y': 0,
         'thickness': edge_width
@@ -575,7 +575,7 @@ def draw_edges(dwg, trayspec):
 
     def old_write_svg(path_object, v_offset):
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-        path.push(f"M {path_object['offset_x'] + object_padding} {path_object['offset_y'] + object_padding}")
+        path.push(f"M {path_object['offset_x'] + object_padding} {path_object['offset_y'] + object_padding + v_offset}")
         for part in path_object['svg']:
             path.push(part)
         return path
@@ -587,7 +587,7 @@ def draw_edges(dwg, trayspec):
         paths.append(old_write_svg(svg_part, cumulative_v_offset))
         cumulative_v_offset += svg_part['height'] + 2 * object_padding
 
-    paths.append(generate_floor(trayspec, (trayspec['tray_depth']+5)*4))
+    paths.append(generate_floor(trayspec, cumulative_v_offset))
     for path in paths:
         dwg.add(path)
 
