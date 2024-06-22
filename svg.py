@@ -1,5 +1,7 @@
 import svgwrite
 
+import svg
+
 # Hairline stroke (Cutting) for Epilog printers is 0.001"
 STROKE = 0.001
 MIN_TOOTH_WIDTH = 7.0
@@ -310,7 +312,8 @@ def generate_floor(trayspec):
         'height': height + 2 * edge_w,
         'offset_x': edge_w,
         'offset_y': edge_w,
-        'thickness': edge_w
+        'thickness': edge_w,
+        'tray': trayspec['name']
     }
 
 
@@ -592,7 +595,15 @@ def draw_edges(dwg, trayspec):
             path.push(part)
         return path
 
+    def generate_nested_objects(parent_object):
+        separate_objects = list()
+        for nested_part in parent_object['nested_objects']:
+            nested_part['offset_x'] += floor_object['offset_x']
+            nested_part['offset_y'] += floor_object['offset_y']
+
     svg_objects = generate_edges(trayspec)
+    svg_objects.append(generate_floor(trayspec))
+
     paths = []
     cumulative_v_offset = 0
     for svg_part in svg_objects:

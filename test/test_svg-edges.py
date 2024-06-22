@@ -193,7 +193,7 @@ def test_generate_floor_with_two_simple_columns():
         'tray_height': content_width + 2*edge_width,
         'columns': [
             {
-                'width': content_width,
+                'width': (content_width - spacer_width) / 2.0,
                 'slots': [
                     {
                         'height': content_width,
@@ -202,10 +202,10 @@ def test_generate_floor_with_two_simple_columns():
                 ]
             },
             {
-                'width': content_width,
+                'width': (content_width - spacer_width) / 2.0,
                 'slots': [
                     {
-                        'height': 50,
+                        'height': content_width,
                         'forbid_indent': True
                     }
                 ]
@@ -273,5 +273,31 @@ def test_generate_floor_with_two_simple_columns():
         last_corner +\
         close_path
 
+    hole_width = svg.MIN_TOOTH_WIDTH
+    nested_objects = [{
+        'svg': [
+            f"m {K_CORR} {K_CORR}",
+            f"h {spacer_width - 2 * K_CORR}",
+            f"v {hole_width - 2 * K_CORR}",
+            f"h -{spacer_width - 2 * K_CORR}",
+            f"v -{hole_width - 2 * K_CORR}",
+            'z'
+        ],
+        'offset_x': (content_width - spacer_width) / 2.0,
+        'offset_y': (tray_spec['columns'][0]['slots'][0]['height'] - hole_width) / 2.0
+    }]
+
     res = svg.generate_floor(tray_spec)
     assert(res['svg'] == expected_svg)
+    assert(res['nested_objects'] == nested_objects)
+    expected_floor_object = {
+        'svg': expected_svg,
+        'nested_objects': nested_objects,
+        'offset_x': edge_width,
+        'offset_y': edge_width,
+        'thickness': edge_width,
+        'width': content_width + 2 * edge_width,
+        'height': content_width + 2 * edge_width,
+        'tray': tray_spec['name']
+    }
+    assert(res == expected_floor_object)
