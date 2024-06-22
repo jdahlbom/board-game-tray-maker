@@ -13,7 +13,18 @@ DPI_CONVERSION = INCHES_PER_MM * DPI # Conversion rate is 3.77953
 
 # When returning array of SVG draw instructions from a function, there
 # should also be following information included in the top level:
-# { "svg": [drawing instructions], "width": number, "height", number, "tray_id": alphanumeric, "thickness": number }
+# { "svg": [drawing instructions],
+#   "nested_objects": [ {
+#       "svg": [ as above ],
+#       "offset_x": numeric offset relative to parent object
+#       "offset_y": numeric offset relative to parent object
+#   }],
+#   "width": number,
+#   "height", number,
+#   "offset_x": number, Offset of starting point relative to origin of "bounding box"
+#   "offset_y": numbre, offset of starting point relative to origin of "bounding box"
+#   "tray_id": alphanumeric,
+#   "thickness": number }
 
 
 def mm(value):
@@ -242,7 +253,7 @@ def generate_edges(trayspec):
     # svg_paths.append(old_write_svg(path_parts, v_offset, corner_toothings[idx]))
 
 
-def generate_floor(trayspec, v_offset):
+def generate_floor(trayspec):
     edge_w = trayspec['edge_width']
     spacer_w = trayspec['spacer_width']
     width = trayspec['tray_width'] - edge_w*2
@@ -257,8 +268,10 @@ def generate_floor(trayspec, v_offset):
     p.extend(generate_toothing(2, True, width, edge_w))
     p.append(kerf_correct_corner(3))
     p.extend(generate_toothing(3, True, height, edge_w))
+    p.append(kerf_correct_corner(4))
+    p.append('z')
 
-    def generate_internal_holes(origin_h_offset, origin_v_offset):
+    def generate_internal_holes():
         col_widths = list(map(lambda col: col['width'], trayspec['columns']))
         hole_width = MIN_TOOTH_WIDTH
         if height/hole_width < 3:
@@ -270,41 +283,40 @@ def generate_floor(trayspec, v_offset):
 
         tooth_spacing = (height - num_tooth * hole_width) / (num_tooth + 1)
 
-        parts = []
+        hole_svgs = []
         for idx, col_w in enumerate(col_widths[0:-1]):
-            h_offset = sum(col_widths[0:idx+1]) + idx * spacer_w + origin_h_offset
+            parts = list()
+            h_offset = sum(col_widths[0:idx+1]) + idx * spacer_w
             for tooth_idx in range(0, num_tooth):
-                v_offset = (tooth_idx + 1) * tooth_spacing + tooth_idx * hole_width + origin_v_offset
-                parts.append('M {} {}'.format(h_offset, v_offset))
+                v_offset = (tooth_idx + 1) * tooth_spacing + tooth_idx * hole_width
                 parts.append('m {} {}'.format(K_CORR, K_CORR))
                 parts.append('h {}'.format(spacer_w - K_CORR*2))
                 parts.append('v {}'.format(hole_width - K_CORR*2))
                 parts.append('h -{}'.format(spacer_w - K_CORR*2))
                 parts.append('v -{}'.format(hole_width - K_CORR*2))
-        return parts
+                parts.append('z')
+                hole_svgs.append({
+                    'svg': parts,
+                    'offset_x': h_offset,
+                    'offset_y': v_offset
+                })
+        return hole_svgs
 
-    def generate_slot_texts(columns, origin_h_offset, origin_v_offset):
-        col_widths = list([col['width'] for col in trayspec['columns']])
-        for col_index, column in columns:
-            col_h_offset = sum(col_widths[0:col_index+1]) + col_index * spacer_w + origin_h_offset
-            c_width = column['width']
-            slot_heights = list([slot['height'] for slot in column['slots']])
-            for slot_index, slot in column['slots']:
-                slot_v_offset = sum(slot_heights[0:slot_index+1]) + slot_index * spacer_w + origin_v_offset
-
-
-    p.extend(generate_internal_holes(edge_w, v_offset+edge_w))
-
-    path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-    path.push('M {} {}'.format(edge_w, v_offset + edge_w))
-    for part in p:
-        path.push(part)
-    return path
+    nested_objects = generate_internal_holes()
+    return {
+        'svg': p,
+        'nested_objects': nested_objects,
+        'width': width + 2 * edge_w,
+        'height': height + 2 * edge_w,
+        'offset_x': edge_w,
+        'offset_y': edge_w,
+        'thickness': edge_w
+    }
 
 
 def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer_width):
     path_parts = [ kerf_correct_corner(0)]
-    path_parts.extend(generate_slotted_top_edge(indent_spaces, spacer_width, content_width, True, edge_width))
+    path_parts.extend(generate_slotted_top_edge(indent_spaces, spacer_width, content_width, True, edge_width, depth))
     path_parts.append(kerf_correct_corner(1))
 
     path_parts.append('v {}'.format(INDENT_DEPTH))
@@ -573,9 +585,9 @@ def draw_edges(dwg, trayspec):
     # This old method of drawing objects without layout is kept here for visual debugging for now.
     # Should be replaced with entirely separate layout package
 
-    def old_write_svg(path_object, v_offset):
+    def old_write_svg(path_object, v_offset, padding):
         path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-        path.push(f"M {path_object['offset_x'] + object_padding} {path_object['offset_y'] + object_padding + v_offset}")
+        path.push(f"M {path_object['offset_x'] + padding} {path_object['offset_y'] + padding + v_offset}")
         for part in path_object['svg']:
             path.push(part)
         return path
@@ -584,10 +596,16 @@ def draw_edges(dwg, trayspec):
     paths = []
     cumulative_v_offset = 0
     for svg_part in svg_objects:
-        paths.append(old_write_svg(svg_part, cumulative_v_offset))
+        paths.append(old_write_svg(svg_part, cumulative_v_offset, object_padding))
         cumulative_v_offset += svg_part['height'] + 2 * object_padding
 
-    paths.append(generate_floor(trayspec, cumulative_v_offset))
+    floor_object = generate_floor(trayspec)
+    paths.append(old_write_svg(floor_object, cumulative_v_offset, object_padding))
+    for nested_part in floor_object['nested_objects']:
+        nested_part['offset_x'] += floor_object['offset_x']
+        nested_part['offset_y'] += floor_object['offset_y']
+        paths.append(old_write_svg(nested_part, cumulative_v_offset, object_padding))
+
     for path in paths:
         dwg.add(path)
 

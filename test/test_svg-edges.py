@@ -177,3 +177,101 @@ def test_single_column_two_slotted_edges():
     }
     res = svg.generate_edges(tray_spec)
     assert(res[0] == expected)
+
+
+def test_generate_floor_with_two_simple_columns():
+    spacer_width = 2
+    edge_width = 3
+    content_width = 30
+
+    tray_spec = {
+        'name': 'Test tray',
+        'spacer_width': spacer_width,
+        'edge_width': edge_width,
+        'tray_depth': 111,
+        'tray_width': content_width + 2*edge_width,  # Lets test this without the elasticity, with exactly sized content
+        'tray_height': content_width + 2*edge_width,
+        'columns': [
+            {
+                'width': content_width,
+                'slots': [
+                    {
+                        'height': content_width,
+                        'forbid_indent': True
+                    }
+                ]
+            },
+            {
+                'width': content_width,
+                'slots': [
+                    {
+                        'height': 50,
+                        'forbid_indent': True
+                    }
+                ]
+            }
+        ]
+    }
+
+    tooth_w = content_width / 3.0
+    tooth_depth = edge_width
+
+    initial_corner = [
+        f"h {K_CORR}"
+    ]
+    top_edge = [
+        f"h {tooth_w - K_CORR}",
+        f"v -{tooth_depth}",
+        f"h {tooth_w + K_CORR*2}",
+        f"v {tooth_depth}",
+        f"h {tooth_w - K_CORR}"
+    ]
+    top_right_corner = [
+        f"h {K_CORR} v {K_CORR}",
+    ]
+    right_edge = [
+        f"v {tooth_w - K_CORR}",
+        f"h {tooth_depth}",
+        f"v {tooth_w + K_CORR*2}",
+        f"h -{tooth_depth}",
+        f"v {tooth_w - K_CORR}"
+    ]
+    lower_right_corner = [
+        f"v {K_CORR} h -{K_CORR}"
+    ]
+    bottom_edge = [
+        f"h -{tooth_w - K_CORR}",
+        f"v {tooth_depth}",
+        f"h -{tooth_w + K_CORR*2}",
+        f"v -{tooth_depth}",
+        f"h -{tooth_w - K_CORR}"
+    ]
+    lower_left_corner = [
+        f"h -{K_CORR} v -{K_CORR}"
+    ]
+    left_edge = [
+        f"v -{tooth_w - K_CORR}",
+        f"h -{tooth_depth}",
+        f"v -{tooth_w + K_CORR*2}",
+        f"h {tooth_depth}",
+        f"v -{tooth_w - K_CORR}"
+    ]
+    last_corner = [
+        f"v -{K_CORR}"
+    ]
+    close_path = [
+        'z'
+    ]
+    expected_svg = initial_corner +\
+        top_edge +\
+        top_right_corner +\
+        right_edge +\
+        lower_right_corner +\
+        bottom_edge +\
+        lower_left_corner +\
+        left_edge +\
+        last_corner +\
+        close_path
+
+    res = svg.generate_floor(tray_spec)
+    assert(res['svg'] == expected_svg)
