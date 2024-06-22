@@ -602,7 +602,6 @@ def draw_edges(dwg, trayspec):
             nested_part['offset_y'] += floor_object['offset_y']
 
     svg_objects = generate_edges(trayspec)
-    svg_objects.append(generate_floor(trayspec))
 
     paths = []
     cumulative_v_offset = 0
