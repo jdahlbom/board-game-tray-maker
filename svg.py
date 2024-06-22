@@ -1,7 +1,5 @@
 import svgwrite
 
-import svg
-
 # Hairline stroke (Cutting) for Epilog printers is 0.001"
 STROKE = 0.001
 MIN_TOOTH_WIDTH = 7.0
@@ -363,10 +361,10 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
         return p
 
     path_parts = path_parts + generate_floor_teeth(content_width, edge_width)
-    path_parts.append(kerf_correct_corner(3))
     path_parts.append('v -{}'.format(depth - INDENT_DEPTH))
     path_parts.append('h -{}'.format(edge_width))
-    path_parts.append('v -{}'.format(INDENT_DEPTH + K_CORR))
+    path_parts.append(kerf_correct_corner(3))
+    path_parts.append('v -{}'.format(INDENT_DEPTH))
     path_parts.append(kerf_correct_corner(4))
     path_parts.append('z')
     return path_parts

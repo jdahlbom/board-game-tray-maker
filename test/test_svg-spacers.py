@@ -101,4 +101,52 @@ def test_generate_vert_spacer():
     spacer_width = 2
     edge_width = 3
     content_width = 30
+    depth = 20
+    indent_depth = svg.INDENT_DEPTH
+    tooth_width = svg.MIN_TOOTH_WIDTH
     tray_spec = fixtures.get_simple_two_column_tray_spec(spacer_width, edge_width, content_width)
+
+    indent_spacing = svg.create_vertical_spacer_combined_slot_list(tray_spec['columns'], spacer_width)
+    assert(indent_spacing[0] == [{'length': content_width}])
+
+    res = svg.generate_vert_spacer(indent_spacing[0], content_width, depth, edge_width, spacer_width)
+
+    top_left_corner = [f"h {K_CORR}"]
+    top_edge = [
+        f"h {edge_width}",
+        f"h {content_width}",
+        f"h {edge_width}"
+    ]
+    top_right_corner = [f"h {K_CORR} v {K_CORR}"]
+    right_edge = [
+        f"v {INDENT_DEPTH}",
+        f"v {K_CORR} h -{K_CORR}",
+        f"h -{edge_width}",
+        f"v {depth-INDENT_DEPTH}"
+    ]
+    bottom_edge = [
+        f"h -{(content_width-tooth_width)/2.0 - K_CORR}",
+        f"v {edge_width + K_CORR}",
+        f"h -{(tooth_width + 2 * K_CORR)}",
+        f"v -{edge_width + K_CORR}",
+        f"h -{(content_width-tooth_width)/2.0 - K_CORR}"
+    ]
+    left_edge = [
+        f"v -{depth-INDENT_DEPTH}",
+        f"h -{edge_width}",
+        f"h -{K_CORR} v -{K_CORR}",
+        f"v -{INDENT_DEPTH}"
+    ]
+    top_left_corner_again = [f"v -{K_CORR}"]
+    close_path = ['z']
+
+    expected_svg = top_left_corner +\
+        top_edge +\
+        top_right_corner +\
+        right_edge +\
+        bottom_edge +\
+        left_edge +\
+        top_left_corner_again +\
+        close_path
+
+    assert(res == expected_svg)

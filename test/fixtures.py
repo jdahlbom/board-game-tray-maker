@@ -1,3 +1,5 @@
+from llist import dllist
+
 def get_single_column_two_slot_tray_spec(spacer_width, edge_width, depth, content_width):
     return {
         'name': 'Test tray',
@@ -6,7 +8,7 @@ def get_single_column_two_slot_tray_spec(spacer_width, edge_width, depth, conten
         'tray_depth': depth,
         'tray_width': content_width + 2*edge_width,  # Lets test this without the elasticity, with exactly sized content
         'tray_height': content_width + 2*edge_width,
-        'columns': [
+        'columns': dllist([
             {
                 'width': content_width,
                 'slots': [
@@ -20,7 +22,7 @@ def get_single_column_two_slot_tray_spec(spacer_width, edge_width, depth, conten
                     }
                 ]
             }
-        ]
+        ])
     }
 
 
@@ -35,21 +37,21 @@ def get_simple_two_column_tray_spec(spacer_width, edge_width, content_width):
         'columns': [
             {
                 'width': (content_width - spacer_width) / 2.0,
-                'slots': [
+                'slots': dllist([
                     {
                         'height': content_width,
                         'forbid_indent': True
                     }
-                ]
+                ])
             },
             {
                 'width': (content_width - spacer_width) / 2.0,
-                'slots': [
+                'slots': dllist([
                     {
                         'height': content_width,
                         'forbid_indent': True
                     }
-                ]
+                ])
             }
         ]
     }
