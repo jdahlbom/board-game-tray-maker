@@ -1,4 +1,5 @@
 import svg
+import test.fixtures as fixtures
 
 #These NEED to be in a configuration file, not hard coded!
 STROKE = 0.001
@@ -22,20 +23,12 @@ def test_two_slot_slotted_top_edge():
     edge_width = 3
     content_width = 100
     depth = 40
-    slots = [
-        {
-            'length': 48,
-            'slot_properties': {
-                'forbid_indent': True
-            }
-        },
-        {
-            'length': 50,
-            'slot_properties': {
-                'forbid_indent': True
-            }
-        }
-    ]
+
+    tray_spec = fixtures.get_single_column_two_slot_tray_spec(spacer_width, edge_width, depth, content_width)
+    slots = tray_spec['columns'][0]['slots']
+    slots[0]['length'] = slots[0]['height']
+    slots[1]['length'] = slots[1]['height']
+
     corner_toothing = True
 
     res = svg.generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth)
@@ -61,29 +54,7 @@ def test_single_column_two_slotted_edges():
     depth = 30
     max_tooth_size = 10.0
 
-    tray_spec = {
-        'name': 'Test tray',
-        'spacer_width': spacer_width,
-        'edge_width': edge_width,
-        'tray_depth': depth,
-        'tray_width': content_width + 2*edge_width,  # Lets test this without the elasticity, with exactly sized content
-        'tray_height': content_width + 2*edge_width,
-        'columns': [
-            {
-                'width': content_width,
-                'slots': [
-                    {
-                        'height': 48,
-                        'forbid_indent': True
-                    },
-                    {
-                        'height': 50,
-                        'forbid_indent': True
-                    }
-                ]
-            }
-        ]
-    }
+    tray_spec = fixtures.get_single_column_two_slot_tray_spec(spacer_width, edge_width, depth, content_width)
 
     upper_left_corner = [
         f"h {K_CORR}"
@@ -183,35 +154,7 @@ def test_generate_floor_with_two_simple_columns():
     spacer_width = 2
     edge_width = 3
     content_width = 30
-
-    tray_spec = {
-        'name': 'Test tray',
-        'spacer_width': spacer_width,
-        'edge_width': edge_width,
-        'tray_depth': 111,
-        'tray_width': content_width + 2*edge_width,  # Lets test this without the elasticity, with exactly sized content
-        'tray_height': content_width + 2*edge_width,
-        'columns': [
-            {
-                'width': (content_width - spacer_width) / 2.0,
-                'slots': [
-                    {
-                        'height': content_width,
-                        'forbid_indent': True
-                    }
-                ]
-            },
-            {
-                'width': (content_width - spacer_width) / 2.0,
-                'slots': [
-                    {
-                        'height': content_width,
-                        'forbid_indent': True
-                    }
-                ]
-            }
-        ]
-    }
+    tray_spec = fixtures.get_simple_two_column_tray_spec(spacer_width, edge_width, content_width)
 
     tooth_w = content_width / 3.0
     tooth_depth = edge_width

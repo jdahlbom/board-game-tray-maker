@@ -1,4 +1,5 @@
 import svg
+import test.fixtures as fixtures
 
 #These NEED to be in a configuration file, not hard coded!
 STROKE = 0.001
@@ -94,3 +95,10 @@ def test_generate_horizontal_spacers_two_slots_should_create_simplest_spacer():
 
     assert(len(res) == 1)
     assert(res[0] == expected)
+
+
+def test_generate_vert_spacer():
+    spacer_width = 2
+    edge_width = 3
+    content_width = 30
+    tray_spec = fixtures.get_simple_two_column_tray_spec(spacer_width, edge_width, content_width)

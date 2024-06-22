@@ -255,6 +255,25 @@ def generate_edges(trayspec):
     # svg_paths.append(old_write_svg(path_parts, v_offset, corner_toothings[idx]))
 
 
+def spacer_floor_hole_positioning(height):
+    hole_width = MIN_TOOTH_WIDTH
+    if height/hole_width < 3:
+        return [height]
+
+    num_tooth = 1
+    if height/hole_width > 5:
+        num_tooth = 2
+
+    tooth_spacing = (height - num_tooth * hole_width) / (num_tooth + 1)
+    positions = list()
+    for index in range(num_tooth * 2 + 1):
+        if index % 2 == 0:
+            positions.append(tooth_spacing)
+        else:
+            positions.append(hole_width)
+    return positions
+
+
 def generate_floor(trayspec):
     edge_w = trayspec['edge_width']
     spacer_w = trayspec['spacer_width']
@@ -275,27 +294,24 @@ def generate_floor(trayspec):
 
     def generate_internal_holes():
         col_widths = list(map(lambda col: col['width'], trayspec['columns']))
-        hole_width = MIN_TOOTH_WIDTH
-        if height/hole_width < 3:
-            return
-
-        num_tooth = 1
-        if height/hole_width > 5:
-            num_tooth = 2
-
-        tooth_spacing = (height - num_tooth * hole_width) / (num_tooth + 1)
-
+        positions = spacer_floor_hole_positioning(height)
         hole_svgs = []
+
+        if len(positions) == 1:
+            return hole_svgs
+
         for idx, col_w in enumerate(col_widths[0:-1]):
-            parts = list()
             h_offset = sum(col_widths[0:idx+1]) + idx * spacer_w
-            for tooth_idx in range(0, num_tooth):
-                v_offset = (tooth_idx + 1) * tooth_spacing + tooth_idx * hole_width
+            for index, position_length in enumerate(positions):
+                if index % 2 == 0:
+                    continue
+                parts = list()
+                v_offset = sum(positions[0:index])
                 parts.append('m {} {}'.format(K_CORR, K_CORR))
                 parts.append('h {}'.format(spacer_w - K_CORR*2))
-                parts.append('v {}'.format(hole_width - K_CORR*2))
+                parts.append('v {}'.format(position_length - K_CORR*2))
                 parts.append('h -{}'.format(spacer_w - K_CORR*2))
-                parts.append('v -{}'.format(hole_width - K_CORR*2))
+                parts.append('v -{}'.format(position_length - K_CORR*2))
                 parts.append('z')
                 hole_svgs.append({
                     'svg': parts,
@@ -327,30 +343,26 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
     path_parts.append('h -{}'.format(edge_width))
     path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
-    def generate_floor_teeth(width):
+    def generate_floor_teeth(width, edge_w):
         p = []
-        hole_width = MIN_TOOTH_WIDTH
-        if width/hole_width < 3:
-            return
+        positions = spacer_floor_hole_positioning(width)
+        if len(positions) == 1:
+            return [f"h -{positions[0]}"]
 
-        num_tooth = 1
-        if width/hole_width > 5:
-            num_tooth = 2
+        for index, position_length in enumerate(positions):
+            kerf_correction = K_CORR
+            if index == 3 and len(positions) == 5:
+                kerf_correction = 2 * K_CORR
 
-        tooth_spacing = (width - num_tooth * hole_width) / (num_tooth + 1)
-
-        for tooth_idx in range(0, num_tooth):
-            if tooth_idx == 0:
-                p.append('h -{}'.format(tooth_spacing - K_CORR))
+            if index % 2 == 0:
+                p.append(f"h -{position_length - kerf_correction}")
             else:
-                p.append('h -{}'.format(tooth_spacing - 2*K_CORR))
-            p.append('v {}'.format(edge_width + K_CORR))
-            p.append('h -{}'.format(hole_width + K_CORR*2))
-            p.append('v -{}'.format(edge_width + K_CORR))
-        p.append('h -{}'.format(tooth_spacing - K_CORR))
+                p.append('v {}'.format(edge_w + K_CORR))
+                p.append('h -{}'.format(position_length + K_CORR*2))
+                p.append('v -{}'.format(edge_w + K_CORR))
         return p
 
-    path_parts = path_parts + generate_floor_teeth(content_width)
+    path_parts = path_parts + generate_floor_teeth(content_width, edge_width)
     path_parts.append(kerf_correct_corner(3))
     path_parts.append('v -{}'.format(depth - INDENT_DEPTH))
     path_parts.append('h -{}'.format(edge_width))
