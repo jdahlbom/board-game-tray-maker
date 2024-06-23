@@ -367,7 +367,20 @@ def generate_vert_spacer(indent_spaces, content_width, depth, edge_width, spacer
     path_parts.append('v -{}'.format(INDENT_DEPTH))
     path_parts.append(kerf_correct_corner(4))
     path_parts.append('z')
-    return path_parts
+
+    positions_for_height = spacer_floor_hole_positioning(content_width)
+    height_from_teeth = edge_width + K_CORR
+    if len(positions_for_height) == 1:
+        height_from_teeth = 0
+    spacer_object = {
+        'svg': path_parts,
+        'width': content_width + 2 * edge_width + 2 * K_CORR,
+        'height': depth + 2 * K_CORR + height_from_teeth,
+        'offset_x': 0,
+        'offset_y': 0,
+        'thickness': spacer_width
+    }
+    return spacer_object
 
 
 # Generates SVG string path parts to draw a single horizontal spacer.
@@ -410,7 +423,15 @@ def generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_widt
     path_parts.append('h -{}'.format(l_edge_width))
     path_parts.append('v -{}'.format(INDENT_DEPTH + K_CORR*2))
     path_parts.append('z')
-    return path_parts
+    spacer_object = {
+        'svg': path_parts,
+        'width': l_edge_width + sum(col_widths) + spacer_width * (len(col_widths) -1) + r_edge_width + 2 * K_CORR,
+        'height': depth + 2 * K_CORR,
+        'offset_x': 0,
+        'offset_y': 0,
+        'thickness': spacer_width
+    }
+    return spacer_object
 
 
 def cubic_sloped_indent(top_width, bottom_width, depth):
@@ -520,7 +541,7 @@ def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
 
         return (needs_indent_a or needs_indent_b) and not (forbid_indent_a or forbid_indent_b)
 
-    spacer_paths = []
+    spacer_objects = []
     for idx, column in enumerate(columns):
         slots = column['slots']
 
@@ -557,7 +578,7 @@ def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
                         if rcolumn == columns[-1]:
                             r_edge_width = edge_width  #H-spacer ends up connecting to tray edge.
 
-            spacer_paths.append(generate_horiz_spacer(
+            spacer_objects.append(generate_horiz_spacer(
                 col_slots,
                 spacer_indents,
                 sum(col_slots) + spacer_width * (len(col_slots)-1),
@@ -565,7 +586,7 @@ def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
                 l_edge_width,
                 r_edge_width,
                 depth))
-    return spacer_paths
+    return spacer_objects
 
 
 def draw_spacers(dwg, trayspec):
@@ -583,10 +604,17 @@ def draw_spacers(dwg, trayspec):
 
     horiz_paths = generate_horizontal_spacers(columns, edge_w, spacer_w, depth)
 
+    spacer_objects = paths + horiz_paths
+    for idx in range(len(spacer_objects)):
+        spacer_objects[idx]['tray'] = trayspec['name']
+
     # Loops through an array of arrays of string type svg path parts, composes SVG paths out of them
     # This enables late absolute positioning of elements.
-    for path_index, path_parts in enumerate(paths + horiz_paths):
-        parts = ['M 0 {}'.format( (depth+5) * path_index)] + path_parts
+    padding = 1
+    cumulative_v_offset = 0
+    for spacer_obj in spacer_objects:
+        parts = [f"M {padding} {cumulative_v_offset + padding}"] + spacer_obj['svg']
+        cumulative_v_offset += spacer_obj['height'] + padding
         element_path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
         for part in parts:
             element_path.push(part)
