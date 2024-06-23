@@ -12,14 +12,15 @@ K_CORR = KERF/2.0
 def test_single_column_horizontal_spacer_without_indent():
     spacer_material_thickness = 2
     edge_material_thickness = 3
-
-    col_widths = [100]
-    spacer_indents = [ False ]
     content_width = 100
+    depth = 60
+
+    tray_spec = fixtures.get_single_column_two_slot_tray_spec(spacer_material_thickness, edge_material_thickness, depth, content_width)
+    col_widths = [ tray_spec['columns'][0]['width']]
+    spacer_indents = [ False ]
     spacer_width = spacer_material_thickness
     l_edge_width = edge_material_thickness
     r_edge_width = edge_material_thickness
-    depth = 60
 
     res = svg.generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth)
     expected = [
