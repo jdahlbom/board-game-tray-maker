@@ -55,3 +55,44 @@ def get_simple_two_column_tray_spec(spacer_width, edge_width, content_width):
             }
         ]
     }
+
+
+def get_object_list_with_two_thicknesses_and_bins():
+    return [
+        {
+            "width": 40.0,
+            "height": 60.0,
+            "tray": "first",
+            "thickness": 3,
+            "id_in_tray": 1,
+            "offset_x": 0,
+            "offset_y": 0
+        },
+        {
+            "width": 40.0,
+            "height": 40.0,
+            "tray": "first",
+            "thickness": 3,
+            "id_in_tray": 2,
+            "offset_x": 0,
+            "offset_y": 0
+        },
+        {
+            "width": 40.0,
+            "height": 40.0,
+            "tray": "first",
+            "thickness": 3,
+            "id_in_tray": 3,
+            "offset_x": 0,
+            "offset_y": 0
+        },
+        {
+            "width": 40.0,
+            "height": 40.0,
+            "tray": "first",
+            "thickness": 1,
+            "id_in_tray": 4,
+            "offset_x": 0,
+            "offset_y": 0
+        }
+    ]
