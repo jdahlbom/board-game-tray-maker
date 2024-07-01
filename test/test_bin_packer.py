@@ -1,6 +1,7 @@
 from rectpack import newPacker, float2dec
 import layout
 import test.fixtures as fixtures
+import math
 
 def test_bin_packing():
     objects = [
@@ -75,7 +76,7 @@ def test_pack_objects():
     assert(len(result["3mm"]) == 2)
     assert(len(result["1mm"]) == 1)
 
-    object_margin = 0.1
+    object_margin = layout.object_margin
     one_mm_object = result["1mm"][0][0]
     assert(one_mm_object["packer_offset_x"] == object_margin)
     assert(one_mm_object["packer_offset_y"] == object_margin)
@@ -95,3 +96,25 @@ def test_pack_objects():
     expected_y_offset = float(float2dec(2 * object_margin + two_object_bin[0]["height"], 5)) + object_margin
     assert(two_object_bin[1]["packer_offset_y"] == expected_y_offset)
     assert(two_object_bin[1]["offset_x"] == 0)
+
+
+def test_four_object_layout():
+    objects = fixtures.get_four_objects_to_lay_out()
+    result = layout.pack_objects(objects, 400, 300)
+
+    assert("3mm" in result)
+    bins = result["3mm"]
+    assert(len(bins) == 1)
+    objects = bins[0]
+    assert(len(objects) == 4)
+
+    first = objects[0]
+    padding = layout.object_margin
+    assert(first['packer_offset_x'] == padding)
+    assert(first['packer_offset_y'] == padding)
+    assert(first['width'] == 98)
+    assert(first['height'] == 70)
+
+    second = objects[1]
+    assert(math.isclose(second['packer_offset_x'], padding, abs_tol=0.001))
+    assert(math.isclose(second['packer_offset_y'], 3 * padding + first['height'], abs_tol=0.001))

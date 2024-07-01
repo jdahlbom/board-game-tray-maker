@@ -11,6 +11,8 @@ DPI = 96 # Assumed DPI used by CorelDraw
 INCHES_PER_MM = 1.0 / 25.4
 DPI_CONVERSION = INCHES_PER_MM * DPI # Conversion rate is 3.77953
 
+ENABLE_DRAW_BOUNDING_BOX = False
+
 # When returning array of SVG draw instructions from a function, there
 # should also be following information included in the top level:
 # { "svg": [drawing instructions],
@@ -589,7 +591,7 @@ def generate_horizontal_spacers(columns, edge_width, spacer_width, depth):
     return spacer_objects
 
 
-def draw_spacers(dwg, trayspec):
+def generate_spacers(trayspec):
     columns = trayspec['columns']
     spacer_w = trayspec['spacer_width']
     edge_w = trayspec['edge_width']
@@ -607,6 +609,11 @@ def draw_spacers(dwg, trayspec):
     spacer_objects = paths + horiz_paths
     for idx in range(len(spacer_objects)):
         spacer_objects[idx]['tray'] = trayspec['name']
+    return spacer_objects
+
+
+def draw_spacers(dwg, trayspec):
+    spacer_objects = generate_spacers(trayspec)
 
     # Loops through an array of arrays of string type svg path parts, composes SVG paths out of them
     # This enables late absolute positioning of elements.
@@ -633,12 +640,6 @@ def draw_edges(dwg, trayspec):
             path.push(part)
         return path
 
-    def generate_nested_objects(parent_object):
-        separate_objects = list()
-        for nested_part in parent_object['nested_objects']:
-            nested_part['offset_x'] += floor_object['offset_x']
-            nested_part['offset_y'] += floor_object['offset_y']
-
     svg_objects = generate_edges(trayspec)
 
     paths = []
@@ -657,4 +658,41 @@ def draw_edges(dwg, trayspec):
     for path in paths:
         dwg.add(path)
 
+
+def get_bounding_box_path(svg_obj):
+    path = svgwrite.path.Path(stroke='red', stroke_width=0.2, fill='none')
+    offset_x = svg_obj['packer_offset_x']
+    offset_y = svg_obj['packer_offset_y']
+    path.push(f"M {offset_x} {offset_y}")
+    path.push(f"h {svg_obj['width']}")
+    path.push(f"v {svg_obj['height']}")
+    path.push(f"h -{svg_obj['width']}")
+    path.push(f"v -{svg_obj['height']}")
+    path.push('z')
+    return path
+
+
+def draw_objects(objects_in_bins, thickness, identifier, panel_width, panel_height):
+    for bin_id in objects_in_bins.keys():
+        file_name = f"output/{identifier}-{thickness}-panel-{bin_id+1}.svg"
+        dwg = get_drawing(file_name, panel_width, panel_height)
+
+        for svg_obj in objects_in_bins[bin_id]:
+            path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
+            offset_x = svg_obj['offset_x'] + svg_obj['packer_offset_x']
+            offset_y = svg_obj['offset_y'] + svg_obj['packer_offset_y']
+            path.push(f"M {offset_x} {offset_y}")
+            for part in svg_obj['svg']:
+                path.push(part)
+            if 'nested_objects' in svg_obj:
+                for nested in svg_obj['nested_objects']:
+                    path.push(f"M {offset_x + nested['offset_x']} {offset_y + nested['offset_y']}")
+                    for part in nested['svg']:
+                        path.push(part)
+
+            dwg.add(path)
+            if ENABLE_DRAW_BOUNDING_BOX:
+                dwg.add(get_bounding_box_path(svg_obj))
+        dwg.save()
+        print(f"Generated {file_name}")
 

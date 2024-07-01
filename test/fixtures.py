@@ -70,7 +70,7 @@ def get_object_list_with_two_thicknesses_and_bins():
         },
         {
             "width": 40.0,
-            "height": 40.0,
+            "height": 30.0,
             "tray": "first",
             "thickness": 3,
             "id_in_tray": 2,
@@ -79,7 +79,7 @@ def get_object_list_with_two_thicknesses_and_bins():
         },
         {
             "width": 40.0,
-            "height": 40.0,
+            "height": 30.0,
             "tray": "first",
             "thickness": 3,
             "id_in_tray": 3,
@@ -94,5 +94,46 @@ def get_object_list_with_two_thicknesses_and_bins():
             "id_in_tray": 4,
             "offset_x": 0,
             "offset_y": 0
+        }
+    ]
+
+
+def get_four_objects_to_lay_out():
+    return [
+        {
+            'width': 98,
+            'height': 70,
+            'offset_x': 0,
+            'offset_y': 0,
+            'thickness': 3,
+            'tray': 'power-cards',
+            'id_in_tray': 0
+        },
+        {
+            'width': 98,
+            'height': 70,
+            'offset_x': 0,
+            'offset_y': 0,
+            'thickness': 3,
+            'tray': 'power-cards',
+            'id_in_tray': 2
+        },
+        {
+            'width': 92,
+            'height': 70,
+            'offset_x': 3,
+            'offset_y': 0,
+            'thickness': 3,
+            'tray': 'power-cards',
+            'id_in_tray': 1
+        },
+        {
+            'width': 92,
+            'height': 70,
+            'offset_x': 3,
+            'offset_y': 0,
+            'thickness': 3,
+            'tray': 'power-cards',
+            'id_in_tray': 3
         }
     ]

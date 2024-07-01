@@ -2,6 +2,7 @@ import sys
 
 import svg
 import tray as gtray
+import layout
 
 
 def convert_tray_format(tray):
@@ -44,17 +45,22 @@ if __name__ == '__main__':
 
     trays = gtray.generate_trays_from_spec(cfg['spacer_width'], cfg['edge_width'], specs, trayname_arg)
 
+    all_objects = list()
     for tray in trays:
         svg_tray = convert_tray_format(tray)
         edge_width = svg_tray['edge_width']
         spacer_width = svg_tray['spacer_width']
         tray_name = svg_tray['name']
-        dwg = svg.get_drawing('output/{}-{}-edges.svg'.format(tray_name, edge_width), cfg['edge_material_width'], cfg['edge_material_height'])
-        svg.draw_edges(dwg, svg_tray)
-        finish(dwg)
 
-        dwg = svg.get_drawing('output/{}-{}-spacers.svg'.format(tray_name, spacer_width), cfg['spacer_material_width'], cfg['spacer_material_height'])
-        svg.draw_spacers(dwg, svg_tray)
-        finish(dwg)
+        all_objects.extend(svg.generate_edges(svg_tray))
+#        all_objects.extend(svg.generate_floor(svg_tray))
+        all_objects.extend(svg.generate_spacers(svg_tray))
 
+    panel_width = cfg['edge_material_width']
+    panel_height = cfg['edge_material_height']
 
+    bins = layout.pack_objects(all_objects, panel_width, panel_height)
+    game_name = 'should-get-game-name-somewhere'
+
+    for thickness in bins.keys():
+        svg.draw_objects(bins[thickness], thickness, game_name, panel_width, panel_height)
