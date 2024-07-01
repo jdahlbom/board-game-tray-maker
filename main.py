@@ -53,7 +53,7 @@ if __name__ == '__main__':
         tray_name = svg_tray['name']
 
         all_objects.extend(svg.generate_edges(svg_tray))
-#        all_objects.extend(svg.generate_floor(svg_tray))
+        all_objects.append(svg.generate_floor(svg_tray))
         all_objects.extend(svg.generate_spacers(svg_tray))
 
     panel_width = cfg['edge_material_width']
