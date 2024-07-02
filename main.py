@@ -35,10 +35,10 @@ if __name__ == '__main__':
         'spacer_width': 1,
         'edge_width': 3,
     # Board sizes for materials
-        'spacer_material_width': 400,
-        'spacer_material_height': 300,
-        'edge_material_width': 400,
-        'edge_material_height': 300
+        'spacer_material_width': 600.0,
+        'spacer_material_height': 600.0,
+        'edge_material_width': 600.0,
+        'edge_material_height': 600.0
     }
 
     specs = gtray.get_specification(sys.argv[1])
@@ -56,8 +56,8 @@ if __name__ == '__main__':
         all_objects.append(svg.generate_floor(svg_tray))
         all_objects.extend(svg.generate_spacers(svg_tray))
 
-    panel_width = cfg['edge_material_width']
-    panel_height = cfg['edge_material_height']
+    panel_width = cfg['edge_material_width'] - 2 * svg.OUTLINE_MARGIN
+    panel_height = cfg['edge_material_height'] - 2 * svg.OUTLINE_MARGIN
 
     bins = layout.pack_objects(all_objects, panel_width, panel_height)
     game_name = 'should-get-game-name-somewhere'

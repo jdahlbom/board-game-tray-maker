@@ -1,7 +1,7 @@
 from rectpack import newPacker, float2dec
 
 
-object_margin = 0.5
+object_margin = 1.0
 
 
 def get_packer_id(svg_object):
@@ -10,7 +10,7 @@ def get_packer_id(svg_object):
 
 #  Given a list of svg objects it sorts them by thickness, and then lays them out within
 #  a rectangle boundary that may span several "bins", corresponding to separate cuttable boards.
-def pack_objects(svg_objects, material_width_mm: 600, material_height_mm: 600):
+def pack_objects(svg_objects, material_width_mm: 600.0, material_height_mm: 600.0):
     objects_by_id = {}
     for idx in range(len(svg_objects)):
         svg_objects[idx]['id_in_tray'] = idx
@@ -23,7 +23,7 @@ def pack_objects(svg_objects, material_width_mm: 600, material_height_mm: 600):
     for thickness in unique_thicknesses:
         packer = newPacker(rotation=False)
         matching_objects = list([obj for obj in svg_objects if obj['thickness'] == thickness])
-        packer.add_bin(material_width_mm, material_height_mm, 4)
+        packer.add_bin(float2dec(material_width_mm,3), float2dec(material_height_mm,3), 4)
         for obj in matching_objects:
             packer.add_rect(float2dec(obj['width'] + object_margin * 2, 5),
                             float2dec(obj['height'] + object_margin * 2, 5),

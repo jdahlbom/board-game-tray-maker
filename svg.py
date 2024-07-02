@@ -7,6 +7,8 @@ INDENT_DEPTH = 10
 KERF = 0.2
 K_CORR = KERF/2.0
 
+OUTLINE_MARGIN = 10.0 # 10 mm
+
 DPI = 96 # Assumed DPI used by CorelDraw
 INCHES_PER_MM = 1.0 / 25.4
 DPI_CONVERSION = INCHES_PER_MM * DPI # Conversion rate is 3.77953
@@ -679,8 +681,8 @@ def draw_objects(objects_in_bins, thickness, identifier, panel_width, panel_heig
 
         for svg_obj in objects_in_bins[bin_id]:
             path = svgwrite.path.Path(stroke='black', stroke_width=STROKE, fill="none")
-            offset_x = svg_obj['offset_x'] + svg_obj['packer_offset_x']
-            offset_y = svg_obj['offset_y'] + svg_obj['packer_offset_y']
+            offset_x = svg_obj['offset_x'] + svg_obj['packer_offset_x'] + OUTLINE_MARGIN
+            offset_y = svg_obj['offset_y'] + svg_obj['packer_offset_y'] + OUTLINE_MARGIN
             path.push(f"M {offset_x} {offset_y}")
             for part in svg_obj['svg']:
                 path.push(part)
