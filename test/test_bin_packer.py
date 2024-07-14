@@ -72,7 +72,7 @@ def test_bin_packing():
 
 def test_pack_objects():
     objects = fixtures.get_object_list_with_two_thicknesses_and_bins()
-    result = layout.pack_objects(objects, 41, 82)
+    result = layout.pack_objects(objects, 40 + layout.object_margin*2, 80 + 2 * layout.object_margin)
     assert(len(result["3mm"]) == 2)
     assert(len(result["1mm"]) == 1)
 

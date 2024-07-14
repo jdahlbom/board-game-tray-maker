@@ -1,3 +1,14 @@
+2024-07-14
+- Got to try building the 2. July cut pieces: No luck, there is a mismatch with floor pieces
+- Next up: Write unit tests and fix the floor mismatch.
+- It seems that the SVG generation is correct, but the problem comes from different material
+having different kerf value. Same problem would arise with significantly different material thickness.
+
+Very useful next feature could be YAML configuration for piece generation so that
+it would be easy to select which trays get created. Also, using waste pieces of board material
+needs a way to configure single pieces for each thickness.
+
+
 2024-06-18
 - Started writing unit tests and refactoring svg code to pass more 
 structured results from svg code generating functions.

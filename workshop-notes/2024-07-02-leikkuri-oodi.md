@@ -21,3 +21,10 @@ Looks like the SVG generation might be correct.
 Did not manage to get this done in time during the lab and messed up with lot of other stuff.
 It is much better option to just start from scratch with new panels than try and manually
 fit stuff on partially used panels.
+
+Afterwards: 14.7.2024, soon after trying to fit the pieces together, it seems that
+there is a mismatch between walls' floor teeth and floors teeth. The size difference
+is so small that it might be a kerf correction issue or edge width measurement difference.
+Over length of 10 cm it compounds to enough difference so that the pieces don't fit together,
+so whole this cutting run is pretty much wasted. Will have to see if either walls or floors could
+be still used while the other pieces need to be recalculated and recut.

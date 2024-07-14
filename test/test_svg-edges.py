@@ -244,3 +244,102 @@ def test_generate_floor_with_two_simple_columns():
         'tray': tray_spec['name']
     }
     assert(res == expected_floor_object)
+
+
+def test_walls_match_with_floors():
+    edge_width = 3
+    content_width = 30.0
+    content_height = 34.0
+    depth = 30.0
+    depth_tooth_size = depth / 3.0
+    width_tooth = content_width / 3.0
+    height_tooth = content_height / 3.0
+    tray_spec = fixtures.get_single_column_single_slot_tray_spec(edge_width, depth, content_width, content_height)
+    edges = svg.generate_edges(tray_spec)
+    floor = svg.generate_floor(tray_spec)
+
+    expected_edges_w = [
+        f"h {K_CORR}",  # Top edge
+        f"h {edge_width}",
+        f"h {content_width}",
+        f"h {edge_width}",
+        f"h {K_CORR} v {K_CORR}",
+        f"v {depth_tooth_size + K_CORR}",  # Right edge
+        f"h {-edge_width}",
+        f"v {depth_tooth_size - 2*K_CORR}",
+        f"h {edge_width}",
+        f"v {depth_tooth_size + K_CORR}",
+        f"v {edge_width}",
+        f"v {K_CORR} h -{K_CORR}",
+        f"h -{edge_width}",  # Floor edge
+        f"h -{width_tooth + K_CORR}",
+        f"v -{edge_width}",
+        f"h -{width_tooth - 2*K_CORR}",
+        f"v {edge_width}",
+        f"h -{width_tooth + K_CORR}",
+        f"h -{edge_width}",
+        f"h -{K_CORR} v -{K_CORR}",
+        f"v -{edge_width}",  # Left edge
+        f"v -{depth_tooth_size + K_CORR}",
+        f"h {edge_width}",
+        f"v -{depth_tooth_size - K_CORR*2}",
+        f"h -{edge_width}",
+        f"v -{depth_tooth_size + K_CORR}",
+        f"v -{K_CORR}",
+        'z'
+    ]
+    result_edge_w = edges[0]['svg']
+    assert(result_edge_w == expected_edges_w)
+
+    expected_floor_w = [
+        f"h {K_CORR}",
+        f"h {width_tooth -K_CORR}",
+        f"v -{edge_width}",
+        f"h {width_tooth + K_CORR*2}",
+        f"v {edge_width}",
+        f"h {width_tooth - K_CORR}",
+        f"h {K_CORR} v {K_CORR}",
+    ]
+    floor_w = floor['svg'][:len(expected_floor_w)]
+    assert(floor_w == expected_floor_w)
+
+    expected_edges_h = [
+        f"h {K_CORR}",  # Top edge
+        f"h {content_height}",
+        f"h {K_CORR} v {K_CORR}",
+        f"v {depth_tooth_size - K_CORR}",  # Right edge
+        f"h {edge_width}",
+        f"v {depth_tooth_size + 2*K_CORR}",
+        f"h -{edge_width}",
+        f"v {depth_tooth_size - K_CORR}",
+        f"v {edge_width}",
+        f"v {K_CORR} h -{K_CORR}",
+        f"h -{height_tooth + K_CORR}",  # Bottom edge
+        f"v -{edge_width}",
+        f"h -{height_tooth - 2*K_CORR}",
+        f"v {edge_width}",
+        f"h -{height_tooth + K_CORR}",
+        f"h -{K_CORR} v -{K_CORR}",
+        f"v -{edge_width}",  # Left edge
+        f"v -{depth_tooth_size - K_CORR}",
+        f"h -{edge_width}",
+        f"v -{depth_tooth_size + K_CORR*2}",
+        f"h {edge_width}",
+        f"v -{depth_tooth_size - K_CORR}",
+        f"v -{K_CORR}",
+        'z'
+    ]
+
+    assert(edges[1]['svg'] == expected_edges_h)
+
+    expected_floor_h = [
+        f"v {height_tooth - K_CORR}",
+        f"h {edge_width}",
+        f"v {height_tooth + 2 * K_CORR}",
+        f"h -{edge_width}",
+        f"v {height_tooth - K_CORR}",
+        f"v {K_CORR} h -{K_CORR}"
+    ]
+
+    floor_h = floor['svg'][len(expected_floor_w):len(expected_floor_w)+len(expected_floor_h)]
+    assert(floor_h == expected_floor_h)

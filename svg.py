@@ -91,7 +91,7 @@ def generate_toothing(direction, invert, length, tooth_depth):
         divisions = 9
     if divisions == 1:
         divisions = 3
-    tooth_width = length / divisions
+    tooth_width = length / float(divisions)
 
     p = []
     for idx in range(0, divisions):
