@@ -24,17 +24,20 @@ class Svg:
         self.spacer_kerf = spacer_kerf
         self.k_corr = self.kerf / 2.0
 
-    def kerf_correct_corner(self, corner_index):
+    def kerf_correct_corner(self, corner_index, is_spacer=False):
+        correction = self.k_corr
+        if is_spacer:
+            correction = self.spacer_kerf / 2.0
         if corner_index == 0:
-            return 'h {}'.format(self.k_corr)
+            return 'h {}'.format(correction)
         elif corner_index == 1:
-            return 'h {} v {}'.format(self.k_corr, self.k_corr)
+            return 'h {} v {}'.format(correction, correction)
         elif corner_index == 2:
-            return 'v {} h -{}'.format(self.k_corr, self.k_corr)
+            return 'v {} h -{}'.format(correction, correction)
         elif corner_index == 3:
-            return f"h -{self.k_corr} v -{self.k_corr}"
+            return f"h -{correction} v -{correction}"
         elif corner_index == 4:
-            return f"v {-self.k_corr}"
+            return f"v {-correction}"
 
     def generate_toothing(self, direction, invert, length, tooth_depth):
         # Directions:
@@ -293,12 +296,12 @@ class Svg:
         }
 
     def generate_vert_spacer(self, indent_spaces, content_width, depth, edge_width, spacer_width):
-        path_parts = [ self.kerf_correct_corner(0)]
+        path_parts = [ self.kerf_correct_corner(0, True)]
         path_parts.extend(self.generate_slotted_top_edge(indent_spaces, spacer_width, content_width, True, edge_width, depth))
-        path_parts.append(self.kerf_correct_corner(1))
+        path_parts.append(self.kerf_correct_corner(1, True))
 
         path_parts.append('v {}'.format(INDENT_DEPTH))
-        path_parts.append(self.kerf_correct_corner(2))
+        path_parts.append(self.kerf_correct_corner(2, True))
         path_parts.append('h -{}'.format(edge_width))
         path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
@@ -309,24 +312,24 @@ class Svg:
                 return [f"h -{positions[0]}"]
 
             for index, position_length in enumerate(positions):
-                kerf_correction = self.k_corr
+                kerf_correction = self.spacer_kerf / 2.0
                 if index == 3 and len(positions) == 5:
-                    kerf_correction = 2 * self.k_corr
+                    kerf_correction = self.spacer_kerf
 
                 if index % 2 == 0:
                     p.append(f"h -{position_length - kerf_correction}")
                 else:
-                    p.append('v {}'.format(edge_w + self.k_corr))
-                    p.append('h -{}'.format(position_length + self.k_corr*2))
-                    p.append('v -{}'.format(edge_w + self.k_corr))
+                    p.append('v {}'.format(edge_w + self.spacer_kerf / 2.0))
+                    p.append('h -{}'.format(position_length + self.spacer_kerf))
+                    p.append('v -{}'.format(edge_w + self.spacer_kerf / 2.0))
             return p
 
         path_parts = path_parts + generate_floor_teeth(content_width, edge_width)
         path_parts.append('v -{}'.format(depth - INDENT_DEPTH))
         path_parts.append('h -{}'.format(edge_width))
-        path_parts.append(self.kerf_correct_corner(3))
+        path_parts.append(self.kerf_correct_corner(3, True))
         path_parts.append('v -{}'.format(INDENT_DEPTH))
-        path_parts.append(self.kerf_correct_corner(4))
+        path_parts.append(self.kerf_correct_corner(4, True))
         path_parts.append('z')
 
         positions_for_height = spacer_floor_hole_positioning(content_width)
@@ -350,7 +353,7 @@ class Svg:
     # Returns: Array of SVG path strings.
     def generate_horiz_spacer(self, col_widths, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth):
         path_parts = list()
-        path_parts.append('h {}'.format(l_edge_width + self.k_corr))
+        path_parts.append('h {}'.format(l_edge_width + self.spacer_kerf / 2.0))
         if len(list(filter(lambda spacer: spacer, spacer_indents))) > 0:
             margin = 5.0
             for idx, slot_width in enumerate(col_widths):
@@ -365,23 +368,23 @@ class Svg:
                     path_parts.append('h {}'.format(spacer_width))
         else:
             path_parts.append('h {}'.format(content_width))
-        path_parts.append('h {}'.format(r_edge_width + self.k_corr))
+        path_parts.append('h {}'.format(r_edge_width + self.spacer_kerf / 2.0))
 
-        path_parts.append('v {}'.format(INDENT_DEPTH + self.k_corr*2))
+        path_parts.append('v {}'.format(INDENT_DEPTH + self.spacer_kerf))
         path_parts.append('h -{}'.format(r_edge_width))
         path_parts.append('v {}'.format(depth - INDENT_DEPTH))
 
         #Bottom with indent slots
         for idx, slot_width in enumerate(col_widths[::-1]):
-            path_parts.append('h -{}'.format(slot_width + self.k_corr*2))
+            path_parts.append('h -{}'.format(slot_width + self.spacer_kerf))
             if idx != len(col_widths)-1:
-                path_parts.append('v -{}'.format(depth-INDENT_DEPTH - self.k_corr))
-                path_parts.append('h -{}'.format(spacer_width - self.k_corr*2))
-                path_parts.append('v {}'.format(depth-INDENT_DEPTH - self.k_corr))
+                path_parts.append('v -{}'.format(depth-INDENT_DEPTH - self.spacer_kerf / 2.0))
+                path_parts.append('h -{}'.format(spacer_width - self.spacer_kerf / 2.0))
+                path_parts.append('v {}'.format(depth-INDENT_DEPTH - self.spacer_kerf / 2.0))
 
         path_parts.append('v -{}'.format(depth-INDENT_DEPTH))
         path_parts.append('h -{}'.format(l_edge_width))
-        path_parts.append('v -{}'.format(INDENT_DEPTH + self.k_corr*2))
+        path_parts.append('v -{}'.format(INDENT_DEPTH + self.spacer_kerf))
         path_parts.append('z')
         spacer_object = {
             'svg': path_parts,
