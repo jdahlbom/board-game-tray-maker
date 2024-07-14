@@ -3,6 +3,7 @@ import sys
 import svg
 import tray as gtray
 import layout
+import yaml
 
 
 def convert_tray_format(tray):
@@ -31,15 +32,33 @@ if __name__ == '__main__':
         trayname_arg = sys.argv[2]
 
     # TODO: Bring the material specifications from some external source at some point.
-    cfg = {
-        'spacer_width': 1,
-        'edge_width': 3,
-    # Board sizes for materials
-        'spacer_material_width': 600.0,
-        'spacer_material_height': 600.0,
-        'edge_material_width': 600.0,
-        'edge_material_height': 600.0
-    }
+    with open('config.yaml') as stream:
+        config = yaml.safe_load(stream)
+
+    cfg = dict()
+    cfg['edge_width'] = config['edge_material']['thickness']
+    cfg['spacer_width'] = config['spacer_material']['thickness']
+
+    def get_material_kerfs(config):
+        materials = config['material_kerf']
+        edge_material = config['edge_material']['material']
+        edge_thickness = config['edge_material']['thickness']
+        spacer_material = config['spacer_material']['material']
+        spacer_thickness = config['spacer_material']['thickness']
+
+        def get_closest(material_kerfs, thickness):
+            material_keys = material_kerfs.keys()
+            mkeys = [float(key) for key in material_keys]
+            closest_thickness = min(mkeys, key=lambda x: abs(x - thickness))
+            return material_kerfs[int(closest_thickness)]
+
+        edge_kerf = get_closest(materials[edge_material], edge_thickness)
+        spacer_kerf = get_closest(materials[spacer_material], spacer_thickness)
+        return edge_kerf, spacer_kerf
+
+    kerfs = get_material_kerfs(config)
+    cfg['edge_kerf'] = kerfs[0]
+    cfg['spacer_kerf'] = kerfs[1]
 
     specs = gtray.get_specification(sys.argv[1])
 
@@ -52,15 +71,17 @@ if __name__ == '__main__':
         spacer_width = svg_tray['spacer_width']
         tray_name = svg_tray['name']
 
-        all_objects.extend(svg.generate_edges(svg_tray))
-        all_objects.append(svg.generate_floor(svg_tray))
-        all_objects.extend(svg.generate_spacers(svg_tray))
+        Svg = svg.Svg(cfg['edge_kerf'], cfg['spacer_kerf'])
 
-    panel_width = cfg['edge_material_width'] - 2 * svg.OUTLINE_MARGIN
-    panel_height = cfg['edge_material_height'] - 2 * svg.OUTLINE_MARGIN
+        all_objects.extend(Svg.generate_edges(svg_tray))
+        all_objects.append(Svg.generate_floor(svg_tray))
+        all_objects.extend(Svg.generate_spacers(svg_tray))
+
+    panel_width = config['edge_material']['default_sizes']['width'] - 2 * svg.OUTLINE_MARGIN
+    panel_height = config['edge_material']['default_sizes']['height'] - 2 * svg.OUTLINE_MARGIN
 
     bins = layout.pack_objects(all_objects, panel_width, panel_height)
-    game_name = 'should-get-game-name-somewhere'
+    game_name = 'game-name'
 
     for thickness in bins.keys():
         svg.draw_objects(bins[thickness], thickness, game_name, panel_width, panel_height)

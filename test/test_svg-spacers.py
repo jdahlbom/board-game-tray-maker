@@ -22,7 +22,7 @@ def test_single_column_horizontal_spacer_without_indent():
     l_edge_width = edge_material_thickness
     r_edge_width = edge_material_thickness
 
-    res = svg.generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth)
+    res = svg.Svg(KERF, KERF).generate_horiz_spacer(col_widths, spacer_indents, content_width, spacer_width, l_edge_width, r_edge_width, depth)
     expected_svg = [
         f"h {l_edge_width + K_CORR}",
         f"h {col_widths[0]}",
@@ -62,7 +62,7 @@ def test_generate_horizontal_spacers_single_slot_should_create_no_spacers():
             ]
         }
     ]
-    res = svg.generate_horizontal_spacers(columns, edge_material_thickness, spacer_material_thickness, depth)
+    res = svg.Svg(KERF, KERF).generate_horizontal_spacers(columns, edge_material_thickness, spacer_material_thickness, depth)
     assert(res == [])
 
 
@@ -75,7 +75,7 @@ def test_generate_horizontal_spacers_two_slots_should_create_simplest_spacer():
 
     columns = tray_spec['columns']
     first_column_width = columns[0]['width']
-    res = svg.generate_horizontal_spacers(columns, edge_width, spacer_width, depth)
+    res = svg.Svg(KERF, KERF).generate_horizontal_spacers(columns, edge_width, spacer_width, depth)
     expected_svg = [
         f"h {edge_width + K_CORR}",
         f"h {first_column_width}",
@@ -109,10 +109,10 @@ def test_generate_vert_spacer():
     tooth_width = svg.MIN_TOOTH_WIDTH
     tray_spec = fixtures.get_simple_two_column_tray_spec(spacer_width, edge_width, content_width)
 
-    indent_spacing = svg.create_vertical_spacer_combined_slot_list(tray_spec['columns'], spacer_width)
+    indent_spacing = svg.Svg(KERF, KERF).create_vertical_spacer_combined_slot_list(tray_spec['columns'], spacer_width)
     assert(indent_spacing[0] == [{'length': content_width}])
 
-    res = svg.generate_vert_spacer(indent_spacing[0], content_width, depth, edge_width, spacer_width)
+    res = svg.Svg(KERF, KERF).generate_vert_spacer(indent_spacing[0], content_width, depth, edge_width, spacer_width)
 
     top_left_corner = [f"h {K_CORR}"]
     top_edge = [

@@ -1,7 +1,7 @@
 import svg
 import test.fixtures as fixtures
 
-#These NEED to be in a configuration file, not hard coded!
+# These NEED to be in a configuration file, not hard coded!
 STROKE = 0.001
 MIN_TOOTH_WIDTH = 7.0
 INDENT_DEPTH = 10
@@ -31,7 +31,8 @@ def test_two_slot_slotted_top_edge():
 
     corner_toothing = True
 
-    res = svg.generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth)
+    svgi = svg.Svg(KERF, KERF)
+    res = svgi.generate_slotted_top_edge(slots, spacer_width, content_width, corner_toothing, edge_width, depth)
 
     expected = [
         f"h {edge_width}",
@@ -146,7 +147,8 @@ def test_single_column_two_slotted_edges():
         'tray': 'Test tray',
         'thickness': edge_width
     }
-    res = svg.generate_edges(tray_spec)
+    svgi = svg.Svg(KERF, KERF)
+    res = svgi.generate_edges(tray_spec)
     assert(res[0] == expected)
 
 
@@ -230,7 +232,7 @@ def test_generate_floor_with_two_simple_columns():
         'offset_y': (tray_spec['columns'][0]['slots'][0]['height'] - hole_width) / 2.0
     }]
 
-    res = svg.generate_floor(tray_spec)
+    res = svg.Svg(KERF, KERF).generate_floor(tray_spec)
     assert(res['svg'] == expected_svg)
     assert(res['nested_objects'] == nested_objects)
     expected_floor_object = {
@@ -255,8 +257,9 @@ def test_walls_match_with_floors():
     width_tooth = content_width / 3.0
     height_tooth = content_height / 3.0
     tray_spec = fixtures.get_single_column_single_slot_tray_spec(edge_width, depth, content_width, content_height)
-    edges = svg.generate_edges(tray_spec)
-    floor = svg.generate_floor(tray_spec)
+    svgi = svg.Svg(KERF, KERF)
+    edges = svgi.generate_edges(tray_spec)
+    floor = svgi.generate_floor(tray_spec)
 
     expected_edges_w = [
         f"h {K_CORR}",  # Top edge
