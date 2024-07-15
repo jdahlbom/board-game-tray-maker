@@ -4,14 +4,14 @@
 		"cards-in-mayday-standard-sleeve": {
 			"width": 92,
 			"height": 67,
-			"thickness": 0.50,
+			"thickness": 0.46,
 			"needs_indent": true,
 			"comment": "412 cards total in game"
 		},
 		"cards-in-mayday-mini-euro-sleeve": {
 			"width": 68.2,
 			"height": 44.2,
-			"thickness": 0.50,
+			"thickness": 0.46,
 			"needs_indent": true,
 			"comment": "23 cards total in game"
 		},
@@ -60,7 +60,7 @@
 						},
 						{
 							"item": "cards-in-mayday-standard-sleeve",
-							"amount": 66,
+							"amount": 76,
 							"label": "Major Powers",
 							"elastic": true
 						}
@@ -111,7 +111,7 @@
 							"item": "cards-in-mayday-standard-sleeve",
 							"amount": 23,
 							"label": "Blight cards",
-							"elastic": true
+							"elastic": false
 						},
 						{
 							"item": "cards-in-mayday-standard-sleeve",
@@ -121,9 +121,15 @@
 						},
 						{
 							"item": "cards-in-mayday-standard-sleeve",
+							"amount": 35,
+							"label": "Aspect cards",
+							"elastic": true
+						},
+						{
+							"item": "cards-in-mayday-standard-sleeve",
 							"amount": 4,
 							"label": "Power progression",
-							"elastic": true
+							"elastic": false
 						}
 					]
 				}
@@ -251,7 +257,7 @@
 			"description": "Invader-sized pieces: Split to half for convenience",
 			"dimensions": {
 				"width": 93,
-				"height": 141
+				"height": 137
 			},
 			"columns": [
 				{
@@ -317,7 +323,7 @@
 			"description": "Dahans, blight etc",
 			"dimensions": {
 				"width": 93,
-				"height": 141
+				"height": 137
 			},
 			"columns": [
 				{
@@ -417,19 +423,19 @@
 							"item": "invaders-others-half",
 							"amount": 1,
 							"label": "Thicket",
-							"elastic": true
+							"elastic": false
 						},
 						{
 							"item": "invaders-others-half",
 							"amount": 1,
 							"label": "Strife",
-							"elastic": true
+							"elastic": false
 						},
 						{
 							"item": "invaders-others-half",
 							"amount": 1,
 							"label": "Badlands",
-							"elastic": true
+							"elastic": false
 						}
 					]
 				}
@@ -440,7 +446,7 @@
 			"description": "Miscallaneous other components",
 			"dimensions": {
 				"width": 93,
-				"height": 108
+				"height": 102
 			},
 			"columns": [
 				{
