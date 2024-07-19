@@ -1,0 +1,106 @@
+game: 'spirit island'
+
+edge-width: 3.0
+
+boxes:
+  - id: cards
+    width: 283.0
+    height: 283.0
+    depth: 65.0
+  - id: tokens
+    width: 283.0
+    height: 283.0
+    depth: 65.0
+
+columns: # 'All columns span the whole box height, colum spanning allows landscape objects'
+  - box: cards
+    index: 0
+    width: 150
+    layers:
+      - index: 0
+        height: 21
+      - index: 1
+        height: 21
+      - index: 2
+        height: 21
+  - box: cards
+    index: 1
+    comment: 'Empty space between spirits and cards'
+    width: 30
+    layers:
+      - index: 0
+        height: 21
+      - index: 1
+        height: 21
+      - index: 2
+        height: 21
+  - box: cards
+    index: 2
+    width: 98
+    layers:
+      - index: 0
+        height: 65
+
+trays:
+  power-cards:
+    height: 92  # Comes from tray configuration
+    box:
+      id: cards
+      column: 2
+      place-in-column: 0
+      column-span: 1
+      layer: 0
+      in-landscape: False
+  events:
+    height: 37
+    box:
+      id: cards
+      column: 2
+      place-in-column: 1
+      layer: 0
+  big-cards-2:
+    height: 141
+    box:
+      id: cards
+      column: 2
+      place-in-column: 2
+      layer: 0
+  player-markers:
+    height: 180
+    width: 51  # Width is required if tray is in landscape orientation
+    box:
+      id: cards
+      column: 0
+      place-in-column: 1
+      column-span: 2
+      layer: 0
+      in-landscape: True
+  fear:
+    height: 180
+    width: 51
+    box:
+      id: cards
+      column: 0
+      place-in-column: 1
+      column-span: 2
+      layer: 1
+      in-landscape: True
+  spirit-special-tokens:
+    height: 180
+    width: 51
+    box:
+      id: cards
+      column: 0
+      place-in-column: 1
+      column-span: 2
+      layer: 2
+      in-landscape: True
+  spirit-boards:
+    height: 227
+    width: 150
+    box:
+      id: cards
+      column: 0
+      place-in-column: 0
+      layer: 0
+      layer-span: 3
