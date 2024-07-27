@@ -195,9 +195,9 @@ def generate_columns_from_spec(spacer_width, edge_width, tray_specs, item_types)
 
 def get_specification(specsfile):
     specs = {}
-    with open(specsfile) as specsfile:
-        specs = json.load(specsfile)
-    specsfile.close()
+    with open(specsfile) as spec_stream:
+        specs = json.load(spec_stream)
+        spec_stream.close()
 
     trays = specs['trays']
     for tray in trays:
