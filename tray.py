@@ -37,7 +37,7 @@ def sum_of_heights(col_items):
 def validate_fit(col_items, max_height, spacer_width, edge_width):
     height_sum = sum_of_heights(col_items)
     height_spacers = (col_items.size-1)*spacer_width
-    height_edges = 2 * edge_width
+    height_edges = 2.0 * edge_width
     total_content = height_sum+height_spacers+height_edges
 
     extra_space = max_height - total_content
@@ -121,11 +121,14 @@ def process_column_contents(specs, item_types, tray_height, spacer_width, edge_w
     for col in specs['columns']:
         col_items = dllist(list(map(lambda c_item: compute_minimum_dimensions(item_types, c_item), col['slots'])))
         extra_space = validate_fit(col_items, tray_height, spacer_width, edge_width)
-        num_elastic_slots = len(list(filter(lambda item: item['elastic'], col_items)))
-        if num_elastic_slots == 0:
+        elastic_slots = [item for item in col_items if item['elastic']]
+        total_minimum_elastic_height = sum([item['min-height'] for item in elastic_slots])
+        if len(elastic_slots) == 0 and extra_space > 0:
             raise Exception("No elastic slots to allocate extra space")
         for slot in col_items:
-            slot['extra-space'] = extra_space / num_elastic_slots
+            if 'elastic' in slot and slot['elastic']:
+                slot['extra-space'] = extra_space * (slot['min-height'] / total_minimum_elastic_height)
+            slot['space-relative-to-minimum'] = get_height(slot) / slot['min-height']
 
         columns.append({
             'slots': col_items,
